@@ -1,0 +1,72 @@
+Life depends on the ability of cells to store, retrieve, and translate
+genetic instructions.
+These instructions are needed to make and maintain living organisms.
+For a long time, it was not clear what molecules
+were able to copy and transmit genetic information.
+We now know that this information is carried by the dioxyribonucleic acid
+or DNA in all living things.
+DNA is a discrete code physically present
+in almost every cell of an organism.
+We can think of DNA as a one dimensional string of characters
+with four characters to choose from.
+These characters are A, C, G, and T. They
+stand for the first letters with the four nucleotides used to construct DNA.
+The full names of these nucleotides are adenine, cytosine, guanine,
+and thymine.
+Each unique three character sequence of nucleotides,
+sometimes called a nucleotide triplet, corresponds to one amino acid.
+The sequence of amino acids is unique for each type of protein
+and all proteins are built from the same set of just 20 amino acids
+for all living things.
+Protein molecules dominate the behavior of the cell
+serving as structural supports, chemical catalysts, molecular motors, and so on.
+The so called central dogma of molecular biology
+describes the flow of genetic information in a biological system.
+Instructions in the DNA are first transcribed into RNA
+and the RNA is then translated into proteins.
+We can think of DNA, when read as sequences of three letters,
+as a dictionary of life.
+In this case study, we will first download a DNA strand as a text file
+from a public web-based repository of DNA sequences.
+We will then write code to translate the DNA sequence
+to a sequence of amino acids where each amino acid is
+represented by a unique letter.
+We will also download the amino acid sequence to check our solution.
+In the process, we will also brush up on basic Python skills.
+To make the problem a bit more concrete, let's first
+think about it conceptually.
+The input to our program is going to be a DNA sequence that
+consists of a four letter alphabet.
+We then read this sequence three letters at a time,
+translate each triplet to a single letter
+that stands for a specific amino acid, and then proceed
+to the next set of three letters.
+We do this until we have reached the end of the input sequence.
+Here is part of the table that we'll be using to do the translation.
+The actual table is longer than this.
+The input is shown on the left and the outward as shown on the right.
+In general before you start writing any code,
+make sure you really understand the problem.
+Sometimes it's helpful to run through a simple example on a piece of paper
+before even thinking about the code itself.
+Let's consider the following input sequence.
+How would you translate this sequence?
+So first we identified the first triplet, which in this case is ATA.
+That corresponds to an I. We then move on to the next triplet,
+CAA, which corresponds to a Q and so on.
+The third triplet, DGG, corresponds to W,
+and the final triplet, CAA, corresponds to a Q again.
+So a translation of this DNA sequence would be IQWQ.
+Just to be clear, the top line in this example
+corresponds to our DNA sequence and the bottom line corresponds
+to our sequence of amino acids.
+Instead of doing this manually, we want to write a Python program that does
+the translation for us automatically.
+In this case study, we have four tasks.
+The first task is to manually download DNA and protein sequence
+data to your computer.
+The second task is to import the DNA data into Python.
+The third task is to create an algorithm that
+translates to DNA using the translation table we will provide.
+The fourth task, the final task, is to check if your DNA translation matches
+the protein string you have downloaded.

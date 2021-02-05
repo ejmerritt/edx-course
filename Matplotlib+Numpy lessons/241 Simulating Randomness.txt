@@ -1,0 +1,122 @@
+Many processes in nature involve randomness in one form or another.
+Whether we investigate the motions of microscopic molecules
+or study the popularity of electoral candidates,
+we see randomness, or at least apparent randomness, almost everywhere.
+In addition to phenomena that are genuinely random,
+we often use randomness when modeling complicated systems
+to abstract away those aspects of the phenomenon for which we do not
+have useful simple models.
+In other words, we try to model those parts of a process
+that we can explain in relatively simple terms,
+and we assume, true or not, that the rest is noise.
+To put this differently, we model what we can,
+and whatever it happens to be left out, we attribute to randomness.
+These are just some of the reasons why it's
+important to understand how to simulate random numbers and random processes
+using Python.
+We have already seen the random module.
+We will be using that to simulate simple random processes,
+but we'll also take a look at some other tools the Python has
+to generate random numbers.
+Let's see how we can use the random choice function to carry out perhaps
+the simplest random process -  the flip of a single coin.
+I'm first going to import the random library.
+So I type import random.
+Then we'll use the random choice function.
+We first need parentheses.
+And in this case, we need some type of a sequence, here a list,
+to contain the elements of the sequence.
+I'm going to go with two strings, H for heads and T for tails.
+If I now run this code, Python will pick one of the two elements, head or tail,
+from the sequence.
+If I run this several times, occasionally I get a head.
+Occasionally I get a tail, as expected.
+Often it's more useful, however, to re-label the side of the coin
+with 0 to 1.
+So instead of using list of strings, as we did in the above example,
+we will be using a list of two numbers, two integers,
+as our argument of the random choice function.
+I'm going to take this previous example.
+I'm going to replace the two strings with the numbers 0 and 1.
+And everything works just the same as before.
+The only difference is that now the outcomes are either zeros or ones.
+How could we use this approach to simulate the role of a die?
+Since the outcome of a die is an integer between 1 and 6,
+we can use the same approach here.
+I'm going to look at my previous example, where
+we picked a number, either 0 or 1.
+Instead of having numbers 0 and 1, all I need to do is update the list.
+In this case, I have the numbers 1, 2, 3, 4, 5, 6,
+which are the six possible outcomes of a standard die.
+I can now roll this die simply by running this line several times.
+In this case, we're choosing one number out of six,
+so this is how we can simulate a die.
+We could also implement this using a range object.
+And in that case, we just have to be careful when specifying the start
+and stop values.
+So instead of a list here, we insert a range.
+The first value has to be 1, and the stopping value is going to be 7.
+Remember that many Python functions, like range,
+stop before they hit the stop value.
+In this case, we specified the range object
+that will include the numbers from 1 to 6.
+Let's try running this example now a few times,
+and we'll see that it works just the same way as our list example above.
+When you explore the documentation for random choice,
+you'll find that you don't necessarily need to provide a list.
+Instead, any sequence object will do.
+And because range is a sequence object, you can provide that as an argument
+to the choice function.
+But it's worth taking a moment to think about what you're asking Python to do
+if you had used the following line.
+Taking the previous example, I'm just going
+to insert my range object inside a list object.
+I'm then going to run this line. See what's happening?
+We know that random choice expects a sequence, which is what you
+have provided, in this case, a list.
+But that list contains only one object.
+What is that object?
+It's a range object.
+So when you run this line, Python will always return a range 1,
+7 object to you because that's the only object or sequence the list contains.
+I mention this here because it could easily lead to a programming error,
+although you can always try running your code in the interactive mode
+to make sure it does what you would like it to do.
+Let's build on this idea to explore a somewhat harder example.
+Imagine a situation where you have three dice, one of them having six faces,
+one of them having eight faces, and one of them having ten faces.
+How could you simulate one outcome for a process, where one of these dice,
+chosen uniformly at random, is rolled just one time?
+Here's what I would do.
+First, I would think about choosing a die,
+and then second, I would think about how to roll the die I just chose.
+Let's first implement all three die and then the selection among them,
+and then we'll finally simulate the role of the chosen die.
+Let's first construct a list of range object.
+We have our first object, our second object, and our third object.
+The first one needs to be arranged 1,7 object, as we saw before.
+The second one is the range 1, 9 object.
+And the third one is range 1, 11 object.
+What we have now here is a list of three different range objects.
+If we'd like to pick one of these, we will use, again,
+the random choice function.
+So we need parentheses.
+Now let's try running this code.
+This time we got the range 1, 11 object.
+Now we get a different object and so on.
+So what this line of code does so far is it picks one to three range
+objects uniformly at random.
+But as before, we can pick one of the numbers that's
+contained within a range object.
+So we can embed the code we have inside another random choice function.
+In this case, we're first picking one range object.
+And then we're calling random choice on whichever
+range object we happened to pick.
+And in this case, we get an outcome that corresponds to the process
+that we wanted.
+Why does this example work?
+Remember, everything is an object in Python.
+Here, the innermost random choice first chooses
+one object from a sequence, here a list of range objects.
+The outermost random choice chooses one of the numbers from the given range
+object.
