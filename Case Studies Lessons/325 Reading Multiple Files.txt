@@ -1,0 +1,186 @@
+Being able to navigate file directories is very important.
+Our goal here is to read every book contained in the various subdirectories
+of our book folder.
+In order for us to read directories, we first need to import the OS module.
+I also want to be keeping track of my book directory.
+I'm going to call that book_dir.
+And it's the directory we've seen before.
+"./Books", let's just run that as well.
+Let's see how the function works.
+os.listdir(book_dir).
+In this case, Python is telling us that the present directory contains four
+items: 'English', 'French', 'German', and 'Portuguese'.
+These are subdirectories for books in these four different languages.
+We want to read all of the directories that are contained within the book
+directory.
+The first level is going to be the language directories.
+We first want to generate a list of the directories that are contained within
+our "Books" directory which we can do by saying os.listdir(book_dir).
+And we'll do this in our book directory.
+This returns us to a list which we can loop over.
+Since these directories will correspond to different languages,
+I'm going to call the loop variable language.
+So we'll say for language in os.listdir(book_dir).
+The second layer is going to be the author directory.
+For author in os.listdir(book_dir).
+In this case, we need the book directory.
+But we need to add the new directory that we're currently
+in which is the language.
+We can do this by concatenating strings.
+We take our book directory, we add the "/".
+And to that, we concatenate the language.
+This is our second loop.
+Finally, we want to be looping over all of the titles that
+are contained within this directory.
+So we'll go with title.
+And in this case, we need the same as we had before, book_dir + "/" + language.
+But we need one more component here.
+First "/" then + author.
+Just to be clear, our first for loop is looping over languages.
+The second for loop is looping over authors.
+And the third, the innermost for loop, is looping
+over different titles, different books.
+I'm going to define my input file here which
+is the directory that I had before.
+But we basically need to add one more thing.
+First our "/" then our title.
+This is the path, the full path, of the book,
+starting from my present working directory.
+It's useful to print this out to make sure
+that my function is working correctly.
+So I'll just print that out using the print function.
+On the next line, I want to read in the book.
+So we just say read_book.
+I can now use the short name for my input file.
+At this point, two more things remain to be done.
+First, we need to count the number of words in our text.
+And then we need to compute our word statistics.
+Let's first count the words.
+The input is text.
+And we can actually take this input and feed it right into our words stats.
+Function.
+So what's happening here is the following.
+We're first taking our text.
+That gets fed into our count_words function.
+That returns to an object that then gets pushed into the words text function
+which returns as an object.
+We'll then need to capture the object that's returned, which is a tuple.
+So we're unpacking a tuple.
+Num_unique, and counts.
+And that should do it.
+Let's try running our function.
+We first have our import and the definition of the book directory.
+And then we have our code here.
+You can see what's happening here.
+Python is first looping over all languages.
+And for each language, is looping over all authors.
+And for each author, it's looping over all of the titles.
+The benefit of having a print function in your code,
+is that you can follow Python as it's reading through your 102 books.
+pandas is a library that provides additional data structures and data
+analysis functionalities for Python.
+It's especially useful for manipulating numerical tables and time series data.
+pandas gets its name from the term panel data
+used to refer to multi-dimensional structured data sets.
+Let's create a simple table using pandas.
+We'll first import pandas as pd which is the convention.
+We then want to create a table.
+The most common data structure in pandas is what's called a data frame.
+This is very similar to the data frame structure
+you might have seen before in R.
+This case, we'll simply demonstrate how to create a table using
+the pandas DataFrame function.
+I'm going to call my table, simply, table.
+We need the DataFrame command.
+And inside, we need to specify the columns of our table.
+Let's have a table that has only two columns.
+The first one being name and the second one being age.
+Now we can add new entries to our table based on the location of these entries.
+Let's see how that works.
+We do this by first typing table.
+And we can specify the location, within the table, where we
+would like the following entry to go.
+I'm going to start at location one.
+And you can think of that as the row one of table.
+The first entry is a name.
+So it has to be a string.
+Let's say James.
+The second might be age.
+Let's say 22.
+I can add a second entry.
+A second row to my table.
+I need to modify the location.
+Let's change the name.
+Let's have Jess.
+Let's say Jess is 32.
+And now we have two entries in my table.
+I can inspect my data object by typing its name, which in this case, is table.
+To get the columns of my table, I can type table.colums.
+In this case, I had only two columns: name and age.
+We can now use pandas data frame to keep track of our book statistics.
+Let's see how that works.
+Let's go back to our previous code.
+I first need to do the import statement here so I can use pandas.
+And the next step is to create an empty table.
+I'm going to call that table stats.
+It's a data frame.
+And I want to define the names of the columns.
+And in this case, we'll define a few columns.
+I'll call them "language", "author", "title", "length".
+And I'm missing a quote there.
+And "unique".
+And we'll put that in quotes as well.
+You can capitalize these terms to your liking.
+In this case, I'm just doing everything lower case.
+This line will create an empty date frame, an empty table,
+that has these five columns.
+To add data to our table, we also need to keep track of the role of the table.
+To do this, we'll define a variable called title_num.
+And we're going to start that with 1.
+To start the data in our table, we need to add a line at the end of our code.
+We use the same syntax as before.
+We insert the new line, new row, and the specific location.
+In this case, we'll use title_num.
+And before we forget, we have to make sure to increase
+that counter once we're done.
+And we insert, to this specific location,
+some of the elements that we care about.
+Language is our first column.
+Author, our second.
+Title, our third.
+Then we need to add the length of the book,
+meaning the number of words in that book.
+We've seen how to use this before.
+We're just summing over the counts that we obtained before.
+And finally, we'll add num_unique here.
+And with that, we should be done.
+We can then run our code.
+And we can see that it seems to run.
+Let's now look at our table which is called stats.
+In this case, we can see that the data frame has 102 rows and five columns.
+If you have a large table, it will probably not
+fit on the screen in one go.
+That's why it's helpful to be able to look at the top five, or bottom five,
+rows of your table.
+Let's look at our stats table.
+Head gives us the top five lines.
+And tail gives us the bottom five lines.
+In this case, it looks like our table is correctly populated.
+Looking at the table, I would like to make two small modifications.
+First, I would like to make sure that the authors always appear capitalized
+in the table.
+Second, I would like to get rid of the .txt file extension in the title
+of the books.
+Let's modify our code accordingly.
+Author name is the second column in our table.
+To capitalize this, you can just say capitalize.
+To modify the title, we replace .txt with an empty string.
+Now the other names will appear capitalized and the titles will appear
+without the .txt.
+Let's fix that comma into a period.
+Let's try running this again.
+Python has just read over 100 books for us.
+We also got the head.
+Now I just got the tail of the table.
+So we got rid of the .txt file extensions and the others now appear
+capitalized.
