@@ -1,0 +1,73 @@
+We can easily extract specific columns from our pandas table using the names
+that we've given to those columns.
+Let's practice this.
+Stats.length gives me access to the length of the different books.
+We can also try looking at the unique column,
+and again, we get access to different data in our table.
+To make the plots, we first need to import matplotlib.pyplot,
+and we'll import that as plt. Let's first try making a very simple scatter
+plot.
+We can use the plt.plot function.
+On the x-axis we'll plot length.
+On the y-axis we'll plot unique, the number of unique words.
+I'd like to use blue circle for this, and let's see what happens.
+In this case, we can see the plot.
+Again, in the plot on the y-axis, we have the number of unique words,
+and on the x-axis, we have the length of the book measured in number of words.
+Let's make a different version of our plot.
+Let's use the loglog version, which plots
+both x and y-axis logarithmically.
+In this case, on the loglog plot, we see a straight line.
+The fact that we see a straight line will later
+suggest some data modeling strategies that we might be able to use.
+Using pandas, we can also stratify data, for example, by language.
+Let's take our stats table.
+We'd like to look at those elements for which language is equal to English.
+In this case, we only have seven entries in English.
+We can do the same for French.
+In this case, we see we have many more entries.
+Let's construct a plot using different colors for different languages.
+This allows us to try out some of the interesting color options
+that Python has.
+Plt uses essentially the same names for colors as HTML does,
+the markup language used to create webpages.
+So if you'd like to learn more about color options,
+you can just google "html colors."
+Finally, we would like to prepare the plot.
+We'll do a 10 by 10 plot.
+Then we have four more subsets, so we stratify our data.
+We take our stats, but we only look at those columns, those entries,
+for which language is equal to English.
+Then we'll do a loglog plot, so plt.loglog.
+The x-axis is going to be subset.length, subset.unique, dot unique.
+We'll use circle as markers, and we'll add a label,
+and we'll add a color, for which we'll use crimson.
+We can then proceed the same way for the other languages.
+So the second language is going to be French.
+Change this to French.
+For French, we'll use forest green.
+Then we'll go with German.
+Change the label to, we'll use orange here.
+And finally we'll go with Portuguese, and we'll go with blue-violet.
+Put these together.
+It's at the legend.
+It's also an x-label, which is "book length".
+Let's add y-label, which is "Number of unique words," words.
+And finally, let's save this, plt.savefig.
+We'll call this lang_plot.
+Now let's try running the code.
+And then go here to
+look for the PDF, and this is our final result. On the x-axis,
+we have the length of the book measured the number of words.
+On the y-axis, we have the number of unique words in each book.
+You'll see that the number of unique words scale, the y-axis,
+goes from about 1,000 to 100,000.
+The book length scale, the x-axis, goes from 1,000 to 1 million.
+That's it.
+We accomplished many tasks in this case study.
+We learned how to count the frequency of words,
+how to navigate file directories, how to use the counter object
+from their collections module, and we also
+learned some very basic ideas about how to use pandas.
+I hope you enjoyed this case study and feel ready to try out
+some of the additional exercises.
