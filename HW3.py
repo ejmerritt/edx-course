@@ -50,9 +50,37 @@ def word_stats(word_counts):
     counts = word_counts.values()
     return (num_unique, counts)
 
+# Exercise 1
+#Read in the data as a pandas dataframe using pd.read_csv. Use the index_col argument to set the first column in
+#the csv file as the index for the dataframe.
 file = "hamlets.csv"
 hamlets = pd.read_csv(file, index_col=0)
 print(len(hamlets))
+
+# Exercise 2
+#Find the dictionary of word frequency in text by calling count_words_fast(). Store this as counted_text.
+#Create a pandas dataframe named data.
+#Using counted_text, define two columns in data:
+    #word, consisting of each unique word in text.
+    #count, consisting of the number of times each word in word is included in the text.
 language, text = hamlets.iloc[0]
-data = pd.DataFrame(columns = ["word","count"])
-    
+counted_text = dict(count_words_fast(text))
+print(counted_text["hamlet"])
+data = pd.DataFrame.from_dict(counted_text, orient="index").reset_index()
+data = data.rename(columns = {"index":"word", 0:"count"})
+
+# Exercise 3
+#Add a column to data named length, defined as the length of each word.
+#Add another column named frequency, which is defined as follows for each word in data:
+#    If count > 10, frequency is "frequent".
+#    If 1 < count <= 10, frequency is "infrequent".
+#    If count == 1, frequency is "unique".
+for i in range(len(data)):
+    row = data.iloc[i]
+    if row["count"] > 10:
+        data["frequency"] = "frequent"
+    elif row["count"] <= 10:
+        data["frequency"] = "infrequent"
+    elif row["count"] == 1:
+        data["frequency"] = "unique"
+print(data.head)
