@@ -128,3 +128,6 @@ sub_data.head()
 # Exercise 6
 #Plot the word statistics of each translations on a single plot. Note that we have already done most of the work for you.
 #Consider: do the word statistics differ by translation?
+
+
+#---------CLASSIFICATION--------------#
