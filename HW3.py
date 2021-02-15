@@ -50,6 +50,29 @@ def word_stats(word_counts):
     counts = word_counts.values()
     return (num_unique, counts)
 
+def summarize_text(language, text):
+    counted_text = count_words_fast(text)
+
+    data = pd.DataFrame({
+        "word": list(counted_text.keys()),
+        "count": list(counted_text.values())
+    })
+
+    data.loc[data["count"] > 10,  "frequency"] = "frequent"
+    data.loc[data["count"] <= 10, "frequency"] = "infrequent"
+    data.loc[data["count"] == 1,  "frequency"] = "unique"
+
+    data["length"] = data["word"].apply(len)
+
+    sub_data = pd.DataFrame({
+        "language": language,
+        "frequency": ["frequent","infrequent","unique"],
+        "mean_word_length": data.groupby(by = "frequency")["length"].mean(),
+        "num_words": data.groupby(by = "frequency").size()
+    })
+
+    return(sub_data)
+
 # Exercise 1
 #Read in the data as a pandas dataframe using pd.read_csv. Use the index_col argument to set the first column in
 #the csv file as the index for the dataframe.
@@ -75,12 +98,33 @@ data = data.rename(columns = {"index":"word", 0:"count"})
 #    If count > 10, frequency is "frequent".
 #    If 1 < count <= 10, frequency is "infrequent".
 #    If count == 1, frequency is "unique".
-for i in range(len(data)):
-    row = data.iloc[i]
-    if row["count"] > 10:
-        data["frequency"] = "frequent"
-    elif row["count"] <= 10:
-        data["frequency"] = "infrequent"
-    elif row["count"] == 1:
-        data["frequency"] = "unique"
+data["length"] = data["word"].apply(len)
+data.loc[data["count"] > 10,  "frequency"] = "frequent"
+data.loc[data["count"] <= 10, "frequency"] = "infrequent"
+data.loc[data["count"] == 1,  "frequency"] = "unique"
 print(data.head)
+print(data.frequency.value_counts().unique)
+
+# Exercise 4
+#Create a pandas dataframe named sub_data including the following columns:
+#    language, which is the language of the text (defined in Exercise 2).
+#    frequency, which is a list containing the strings "frequent", "infrequent", and "unique".
+#    mean_word_length, which is the mean word length of each value in frequency.
+#    num_words, which is the total number of words in each frequency category.
+import statistics
+sub_data = pd.DataFrame(columns = ["language", "frequency", "mean_word_length", "num_words"])
+sub_data.loc[1] = language,  ["frequent", "infrequent", "unique"], [(data.loc[data["frequency"] == "frequent", statistics.mean(data[length])]),(data.loc[data["frequency"] == "infrequent", statistics.mean(data["length"])]),(data.loc[data["frequency"] == "unique", statistics.mean(data["length"])])], [(sum(data.loc[data["frequency"] == "frequent"])), (sum(data.loc[data["frequency"] == "infrequent"])), (sum(data.loc[data["frequency"] == "unique"]))]
+sub_data.head()
+
+# Exercise 5
+#The previous code for summarizing a particular translation of Hamlet is consolidated into a single function called summarize_text.
+#Create a pandas dataframe grouped_data consisting of the results of summarize_text for each translation of Hamlet in hamlets.
+#    Use a for loop across the row indices of hamlets to assign each translation to a new row.
+#    Obtain the ith row of hamlets to variables using the .iloc method, and assign the output to variables language and text.
+#    Call summarize_text using language and text, and assign the output to sub_data.
+#    Use the pandas .append() function to append to pandas dataframes row-wise to grouped_data.
+
+
+# Exercise 6
+#Plot the word statistics of each translations on a single plot. Note that we have already done most of the work for you.
+#Consider: do the word statistics differ by translation?
