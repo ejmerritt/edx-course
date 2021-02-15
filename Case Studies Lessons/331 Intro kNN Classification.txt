@@ -1,0 +1,52 @@
+Statistical learning refers to a collection
+of mathematical and computation tools to understand data.
+In what is often called supervised learning,
+the goal is to estimate or predict an output based on one or more inputs.
+The inputs have many names, like predictors, independent variables,
+features, and variables being called common.
+The output or outputs are often called response variables,
+or dependent variables.
+If the response is quantitative-- say, a number that measures weight or height,
+we call these problems regression problems.
+If the response is qualitative-- say, yes or no, or blue or green,
+we call these problems classification problems.
+This case study deals with one specific approach to classification.
+The goal is to set up a classifier such that when
+it's presented with a new observation whose category is not known,
+it will attempt to assign that observation to a category, or a class,
+based on the observations for which it does know the true category.
+This specific method is known as the k-Nearest Neighbors classifier,
+or kNN for short.
+Given a positive integer k,  say 5, and a new data point,
+it first identifies those k points in the data that are nearest to the point
+and classifies the new data point as belonging to the most common class
+among those k neighbors.
+Let's look at the kNN method on the whiteboard.
+Let's first set up a co-ordinate system.
+We have measured two different features and data.
+Let's call this feature x1, which could be someone's weight,
+and this feature is x2, which could be someone's height.
+We're given a set of points.
+Some of them are blue, like these points over here,
+and another set of points that are red, like these points over here.
+The color of the point tells us the category to which
+that particular observation belongs.
+The goal behind classification is the following:
+Imagine we get a new data point, say, the black point over here,
+whose class is not known.
+Should we, as scientists, point to the blue category or the red category?
+What kNN does is the following:
+It first identifies some of the closest neighbors around it,
+and it assigns the black point to the category
+to which a majority of the points around it belong.
+In this case, we have three points.
+They're all blue.
+And this point gets assigned blue.
+In the second example, if we had to assigned k to be equal to 4,
+we'd be looking at the four nearest neighbors.
+In this case, we have three blue dots and one red dot.
+Because the blue dots are in the majority,
+we would assign this new observation to the blue category.
+In this case study, we have seven different tasks.
+We start by finding the distance between two points,
+and we end with building our own homemade kNN classifier.

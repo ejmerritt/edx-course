@@ -1,0 +1,177 @@
+For building our KNN classifier, we need to be
+able to compute, what is sometimes called, majority vote.
+This means that given an array or a sequence of votes,
+which could be say numbers 1, 2, and 3, we
+need to determine how many times each occurs,
+and then find the most common element.
+So for example, if we had two 1s, three 2s, and one 3,
+the majority vote would be 2.
+Note that while we need to count the number of times each vote occurs
+in the sequence, we will not be returning
+the counts themselves, but instead the observation
+corresponding to the highest count.
+Let's build a function called majority vote.
+We have previously programmed a function called count words in our language case
+study.
+And I'm going to be using that as my starting point for the new function.
+Here we have the function that we wrote before to count the number of words
+occurring in a given piece of text.
+The new function is going to be called majority vote.
+And the input is going to be a sequence of votes.
+I'm going to delete this old docstring which is no longer relevant.
+And we can also remove the pre-processing step here previously.
+Let's change word counts to vote counts.
+And we'll be looping over all the votes.
+So for vote in votes, which is our vote sequence.
+Then we ask, have we seen this vote before.
+So if vote in vote counts.
+If we have seen this before, all we need to do
+is increase the counter, vote counts for this specific vote.
+If we haven't seen this before, we will just add these to our counters,
+so vote counts for this particular vote, is going to be set to 1.
+And we'll change these to vote as well.
+Let's try running the code that we have.
+So we'll define that function.
+And let's also enter some data.
+So votes is equal to, let's say, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3,
+let's add a few more 3s in here.
+Then we can run the function by calling vote counts equals majority vote votes.
+We define a sequence, in this case a list, and then we count the votes.
+We can now inspect votes count, vote counts.
+And this is what we get.
+So the keys here are the different votes that occurred
+and the values are the number of times each vote occurred.
+So for example, number 3 occurred six times.
+We've now counted the votes and by looking at the dictionary,
+we can see that number 3 occurs most frequently among the votes.
+But how can we get Python to do this.
+Let's rephrase our problem.
+Given a dictionary where the values are counts,
+how can we get Python to return the key that corresponds to largest value?
+Let's start with finding the maximum count.
+Let's first take our vote counts dictionary.
+We can ask, what is the maximum.
+In this case, the answer is 3.
+Note that running that is the exact same as running max of vote counts dot keys.
+This returns us the maximum key.
+If you wanted to find out the maximum of the values,
+you would replace dot keys with dot values
+and we would know that the maximum vote occurs six times.
+If you wanted to then extract this bit of information in a variable,
+we could define, let's say max counts, to be equal to max of vote counts
+dot values.
+Let's move this code up in our editor for future use.
+We can now loop over all entries in the dictionary
+and find which entry, or entries in case there are many,
+corresponds to the maximum count.
+We can do this using the items method of dictionaries.
+Let's first make sure we know how the items method works.
+For vote comma count this is a tuple in vote counts dot items.
+Let's just try printing this out.
+So we can print out vote and count.
+This for loop will now loop over the dictionary,
+and for each entry it's going to be printing the key
+and the value associated with that key.
+We can use this as a starting point for our code.
+I'll create an empty list here called winners, and in this list
+I'll be keeping track of the keys that correspond to the highest values
+or counts in the dictionary.
+I'm going to keep track of maximum counts,
+I'm going to move this line here, and then
+we are ready to loop over our dictionary.
+What we'd would like to know is, is the current entry we're looking at, does
+that have the maximum number of votes.
+So, if the present count is equal to max count
+we can append to winners our vote.
+Then we can get rid of this line here.
+Let's try running this.
+In fact, let's change this,
+we have a small typo.
+Let's move this to max count.
+Now we can try running this,
+and the code runs.
+Let's see what we have in our winners.
+In this case, we have just one winner, which is number 3.
+In case of a tie, we can just pick one of the winners at random
+since any option is just as good as any other.
+Let's make this modification and let's also turn this code into a function.
+The first step we need to do is, we'll import the random module.
+The first few lines of the code will remain as they were.
+Although we have to move the return statement further down.
+I'll then take my code here, where we pick the winner,
+make sure to indent the code,
+and let's see what we have.
+Reading from the top, we first set up vote counts dictionary.
+Then we go through all of the votes and we count the number
+of votes each candidate receives.
+And we keep track of the winners.
+And the final thing that remains to be done
+is to return the result, which is going to be winners.
+But remember in case we have multiple winners,
+we want to be able to just pick one of them uniformly at random.
+This is why we call random dot choice on our winners.
+And as a consequence, our function will return just one winner,
+even in the case of a tie.
+Let's next try running our function.
+We're going to move this window to give us a little more space here.
+I'll mark the function.
+And we'll run all of this,
+and luckily no errors.
+We can then run to previous example again.
+We'll first redefine votes and then this time the function
+is going to be returning a single winner to us.
+Let's try running this line.
+And in this case our winner is number 3.
+I'm next going to add three more votes for number 2.
+I'll redefine that.
+And let me just take out this one, the assignment.
+And we can now try running the function a couple of times.
+This time number 3 was the winner.
+This time number 2.
+Now 3 again, and so on.
+So we see that the function is doing what we wanted it to do.
+In case of a tie, it picks one of the candidates,
+one of the elements, uniformly at random and returns one single winner.
+As you may remember, the most commonly occurring element in a sequence
+is called mode in statistics.
+Finding a mode is a common statistical operation.
+So we could use a shortcut approach here.
+Let's try Googling how to find the mode of a NumPy array.
+How to find the mode of a NumPy array.
+In this case, the first hit looks right.
+In the SciPy module there is a function called
+mode which accomplishes exactly what we want to do,
+which is finding the mode of a sequence or an array.
+Let's use this function in our own function.
+Let's go back here.
+In this case, I'm going to take my existing function,
+it's a good starting point for our new version of the function.
+And it turns out that I will not need most of the code here.
+The first step for us will be to import scipy dot stats as ss.
+And we can take the function that we had, in fact,
+we can delete essentially everything of our function.
+We'll be calling ss mstats dot mode.
+We'll be calling this on votes.
+And if you look at the documentation for the function,
+you'll see that scipy returns, the mode function returns, both mode
+and the corresponding count.
+The final thing left for us to do is to return the mode.
+This is a short version of this program.
+I'm just going to call that majority vote short,
+and let's complete this by adding a docstring.
+Return the most common element in votes.
+I'll make sure to add this docstring also here above.
+Remember our rule was, it's better to write some documentation now,
+rather than postpone writing a docstring later.
+Let's try running our code.
+We can use our existing example here,
+and the code appears to work.
+The function majority vote short,  is both short and fast
+but if you run the code several times, you'll
+see that it always returns number 2.
+This makes sense given the documentation for the mode function.
+It's useful to know that finding the mode of an array
+can be done very easily and quickly.
+But in this case we will stick to our function, majority vote.
+That's because when two or more elements are tied, we'd like to pick one of them
+at random.
