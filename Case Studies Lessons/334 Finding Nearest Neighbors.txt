@@ -122,60 +122,52 @@ was added to the set that's returned to us is 2, 1.
 If you remember our test data set, you can compare these results
 with the location of the red points and the blue point.
 Let's then write the function to predict the class of our new point p.
-We'll call that function knn predict, and it
-takes in three parameters-- p, the new point we'd like to classify,
-points, our existing data or our training data, and the value for k.
+We'll call that function knn_predict, and it takes in three parameters-- p, the new point we'd like to classify, points, our existing data or our training data, and the value for k.
+
+  def knn_predict(p, points, k):
+
 Let's first write this as pseudocode.
 The first thing we'd like to do is to find k nearest neighbors.
 And the second step here is for us to predict the class or category of p
 based on majority vote.
 We've written in the code to accomplish both of these tasks.
-In this case, we use define nearest neighbors function,
-and the inputs will be p, points, and k.
-We will capture the output as ind,
-and that takes care of the first step.
-So far what we have is the code that enables
-us to find those points, those k points that are nearest to p.
-However, to be able to make a class prediction,
-we also need to know the classes to which these k points belong to.
-We'll add one more argument, which is outcomes.
-And these are the classes of the points that are
-specified in the input variable points.
-The one final thing we need to do is
-to take the majority vote of outcomes based on index.
-And we'll return this to our user.
-We can now try running our function.
-And so far it looks good.
-Let's try this out.
-We have previously defined our points.
-What we need to add is a few outcomes.
-We had 9 points, therefore we need 9 outcomes.
-This is going to be defined as a NumPy array,
-and the first four entries will be zeros in this example,
-and the following five will be ones.
-We can run this line, and we can make sure that the length of our outcomes
-is nine.
-Let's then try running our knn predict function.
-The first argument is going to be an array.
-It's a 2.5, 2.7.
-Then we need the points, the outcomes, and a value for k.
-In this case, what knn predict is doing is the following:
+In this case, we use define nearest neighbors function, and the inputs will be p, points, and k.
+We will capture the output as ind, and that takes care of the first step.
+
+  def knn_predict(p, points, k):
+    ind = find_nearest_neighbors(p, points, k)
+
+So far what we have is the code that enables us to find those points, those k points that are nearest to p. However, to be able to make a class prediction, we also need to know the classes to which these k points belong to. We'll add one more argument, which is outcomes. And these are the classes of the points that are specified in the input variable points.
+
+  def knn_predict(p, points, outcomes, k=5):
+    ind = find_nearest_neighbors(p, points, k)
+
+The one final thing we need to do is to take the majority vote of outcomes based on index. And we'll return this to our user. We can now try running our function. And so far it looks good.
+
+  def knn_predict(p, points, outcomes, k=5):
+    ind = find_nearest_neighbors(p, points, k)
+    return majority_vote(outcomes[ind])
+
+Let's try this out. We have previously defined our points. What we need to add is a few outcomes. We had 9 points, therefore we need 9 outcomes. This is going to be defined as a NumPy array,
+and the first four entries will be zeros in this example, and the following five will be ones.
+We can run this line, and we can make sure that the length of our outcomes is nine.
+
+  outcomes = np.array([0,0,0,0,1,1,1,1,1])
+
+Let's then try running our knn_predict() function. The first argument is going to be an array. It's a 2.5, 2.7. Then we need the points, the outcomes, and a value for k.
+
+  knn_predict(np.appay([2.5,2.7]), points, outcomes, k=2)
+
+In this case, what knn_predict() is doing is the following:
 We are providing a new point that has x coordinate 2.5 and y-coordinate 2.7.
 We're asking Python to classify this point.
-We have two different classes in this case-- we have class 0 and class 1.
-In this case what that means is, a point,
-an observation located at 2.5, 2.7, would
-be predicted to belong to class 1.
-Let's try predicting the class of another point.
-Let's say we modify the x-coordinate to 1.
-So the point is now located at x-coordinate equal to 1.0 and y equal
-to 2.7.
-And we can still go with two neighbors.
+We have two different classes in this case-- we have class 0 and class 1. In this case what that means is, a point, an observation located at 2.5, 2.7, would be predicted to belong to class 1.
+Let's try predicting the class of another point. Let's say we modify the x-coordinate to 1. So the point is now located at x-coordinate equal to 1.0 and y equal to 2.7. And we can still go with two neighbors.
+
+  knn_predict(np.appay([1.0, 2.7]), points, outcomes, k=2)
+
 We run the code.
 And in this case, the prediction is 0.
 So we would expect a point located at this position to belong to class 0.
-Based on this code, we could try out a number of different points and see
-where the observations are classified as zeros and where they're classified
-as ones.
-We'll be doing this, but let's first generate
-more interesting synthetic data.
+Based on this code, we could try out a number of different points and see where the observations are classified as zeros and where they're classified as ones.
+We'll be doing this, but let's first generate more interesting synthetic data.
