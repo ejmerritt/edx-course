@@ -1,0 +1,113 @@
+Our next task is to plot a prediction grid. This means that once we've observed our data, we can examine some part of the predictor space and compute the class prediction for each point in the grid using the knn classifier. So instead of finding out how our classifier might classify a given point, we can ask how it classifies all points that belong to a rectangular region of the predictor space.
+We'll go through this example fairly quickly, but I will explain meshgrid and enumerate at the end of the example in a bit more detail.
+We'll be writing a function called make_prediction_grid, and it will take a number of different arguments.
+
+  def make_prediction_grid():
+
+We'll be filling those in as we go along.
+We'll start by specifying the x values of our grid. So these are the xs.
+We'll be starting from x_min. We'll be going to x_max. And we'll be using increments of h to do that.
+
+  def make_prediction_grid():
+    xs = np.arange(x_min, x_max, h)
+    ys = np.arange(y_min, y_max, h)
+
+In a similar way, we'll be creating our ys. We start from y_min, we go to y_max, and we'll be using the same step size again.
+Then we'll use the NumPy meshgrid function, which takes in our xs and our ys, and it generates two 2-dimensional arrays. I'll be calling them xx and yy. This is the function that I will explain in a little more detail once we're done with the example.
+
+  def make_prediction_grid():
+    xs = np.arange(x_min, x_max, h)
+    ys = np.arange(y_min, y_max, h)
+    xx, yy = np.meshgrid(xs, ys)
+
+We need to provide the values of x_min, x_max, y_min, and y_max to this function.
+The user will be providing what I call limits. It's going to be a tuple, and we will just unpack that tuple to get the values of the variables we need-- so x_min, x_max, y_min, y_max.
+
+  def make_prediction_grid(limits):
+    (x_min, x_max, y_min, y_max) = limits
+    xs = np.arange(x_min, x_max, h)
+    ys = np.arange(y_min, y_max, h)
+    xx, yy = np.meshgrid(xs, ys)
+
+So limits will consist of four elements, so limits will be a tuple in this case. We now have the limits of our grid.
+We've generated our x vector, our y vector, and we have the meshgrid generated. We next need to generate our classifiers prediction corresponding to every point of the meshgrid. We'll be calling this object prediction grid. We'll first fill that with zeros, and it's going to be the same size as xx or yy. I've also specified that the data type is integer because we know that the class label is either 0 or 1.
+We'll then be looping over all of our x values, all of our y values, asking our knn predict algorithm or a function to predict the class label 0 or 1 for each point. Once we have done that, we want to capture those predictions in our prediction grid array.
+Let's first loop over our xs. In this case, I'll be using  enumerate construct-- again,
+something that we will discuss briefly after this example. We're looping over xs first.
+Then we need a second for loop which enables us to loop over all of the y values. Again we'll be using enumerate to do that. We now have our x and our y values and because we're using enumerate, we also have the corresponding index locations in the xs and ys vectors. We'll be generating our point p, which is a NumPy array, and it consists of two points, which are the current value for x
+and the current value for y. We then need to predict the outcome that is associated with this given point.
+To do that, we'll be using knn_predict function we wrote before. We want to predict the class label for point p. We need to provide our predictors, our outcomes, and the value of k.
+The specific value of k here is the k in the knn algorithm. That means that's the number of points that will be considered when making the class labeled predictions for point p.
+We also want to make sure that we capture or retain these predictions, and we'll be using a prediction grid for that purpose. We'll capture that prediction by the assignment here,
+and we're a more or less done. Let's go back to our definition of the function here.
+We know that we need to provide predictors as an argument. We also need to provide outcomes. We need to provide limits, which was our x_min and y_max and so on. We need to provide our step size. And finally, we need to provide the value of k. It's also putting a placeholder for our docstring, and let's make sure we return the objects that we've generated. So we'll be using the return statement. We want to provide xx, yy, and prediction grid.
+
+  def make_prediction_grid(predictors, outcomes, limits, h, k):
+    """xxx"""
+    (x_min, x_max, y_min, y_max) = limits
+    xs = np.arange(x_min, x_max, h)
+    ys = np.arange(y_min, y_max, h)
+    xx, yy = np.meshgrid(xs, ys)
+
+    prediction_grid = np.zeros(xx.shape, dtype = int)
+    for i,x in enumerate(xs):
+      for j,y in enumerate)ys:
+      p = np.array([x,y])
+      prediction_grid[j,i] = knn_predict(p, predictors, outcomes, k)
+
+    return (xx, yy, prediction_grid)
+
+Finally, let's complete the docstring. We'll be providing classify each point on the prediction grid.
+
+  def make_prediction_grid(predictors, outcomes, limits, h, k):
+    """Classify each point on the prediction grid."""
+    (x_min, x_max, y_min, y_max) = limits
+    xs = np.arange(x_min, x_max, h)
+    ys = np.arange(y_min, y_max, h)
+    xx, yy = np.meshgrid(xs, ys)
+
+    prediction_grid = np.zeros(xx.shape, dtype = int)
+    for i,x in enumerate(xs):
+      for j,y in enumerate)ys:
+      p = np.array([x,y])
+      prediction_grid[j,i] = knn_predict(p, predictors, outcomes, k)
+
+    return (xx, yy, prediction_grid)
+
+In other words, this function will run through all of the points on our prediction grid and will predict the class label corresponding to that point.
+Finally, before we move on, let's look at the assignment of our prediction on the line where we say prediction_grid[j,i] = knn_predict(p, predictors, outcomes, k).
+Note that we're doing the assignment j, i, not the other way around. This is because j corresponds to y values, and when we specify an index using square brackets, the first value, the first argument, corresponds to the role of the array. That's why we want to make sure that we will assign the y values the rows of the array and the x values the columns of array.
+Let's run our function. And so far, everything looks good.
+
+Let's look at the meshgrid in a little bit more detail. Meshgrid takes in two or more coordinate vectors, say one vector containing the x values of interest and the other containing the y values of interest. It returns matrices, the first containing the x values for each grid point and the second containing the y values for each grid point.
+Let's look at this on the whiteboard.
+To construct a mesh grid, we first provide an array of x values, which would be these numbers-- say 0, 1, 2, 3, and 4. And then we also provide a one-dimensional array of y values-- let's say 1, 2, 3, 4, and 5.
+So these numbers here are the first argument x, and these numbers here are y, our second argument. We don't necessarily have to have the same number of points in these arrays.
+What meshgrid does is the following: let's extend these ticks, we generate a full table.
+Let's look at a given point on the grid.
+For example, for this specific point, the coordinate will be 2, 4. x is equal to 2, y is equal to 4. If we look at this point over here, the x values 1 and the y values equal to 2.
+We could proceed in a similar way and the attach a coordinate to every single point on the grid. This is precisely what meshgrid does. The first output that it provides is going to be the x values of each of these coordinate pairs. The second output is going to be the y values of all of these coordinate pairs. This is why we need two output matrices-- one matrix or one array containing all of the x values and another one containing all of the y values.
+Enumerate is useful when dealing with sequences and when we'd like to have access simultaneously to two things-- different elements in the sequence as well as their index values.
+Let's look at this example from Python.org.
+Let's define seasons as a list of strings. First we can have spring, summer, fall, and winter.
+
+  seasons = ["spring", "summer", "fall", "winter"]
+
+We can generate an enumerate object using seasons. Let's first define seasons.
+
+  enumerate(seasons)
+
+Now if we run the code here, Python will generate the object.
+We don't actually get to look at its content.
+So to do that we can first turn it into a list,
+so we can actually take a look inside what's going on.
+
+  list(enumerate(seasons))
+
+Enumerate returns to us a sequence of tuples. Inside every tuple, the first object is going to be in the index that corresponds to a specific object. The second item is the object itself. If you look at the output, we can see that the first tuple consists of zero and spring. The second one consists of one and summer, and so on. We can illustrate this in a for loop.
+
+  for ind, season in enumerate(seasons):
+    print(ind, season)
+
+If we say for index, ind, season in enumerate seasons, we can print index and season.
+And this is an example of how we can use enumerate.

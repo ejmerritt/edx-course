@@ -1,0 +1,67 @@
+We're going to write a function that generates two end data points, where the first end points are from class 0, and the second end points are from class 1. These data are known as synthetic data because we
+will be generating these data with the help of the computer.
+In this case, we'll generate predictors from two bivariate normal distributions, where the first distribution gives rise to observations belonging to class 0, and the second gives rise to observations belonging to class 1.
+The word, bivariate, just means 2 variables, like x and y. If it were generating say, just the x variables, then we'd be dealing with univariate data.
+Because we generate the data ourselves, we know what we expect to see, which is very useful when you're developing code.
+To generate the synthetic data, we'll be using the scipystats module.
+
+  import scipystats as ss
+
+First, we specify the mean and standard deviation for observations coming from class 1.
+We can just try this out. We'd like to generate in this example, 5 rows and 2 columns of observations coming from this particular normal distribution. For the other class, we'll have the same line, except that we change the mean to be equal to 1. And again, we can try this just to see that the code works.
+
+  ss.norm(0,1).rvs((5,2))
+  ss.norm(1,1).rvs((5,2))
+
+The next step for us is to concatenate these two arrays so that we get a single array consisting of 10 rows and 2 columns.
+We'll be doing that using the numPy concatenate function.
+First we provide a tuple that consists of these 2 arrays. And then we need to specify the axis of concatenation, which is in this case, equal to 0. That's because we're concatenating along the rows of these arrays. We run this, and we get the output we expect, which is 10 rows and 2 columns.
+
+  np.concatenate((ss.norm(0,1).rvs((5,2))), ss.norm(1,1).rvs((5,2)), axis=0)
+
+To turn this into a function, we want to be able to specify the number of rows in our synthetic data set.
+We'll tweak the code here so that we have first, n observations from the first category, category 0, and then that's going to be followed by n observations from the second category, called category 1 or class 1.
+
+  np.concatenate((ss.norm(0,1).rvs((n,2))), ss.norm(1,1).rvs((n,2)), axis=0)
+
+So far we've generated the points for each of these two classes, but we also need to generate are the outcomes. Remember, the first n observations have outcome equal to 0, which is the class label. The second group of observations have class label or outcome equal to 1. Let's generate the outcome vector.
+We can use numPy repeat function to do this. First we'd like to repeat 0 n times.
+We'd then like to repeat 1, n times. And we'd like to concatenate these two arrays together. Again, we'll be using the concatenate function of numPy.
+To run this, we need to specify n.
+
+  outcomes = np.concatenate((np.repeat(0,n), np.repeat(1,n)))
+
+We can try specifying n equals 5, just for this example.
+And in this case, we get one array that consists of a total of 10 elements.
+Let's call this vector or array outcomes. We can move it up here. And now we have edge write this function.
+Let's call this, generate synthetic data. We will provide only one input argument, which is the number of points in each class, in each of the two categories. We can specify a default value of 50. This means that if the person calling this function doesn't provide the input argument, n equals 50 will be used as a default. But the person can also specify any other number for n, depending on how much synthetic data is needed.
+Let's first put in a placeholder for a docstring. The first step is to generate our observations here.
+We'll call this just, points. Then we generate our outcomes. And finally, we return a tuple, which consists of points and outcomes.
+To wrap this up, let's write in the actual docstring. We asked this function to create two sets of points
+from bivariate normal distributions. We can then try defining our function, and so far, everything looks good.
+
+  def generate_synth_data(n=50):
+    """Create two sets of points from bivariate normal distributions."""
+    points = np.concatenate((ss.norm(0,1).rvs((n,2))), ss.norm(1,1).rvs((n,2)), axis=0)
+    outcomes = np.concatenate((np.repeat(0,n), np.repeat(1,n)))
+    return (points, outcomes)
+
+For the sake of this example, let's set n equal to 20. We'll then try running the function that we just defined. We'll make sure to provide n as an input argument.
+So we've now generated our points and outcomes. Let's try plotting these data.
+We'll first open a figure. We'll be using the plt.plot  function to do this.
+We'll be taking some subsets of points, first for class 0, and we'll be using red circles to represent those points.
+
+  plt.figure()
+  plt.plot(points[:n,0], points[:n,1],"ro")
+
+We'll also want to plot the points from the other category. Let's draw those using blue circles.
+We need to be careful to extract the right rows and right columns in these plots. Observations in the first class correspond to the first n rows of our data, and the x coordinates are located in column 0,
+and the y coordinates in column 1.
+Observations in the second category are the remaining rows, again, in calling 0 for the x values and the remaining rows in column 1 for the y values.
+Finally, we can try saving this figure. We'll call this bivariate data dot PDF.
+
+  plt.plot(points[n:, 0], points[n:, 1],"bo")
+  plt.savefig("bivariate.pdf")
+
+And to have a complete example here, we can define n to be equal to 20.
+And then we run the code. 

@@ -1,0 +1,181 @@
+As the name K-Nearest neighbors suggests, as part of the method,
+we need to find which point are the nearest neighbors of any given point
+that we're hoping to classify.
+Using very informal pseudocode, let's see
+how we might be able to identify those nearest neighbors.
+In this case, we have three different steps in our program.
+The first is to loop over all points.
+For any given point, we want to compute the distance
+between point P, a point, we're hoping to classify, and every other point.
+Once we're done with that, we'd like to sort distances and return those k
+points that are nearest to point p.
+This informal pseudocode will serve as the starting point
+for our actual Python code.
+Before we even start writing any actual code, let's set up a simple test
+data set so that we can work with it interactively from the start.
+I'm going to create a vector which is called points.
+It's a one-dimensional NumPy array.
+And I'd like to have nine points in this array.
+The first point is 1,1.
+The second is 1,2, the third is 1,3.
+Then we go with 2,1, 2,2, 2,3, and finally 3,1, 3,2, and 3,3.
+Because NumPy array expects as input just one list,
+we need to make sure we embed these rows in another list.
+We can now run the code, and we have our dataset defined.
+Let's then also set up a point p, which is NumPy array consisting
+of two elements 2.5 and 2.
+And we can run the code.
+Now we have our points and our p defined.
+Let's then visualize our data to better understand it.
+We like to plot two things-- both all of the points
+and our specific point p of interest.
+We'll use the plt.plot function.
+We first need the x-coordinates, and then we need the y-coordinates.
+For the x-coordinates, we would like to plot all of the rows in column 0,
+and the y-coordinates correspond to all of the rows in column 1.
+In this case, let's plot these data using red circles.
+The second thing we'll plot is the point p.
+In this case, we can use a shorthand notation-- p(0) corresponds
+to the first element, p(1) the second, and we'll draw this in blue.
+Let's run both of these lines.
+In this case, we can see a grid of nine points,
+and we can change the axes to make the points more visible.
+Let's then rerun the plotting and we can see
+we have nine red dots and one blue dot.
+Let's then work with our function.
+Let's first create an empty array called distances to hold all of our distances.
+It's going to have the same number of elements
+as we have rows in our points array.
+The next step is to loop over all of the points that we have.
+We're going to be setting up an index i in the range of length of distances.
+The remaining thing for us to do is to calculate
+the distance between a point p and each of the points in our array points.
+Distances i, which is a given element of the array,
+will be set equal to distance between p and the point which
+happens to be at the ith location of our points array.
+So far we're done with the first two lines of our pseudocode.
+What are the two nearest points here?
+There are 2,2, and 3,2.
+And they correspond to columns 4 and 7 in our points array.
+Let's check this.
+We can rerun our definition of points then we can run our code,
+and we can look at the contents of distances.
+In this case, if you look up point 4, that's our point 2.2.
+The corresponding distance, the distance from point p to that point, is 0.5.
+We can take our point number 7, which is located at 3,2,
+and we can check the distance of that point, which is also 0.5.
+We could sort the distances array to give us shorter distances,
+but instead what we really would like to get
+is an index vector that would sort the array.
+If we had that, we could take the first K elements of that array,
+and know that the corresponding points are the K closest
+points to our point of interest p.
+Fortunately, this function exists in NumPy and it's called argsort.
+What it does is, it returns to indices that would sort the given array.
+Let's first explore it interactively.
+Let's take a look at the contents of distances.
+We'll use the argsort function, apply that to distances,
+and we will capture the object in ind.
+Let's take a look at that object.
+It's an array of indices.
+If we now type distances, and we extract the element at locations given by ind,
+we'll see that the distances have been sorted.
+If we wanted to take the say, two nearest elements,
+we would just pick the first two indices of the end vector.
+So we would type from 0 to 2, which gives us
+the elements at locations 0 and 1.
+And in this case, we have found the two nearest points to our point p.
+Let's then finish this part, and turn it into a function.
+Going back to our previous code, let's first define the function.
+We'll call that find nearest neighbors.
+The input arguments are going to be p, all of the other points,
+and k, the value of nearest neighbors we're interested in.
+I'm going to set the default value for the parameter for argument
+to be equal to 5.
+In other words, if a user of this function only specifies p in points,
+Python is going to be using the value 5 for k.
+We'll make sure to indent the code first.
+Then we'll use our NumPy argsort, apply to distances.
+We capture the index as ind, and then we'd
+like to return part of the index factor, the first k elements.
+In fact, a shorthand notation here would be just to omit the 0,
+and this does just the same.
+To wrap up the function, let's add a brief docstring.
+A description could be find the k nearest neighbors of point p
+and return their indices.
+We can then try running our function.
+Our function has now been defined.
+Let's then try calling our function.
+We'll capture the output as ind.
+Find nearest neighbors, p, points.
+I'm going to be using 2 initially.
+Then I'd like to print the locations of these points, which is add a print
+statement here, print function.
+And we run the line.
+In this case, Python is returning us the coordinates
+of the two closest points, the two points that
+are closest to our fixed point p.
+Let's try rerunning this, but we'll change the value of k.
+Let's try finding the three nearest neighbors.
+In this case, you'll see that the new point that
+was added to the set that's returned to us is 2, 1.
+If you remember our test data set, you can compare these results
+with the location of the red points and the blue point.
+Let's then write the function to predict the class of our new point p.
+We'll call that function knn predict, and it
+takes in three parameters-- p, the new point we'd like to classify,
+points, our existing data or our training data, and the value for k.
+Let's first write this as pseudocode.
+The first thing we'd like to do is to find k nearest neighbors.
+And the second step here is for us to predict the class or category of p
+based on majority vote.
+We've written in the code to accomplish both of these tasks.
+In this case, we use define nearest neighbors function,
+and the inputs will be p, points, and k.
+We will capture the output as ind,
+and that takes care of the first step.
+So far what we have is the code that enables
+us to find those points, those k points that are nearest to p.
+However, to be able to make a class prediction,
+we also need to know the classes to which these k points belong to.
+We'll add one more argument, which is outcomes.
+And these are the classes of the points that are
+specified in the input variable points.
+The one final thing we need to do is
+to take the majority vote of outcomes based on index.
+And we'll return this to our user.
+We can now try running our function.
+And so far it looks good.
+Let's try this out.
+We have previously defined our points.
+What we need to add is a few outcomes.
+We had 9 points, therefore we need 9 outcomes.
+This is going to be defined as a NumPy array,
+and the first four entries will be zeros in this example,
+and the following five will be ones.
+We can run this line, and we can make sure that the length of our outcomes
+is nine.
+Let's then try running our knn predict function.
+The first argument is going to be an array.
+It's a 2.5, 2.7.
+Then we need the points, the outcomes, and a value for k.
+In this case, what knn predict is doing is the following:
+We are providing a new point that has x coordinate 2.5 and y-coordinate 2.7.
+We're asking Python to classify this point.
+We have two different classes in this case-- we have class 0 and class 1.
+In this case what that means is, a point,
+an observation located at 2.5, 2.7, would
+be predicted to belong to class 1.
+Let's try predicting the class of another point.
+Let's say we modify the x-coordinate to 1.
+So the point is now located at x-coordinate equal to 1.0 and y equal
+to 2.7.
+And we can still go with two neighbors.
+We run the code.
+And in this case, the prediction is 0.
+So we would expect a point located at this position to belong to class 0.
+Based on this code, we could try out a number of different points and see
+where the observations are classified as zeros and where they're classified
+as ones.
+We'll be doing this, but let's first generate
+more interesting synthetic data.
