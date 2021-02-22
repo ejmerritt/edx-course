@@ -1,0 +1,176 @@
+SciKitLearn is an open source machine learning library for Python.
+It's a very extensive library.
+Here, we will only make use of its knn classifier.
+But there is much, much more there to explore.
+We'll be applying both the SciKitLearn and our homemade classifier
+to a classic data set created by Ron Fisher in 1933.
+It consists of 150 different iris flowers.
+50 from each of three different species.
+For each flower, we have the following covariates: sepal length, sepal width,
+petal length, and petal width.
+Let's first import some data sets.
+
+  from sklearn import datasets
+
+We can then extract the iris data set.
+
+  iris = datasets.load_iris()
+
+And we can run this.
+Let's take a look at the data.
+We can do this by typing iris data we can see
+150 rows because we have 150 observations
+and we have four different covariates which
+is why we have four columns in our data set.
+For simplicity, we'll just look at the first two covariates or predictors
+in our example.
+We'll define predictors as a subset of our iris data.
+We would like to have all of the rows but only columns 0 and 1.
+To do that, we specify 0:2 because remember,
+the end index 2 will not be included in the slice.
+
+  predictors = iris.data[:, 0:2]
+
+We'll then build an outcomes vector, which is iris.target,
+and we can run these two lines.
+
+  outcomes = iris.target
+
+Let's then try plotting our data.
+We'll first plot out predictors.
+Flash set outcomes is equal to zero.
+And here we would like to have all of the rows from column 0.
+For y coordinates, you want the same exact thing
+except we would like to have the values from column 1.
+And we'll be using red circles for this plot.
+
+  plt.plot(predictors[outcomes==0][:,0], predictors[outcomes==0][:,1], "ro")
+
+This covers the data points that come from class 0 for which the outcomes
+variable is equal to zero.
+You can have the second line modified from the first
+by changing the outcomes.
+And we want to change the color to green.
+
+  plt.plot(predictors[outcomes==1][:,0], predictors[outcomes==1][:,1], "go")
+
+We can similarly plot observation from the third group.
+We just change outcomes equal to 2 and again, we want to change the color and go with
+blue in this case.
+
+  plt.plot(predictors[outcomes==2][:,0], predictors[outcomes==2][:,1], "bo")
+
+We can save this data, the figure, as "iris.pdf".
+And we can take a look at the plot.
+So we have observations from three different groups represented
+by the dots that are colored green, blue, and red.
+X-axis and y-axis correspond to the values of our predictors.
+Let's then make a prediction grid plot.
+To do this, I'll be using code that I wrote previously.
+In this case, I want to use k code 5.
+I'll call this plot "iris_grid.pdf".
+I want to change the limits from 4 to 8 for x-axis.
+And from 1.5 to 4.5 for the y-axis.
+And we will continue to go in increments of 0.1.
+We can then run this code.
+And these are our iris prediction grid.
+In this case, we can see that the grid consists of three different colors
+because we have three different classes of observations.
+Looking at this grid, if we were to observe a new data point that
+sits somewhere in the upper left corner, this classifier
+would predict that observation to belong to the red class.
+Similarly, if we had a new observation that
+happened to sit in the lower left corner of the plot,
+that would be classified as a blue dot.
+Finally, if we had new observations for which the x-coordinate is
+very close to the right boundary of our region here,
+those points would be classified as belonging
+to the green category or class.
+Let's then fit the knn classifier using both the algorithm from SciKitLearn
+as well as our own homemade algorithm.
+We'll be importing the Kneighbors classifier from the sklearn neighbors
+module.
+We can run this line.
+
+  from sklearn.neighbors import KNeighborsClassifier
+  knn = KNeighborsClassifier(n_neighbors = 5)
+
+And we say knn="KNeighborsClassifier" and the number of neighbors,
+n_neighbors, we'll set that to be equal to 5.
+We can run this line as well.
+And we'll fit our model using the fit method.
+As input, we need to provide our predictors and our outcomes.
+
+  knn.fit(predictors, outcomes)
+
+Finally, we can do the predictions.
+We'll call these sk_predictions.
+We will obtain the predictions using the knn.predict function.
+And as input, we need to provide our predictors.
+
+  sk_predictions = knn.predict(predictors)
+
+We can run all of the four lines.
+So let's look at sk_predictions.
+Look at the shape.
+We have 150 observations in this array.
+This makes sense.
+We started with 150 observations belonging
+to one of the three different classes.
+If we look at the, say, first ten data points here,
+these correspond to their predictions provided by the SciKitLearn algorithm
+using KNearestNeighbors.
+Let's build an array that consists of my predictions.
+We'll construct this as a np.array.
+And we'll be building that as a list comprehension.
+We called the knn_predict function.
+We provide p, predictors, outcomes, the value of k as input.
+We'll be looping over all of our predictors.
+So we type for p in predictors.
+We can try running this.
+So my predictions is a 150-element-long array.
+Now these are the predictions to our own homemade knn algorithm did.
+
+  my_predictions = np.array([knn_predict(p, predictors, outcomes, 5) for p in predictors])
+
+What we would like to do is compare the predictions
+obtained by the SciKit library to our own homemade predictions.
+To do this, we can ask how often do the sk_predictions predictions agree
+with my predictions.
+
+  sk_predictions == my_predictions
+
+If we run this, we'll see that it's a boolean
+array that consists of true and false.
+We can take the mean of this in which case true will be valued as one
+and false will be evaluated as zero.
+And we can multiply this by 100 to get the percentages.
+
+  print(np.mean(sk_predictions == my_predictions) * 100)
+
+Finally, let's print this entity.
+In this case, we see that my predictions and the SciKit predictions
+agree 96% of the time.
+We can also ask how frequently do my predictions
+and SciKit predictions agree with the actual observed outcomes.
+We can take the line that we have already here.
+And we're asking when is sk_predictions equal to outcomes.
+And we can also ask how frequently is my predictions equal to outcomes.
+Modify the code slightly.
+
+  print(np.mean(sk_predictions == outcomes) * 100)
+  print(np.mean(my_predictions == outcomes) * 100)
+
+
+And we run these two lines.
+What we see is the following:
+using SciKit, the actual observed outcomes for the data
+points that we have observed, agree with the predictions of the SciKit library
+83% of the time.
+In this case, our homemade predicter is actually somewhat better.
+We're correct approximately 85% of the time.
+That's it.
+We did a lot in this case study.
+The follow up exercises that we have prepared
+for you will enable you to get some more practice on classification using knn.
+I hope you'll enjoy them.
