@@ -9,5 +9,3 @@ def remove_linebreaks(filepath):
   file.truncate(0)
   file.write(text)
   file.close()
-
-remove_linebreaks("333 Majority Vote.txt")

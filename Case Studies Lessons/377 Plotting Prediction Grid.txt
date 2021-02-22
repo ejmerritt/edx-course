@@ -1,0 +1,55 @@
+For us to be able to plot the prediction grid, we need one more function.
+This function is called plot prediction grid,
+and in this case we provide this to you on the cores site.
+We can now try out different values for k.
+If you use a small value you'll see that the boundary between the colors,
+the so-called decision boundary, is more smooth the larger the value of k.
+This means that k controls the smoothness of the fit.
+Let's experiment with this.
+Let's first generate some synthetic data.
+In this case, we provide no input argument.
+So we'll be generated 50 observations from each class.
+We'll capture the object as predictors and outcomes,
+and that's our synthetic data.
+We can try running this just to be sure.
+We can look at the shape of our predictors
+and the shape of our outcomes.
+And everything looks good so far.
+We'll start with a value of k equal 5.
+We'll provide a file name for our plot.
+Let's just call this knn synth five dot pdf.
+We'll then need to provide limits for our plot.
+For x, we'll go from minus 3 to 4.
+And same for y, minus 3 to 4.
+And for step size we'll be using 0.1.
+We'll then call the function,
+so we'll capture xx, yy, and prediction grid.
+The function name was called make prediction grid.
+And the inputs that we needed are predictors, outcomes, limits, h, and k.
+Then finally, we'll call the plot prediction grid.
+We'll provide xx, yy, prediction grid, and file name as inputs.
+Let's try running the code.
+We can then repeat this and rerun the same code for k equal to 50.
+We'll just make sure to update the file name here as well.
+Let's then run these three lines of code.
+We can then look for these plots on our computer.
+We have the 5 one here.
+And we'll open the 50 one as well.
+And we can look at these plots side by side.
+Looking at the plot here for k equals 50,
+we can see that the decision boundary is pretty smooth.
+In contrast, if you look at the plot on the right, where k is equal to 5,
+you'll see that the shape of the decision boundary is more complicated.
+It seems that you might be able to find a value of k that maximizes
+the accuracy of the predictions.
+But that's somewhat short sighted.
+This is because what you really care about is not
+how well your method performs on the training data set,
+the data set we've used so far.
+But rather how well it performs on a future dataset you haven't yet seen.
+It turns out that using a value for k that's too large or too small
+is not optimal.
+A phenomenon that is known as the bias-variance tradeoff.
+This suggests that some intermediate values of k might be best.
+We will not talk more about it here,
+but for this application, using k equal to 5 is a reasonable choice.

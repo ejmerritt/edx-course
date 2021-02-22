@@ -131,3 +131,68 @@ sub_data.head()
 
 
 #---------CLASSIFICATION--------------#
+import numpy as np, random, scipy.stats as ss
+
+def majority_vote_fast(votes):
+    mode, count = ss.mstats.mode(votes)
+    return mode
+
+def distance(p1, p2):
+    return np.sqrt(np.sum(np.power(p2 - p1, 2)))
+
+def find_nearest_neighbors(p, points, k=5):
+    distances = np.zeros(points.shape[0])
+    for i in range(len(distances)):
+        distances[i] = distance(p, points[i])
+    ind = np.argsort(distances)
+    return ind[:k]
+
+def knn_predict(p, points, outcomes, k=5):
+    ind = find_nearest_neighbors(p, points, k)
+    return majority_vote_fast(outcomes[ind])[0]
+
+# Exercise 1
+#Import dataset
+import pandas as pd
+dataset = pd.read_csv("wine.csv")
+#Taking a look at the first 5 rows of the dataset, how many wines in those 5 rows are considered high quality?
+print(dataset.head)
+
+# Exercise 2
+#In order to get all numeric data, we will change the color column to an is_red column.
+#    If color == 'red', we will encode a 1 for is_red
+#    If color == 'white', we will encode a 0 for is_red
+#Create this new column, is_red.
+#Drop the color, quality, and high_quality columns as we will be predict the quality of wine using numeric data in a later exercise
+#Store this all numeric data in a pandas dataframe called numeric_data
+numeric_data = dataset
+numeric_data.loc[numeric_data["color"] == "red",  "is_red"] = 1
+numeric_data.loc[numeric_data["color"] == "white",  "is_red"] = 0
+numeric_data = numeric_data.drop(labels=["color", "quality", "high_quality"], axis=1)
+print(numeric_data.head)
+#How many red wines?
+print(numeric_data.groupby(by="is_red").agg("count"))
+
+# Exercise 3
+#Scale the data using the sklearn.preprocessing function scale() on numeric_data.
+#Convert this to a pandas dataframe, and store as numeric_data.
+#    Include the numeric variable names using the parameter columns = numeric_data.columns.
+#Use the sklearn.decomposition module PCA() and store it as pca.
+#Use the fit_transform() function to extract the first two principal components from the data, and store them as principal_components.
+#Note: You may get a DataConversionWarning, but you can safely ignore it
+import sklearn.preprocessing
+scaled_data = sklearn.preprocessing.scale(numeric_data)
+numeric_data = pd.DataFrame(scaled_data, columns = numeric_data.columns)
+
+import sklearn.decomposition
+pca = sklearn.decomposition.PCA(n_components = 2) # pca stands for principal component analysis
+principal_components = pca.fit_transform(numeric_data)
+
+
+
+# Exercise 4
+# Exercise 5
+# Exercise 6
+# Exercise 7
+# Exercise 8
+# Exercise 9
