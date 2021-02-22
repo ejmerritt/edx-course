@@ -187,12 +187,70 @@ numeric_data = pd.DataFrame(scaled_data, columns = numeric_data.columns)
 import sklearn.decomposition
 pca = sklearn.decomposition.PCA(n_components = 2) # pca stands for principal component analysis
 principal_components = pca.fit_transform(numeric_data)
-
-
+print(principal_components.shape)
 
 # Exercise 4
+#The first two principal components can be accessed using principal_components[:,0] and principal_components[:,1]. Store these as x and y respectively, and make a scatter plot of these first two principal components.
+import matplotlib.pyplot as plt
+from matplotlib.colors import ListedColormap
+from matplotlib.backends.backend_pdf import PdfPages
+observation_colormap = ListedColormap(['red', 'blue'])
+x = principal_components[:,0]
+y = principal_components[:,1]
+
+plt.title("Principal Components of Wine")
+plt.scatter(x, y, alpha = 0.2,
+    c = dataset['high_quality'], cmap = observation_colormap, edgecolors = 'none')
+plt.xlim(-8, 8); plt.ylim(-8, 8)
+plt.xlabel("Principal Component 1")
+plt.ylabel("Principal Component 2")
+plt.show()
+#How well are the two groups of wines separated by the first two principal components?
+
 # Exercise 5
+#Create a function accuracy(predictions, outcomes) that takes two lists of the same size as arguments and returns a single number, which is the percentage of elements that are equal for the two lists.
+np.random.seed(1) # do not change
+
+x = np.random.randint(0, 2, 1000)
+y = np.random.randint(0 ,2, 1000)
+
+def accuracy(predictions, outcomes):
+    accuracy = np.mean((predictions == outcomes) * 100)
+    return accuracy
+#Use accuracy to compare the percentage of similar elements in the x and y numpy arrays defined below.
+print(f"The percent of accurate predictions for the given arrays is {accuracy(x, y)}%")
+#Print your answer.
+
 # Exercise 6
+#Use accuracy() to calculate how many wines in the dataset are of low quality. Do this by using 0 as the first argument, and data["high_quality"] as the second argument.
+#Print your result.
+print(accuracy(0, dataset["high_quality"]))
+
 # Exercise 7
+#Use knn.predict(numeric_data) to predict which wines are high and low quality and store the result as library_predictions.
+#Use accuracy to find the accuracy of your predictions, using library_predictions as the first argument and data["high_quality"] as the second argument.
+#Print your answer. Is this prediction better than the simple classifier in Exercise 6?
+from sklearn.neighbors import KNeighborsClassifier
+knn = KNeighborsClassifier(n_neighbors = 5)
+knn.fit(numeric_data, dataset['high_quality'])
+library_predictions = knn.predict(numeric_data)
+print(accuracy(library_predictions, dataset["high_quality"]))
+
 # Exercise 8
+#Fix the random generator using random.seed(123), and select 10 rows from the dataset using random.sample(range(n_rows), 10). Store this selection as selection.
+random.seed(123)
+n_rows = dataset.shape[0]
+selection = random.sample(range(n_rows), 10)
+print(selection[9])
+
 # Exercise 9
+#For each predictor in predictors[selection], use knn_predict(p, predictors[training_indices,:], outcomes[training_indices], k=5) to predict the quality of each wine in the prediction set, and store these predictions as a np.array called my_predictions. Note that knn_predict is already defined as in the Case 3 videos.
+#Using the accuracy function, compare these results to the selected rows from the high_quality variable in data using my_predictions as the first argument and data.high_quality.iloc[selection] as the second argument. Store these results as percentage.
+#Print your answer.
+predictors = np.array(numeric_data)
+training_indices = [i for i in range(len(predictors)) if i not in selection]
+outcomes = np.array(dataset["high_quality"])
+
+my_predictions = [knn_predict(p, predictors[training_indices,:], outcomes[training_indices], k=5) for p in predictors[selection]]
+percentage = accuracy(my_predictions, dataset.high_quality.iloc[selection])
+print(percentage)
