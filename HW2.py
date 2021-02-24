@@ -32,6 +32,7 @@ print(possibilities(board))
 #Create a function random_place(board, player) that places a marker for the current player at random
 #among all the available positions (those currently set to 0).
 import random
+random.seed(1)
 def random_place(board, player):
     options = possibilities(board)
     if len(options) > 0:
@@ -44,7 +45,7 @@ random_place(board, 2)
 # Exercise 5
 #board is already defined from previous exercises. Use random_place(board, player) to place three pieces
 #on board each for players 1 and 2.
-
+random.seed(1)
 board = create_board()
 for i in range(3):
     for player in [1, 2]:
@@ -90,7 +91,7 @@ col_win(board, 1)
 
 #Finally, create a function diag_win(board, player) that tests if either diagonal of the board
 #consists of only their marker. Have it return True if this condition is met, and False otherwise.
-
+board[1,1] = 2
 def diag_win(board, player):
     main_diag = board.diagonal()
     anti_diag = np.flipud(board).diagonal()[::-1]
@@ -124,6 +125,7 @@ evaluate(board)
 #(beginning with Player 1), and evaluates the board for a winner after every placement.
 #Play the game until one player wins (returning 1 or 2 to reflect the winning player),
 #or the game is a draw (returning -1).
+random.seed(1)
 def play_game():
     board = create_board()
     while True:
@@ -151,56 +153,3 @@ for i in range(ITERATIONS):
 end_time = time.time()
 
 print(end_time - start_time)
-
-#The library matplotlib.pyplot has already been stored as plt. Use plt.hist and plt.show to plot a
-#histogram of the results. Does Player 1 win more than Player 2?
-#Does either player win more than each player draws?
-
-import matplotlib.pyplot as plt
-
-plt.hist(result)
-plt.savefig('tic_tac_toe_Hist.pdf')
-plt.show()
-
-#Exercise 12
-#This result is expected --- when guessing at random, it's better to go first.
-#Let's see if Player 1 can improve their strategy. create_board(), random_place(board, player),
-#and evaluate(board) have been created from previous exercises. Create a function play_strategic_game(),
-#where Player 1 always starts with the middle square, and otherwise both players place their markers randomly.
-
-def play_strategic_game():
-    board, winner = create_board(), 0
-    board[1,1] = 1
-    while winner == 0:
-        for player in [2,1]:
-            board = random_place(board, player)
-            winner = evaluate(board)
-            if winner != 0:
-                break
-    return winner
-
-#Call play_strategic_game once.
-
-play_strategic_game()
-
-#Exercise 13
-#The results from Exercise 12 have been stored. Use the play_strategic_game() function to play 1,000 random games.
-#Use the time libary to evaluate how long all these games takes.
-
-start_time = time.time()
-
-ITERATIONS = 1000
-result2 = []
-for i in range(ITERATIONS):
-    result2.append(play_strategic_game())
-
-end_time = time.time()
-
-print(end_time - start_time)
-
-#The library matplotlib.pyplot has already been stored as plt. Use plt.hist and plt.show to plot your results.
-#Did Player 1's performance improve? Does either player win more than each player draws?
-
-plt.hist(result2)
-plt.savefig('tic_tac_toe_Hist_2.pdf')
-plt.show()
