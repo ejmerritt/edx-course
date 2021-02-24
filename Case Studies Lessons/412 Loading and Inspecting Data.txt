@@ -1,0 +1,80 @@
+Our first task is to load and inspect the data.
+We've made two text files available on the course site,
+and they contain the data needed in this case study.
+The two files are called whiskies.txt and regions.txt.
+The regions file contains the regions in which each of the whiskies produced.
+The whiskies file contains all other details about the whiskies.
+Let's start by importing both NumPy and pandas.
+
+  import numpy as np
+  import pandas as pd
+
+At this point, make sure to change your working directory
+to match the location of the whiskies and regions files.
+In the text files, the entries on each row are separated by commas.
+These type of files are known as a comma separated values file or as CSV file.
+We'll first read whiskies into a pandas data frame object,
+and we'll read regions and add that as a column to the whisky object.
+We can read the CSV file using pandas read_CSV method.
+The file name is whiskies.txt, and I will capture this as whisky.
+
+  whisky = pd.read_csv("whiskies.txt")
+
+We'll then read the second file, I'm going
+to add this into my whisky object.
+I'm going to add it as an extra column, and I will call that column region.
+
+  whisky["Region"] = pd.read_csv("regions.txt")
+
+Let's take a look at these files using the head and tail methods.
+These are the first five rows of the data frame.
+
+  whisky.head()
+
+Look at the last five use of tail methods.
+
+  whisky.tail()
+
+It looks like the data has been read incorrectly.
+We can use the iloc method to index a data frame by location.
+Let's practice its use.
+We'll type whisky.iloc, and we've can first specify the rows.
+In this case, we specify the rows from 0 to 10.
+As with standard Python, the start index is inclusive
+whereas the end index is exclusive.
+That means the last row corresponding to index 10 is not included.
+
+  whisky.iloc[0:10]
+
+We can use the same method to look at specific columns and specific rows.
+We can look at rows from 5 to 10, and we can look at columns from 0 to 5.
+The first 5 to 10 corresponds to rows, and the 0 to 5
+corresponds to our columns.
+
+  whisky.iloc[5:10, 0:5]
+
+Some of the columns corresponding to whisky flavor attributes.
+Let's find out which ones.
+If we type whisky.columns, panda lists us
+the names of the different columns of our data frame object.
+
+  whisky.columns
+
+In this case, we would like to look at all of the columns starting from body
+and ending at floral, floral included.
+We can construct the flavors object of flavors data frame
+by looking at our whisky object.
+
+  flavors = whisky.iloc[:, 2:14]
+
+We use the iloc method.
+We specify all of the rows.
+And then we extract all of the columns that correspond to flavors.
+In this case, Body is the first column that corresponds to a flavor.
+Its location is 2.
+And the last column to be included is Floral.
+Its location is 13, but to include that in the slice,
+we need to specify 14 as the end of the column slice.
+We can now look at our flavors.
+And in this case, it looks like we've extracted the correct columns
+and rows from our table.

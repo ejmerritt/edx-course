@@ -134,22 +134,47 @@ def play_game():
             result = evaluate(board)
             if result != 0:
                 return result
-play_game()
+results = [play_game() for i in range(1000)]
+print(f"Player 1 wins {results.count(1)} times")
 
 # Exercise 11
-#Use the play_game() function to play 1,000 random games, where Player 1 always goes first.
-#When doing this, import and use the time library to call the time function both before and after
-#playing all 1,000 games in order to evaluate how long this takes per game. Print your answer.
+#Let's see if Player 1 can improve their strategy. create_board(), random_place(board, player),
+#and evaluate(board) have been created from previous exercises. Create a function play_strategic_game(),
+#where Player 1 always starts with the middle square, and otherwise both players place their markers randomly.
+random.seed(1)
+def play_strategic_game():
+    board, winner = create_board(), 0
+    board[1,1] = 1
+    while winner == 0:
+        for player in [2,1]:
+            board = random_place(board, player)
+            winner = evaluate(board)
+            if winner != 0:
+                break
+    return winner
 
-import time
+#Call play_strategic_game once.
+
+results = [play_strategic_game() for i in range(1000)]
+print(f"Player 1 wins {results.count(1)} times playing a strategic game.")
+#Exercise 13
+#The results from Exercise 12 have been stored. Use the play_strategic_game() function to play 1,000 random games.
+#Use the time libary to evaluate how long all these games takes.
 
 start_time = time.time()
 
 ITERATIONS = 1000
-result = []
+result2 = []
 for i in range(ITERATIONS):
-    result.append(play_game())
+    result2.append(play_strategic_game())
 
 end_time = time.time()
 
 print(end_time - start_time)
+
+#The library matplotlib.pyplot has already been stored as plt. Use plt.hist and plt.show to plot your results.
+#Did Player 1's performance improve? Does either player win more than each player draws?
+
+plt.hist(result2)
+plt.savefig('tic_tac_toe_Hist_2.pdf')
+plt.show()

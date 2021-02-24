@@ -113,7 +113,7 @@ print(data.frequency.value_counts().unique)
 #    num_words, which is the total number of words in each frequency category.
 import statistics
 sub_data = pd.DataFrame(columns = ["language", "frequency", "mean_word_length", "num_words"])
-sub_data.loc[1] = language,  ["frequent", "infrequent", "unique"], [(data.loc[data["frequency"] == "frequent", statistics.mean(data[length])]),(data.loc[data["frequency"] == "infrequent", statistics.mean(data["length"])]),(data.loc[data["frequency"] == "unique", statistics.mean(data["length"])])], [(sum(data.loc[data["frequency"] == "frequent"])), (sum(data.loc[data["frequency"] == "infrequent"])), (sum(data.loc[data["frequency"] == "unique"]))]
+sub_data.loc[1] = language,  ["frequent", "infrequent", "unique"], [(data.loc[data["frequency"] == "frequent", statistics.mean(data["length"])]),(data.loc[data["frequency"] == "infrequent", statistics.mean(data["length"])]),(data.loc[data["frequency"] == "unique", statistics.mean(data["length"])])], [(sum(data.loc[data["frequency"] == "frequent"])), (sum(data.loc[data["frequency"] == "infrequent"])), (sum(data.loc[data["frequency"] == "unique"]))]
 sub_data.head()
 
 # Exercise 5
