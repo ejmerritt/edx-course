@@ -1,0 +1,203 @@
+Scotch whisky is prized for its complexity and variety of flavors.
+And the regions of Scotland where it is produced
+are believed to have distinct flavor profiles.
+In this case study, we will classify scotch whiskies
+based on their flavor characteristics.
+The dataset we'll be using contains a selection of scotch whiskies
+from several distilleries, and we'll attempt to cluster whiskies
+into groups that are similar in flavor.
+This case study will deepen your understanding of Pandas, NumPy,
+and scikit-learn, and perhaps of scotch whisky.
+You'll also get a try out Bokeh, which is an interactive visualization
+library for web browsers.
+The dataset we'll be using consists of tasting ratings
+of one readily available single malt scotch whisky
+from almost every active whisky distillery in Scotland.
+The resulting dataset has 86 malt whiskies
+that are scored between 0 and 4 in 12 different taste categories.
+The scores have been aggregated from 10 different tasters.
+The taste categories describe whether the whiskies are sweet, smoky,
+medicinal, spicy, and so on.
+Pandas is a Python library that provides data structures and functions
+for working with structured data, primarily tabular data.
+Pandas is built on top of NumPy and some familiarity with NumPy
+makes Pandas easier to use and understand.
+Pandas has two data structures that you need to know the basics of,
+and these are called Series and Data Frame.
+In short, Series is a one-dimensional array-like object,
+and Data Frame is a two-dimensional array-like object.
+Both objects also contain additional information about the data
+called metadata, and this is something that
+will become clear through examples.
+Let's first look at Series.
+We'll start by importing Pandas, and we'll import Pandas as pd.
+
+  import pandas as pd
+
+We can create a Series object by typing pd dot Series.
+The input argument is going to be a list of items.
+In this case, we'll go with numbers 6, 3, 8, and 6.
+I'm going to call this object x.
+
+  x = pd.Series([6,3,8,6])
+
+We can now look at the contents of x.
+Here the data array is shown in the right column,
+and the left column shows the index, which is an array of data labels.
+Because we didn't specify an index explicitly,
+Pandas is using the default index, which is
+a sequence of integers starting at 0, increasing one
+by one for every subsequent row.
+Let's now specify an index explicitly.
+We can work with our previous definition.
+So we're still defining a Series object of four numbers.
+We'll add an extra keyword argument index.
+In this case, I'm going to be using letters.
+We have four entries, so we need four index labels.
+I'm going to call these q, w, e, and r.
+And I will still assign this object to variable x.
+Now, let's take a look at the contents of x.
+In this case, we can see that the left-most column
+corresponds to the index values that we specified the letters q, w, e, and r.
+
+  x = pd.Series([6,3,8,6], index= "q","w","e","r")
+
+You can use the index to specify values or a set of values.
+For example, if we wanted to look up the value that corresponds to w,
+we use this type of syntax, which resembles the way we use NumPy.
+
+  x[["r", "w"]]
+
+If we would like to have multiple entries, we construct a list,
+and inside the list, we enter the entries we are interested in.
+Perhaps we'd like to know the values of entries
+that correspond to index r and w.
+And here Python gives us the relevant output.
+There are many ways to construct a Series object in Pandas.
+A common way is by passing a dictionary.
+Let's define a dictionary where the keys are names of people-- Tim, Jim, Pam,
+and Sam-- and the value objects are their ages.
+This is just a standard Python dictionary.
+
+  ages = {"Tim": 29, "Jim":31, "Pam": 27, "Sam":35}
+
+We can now construct a Series object by using the pd dot Series method,
+but we're providing age as an input argument.
+
+  x = pd.Series(age)
+
+I'm going to continue calling this object x.
+And now let's look at the contents of x.
+You'll notice from the output that the index of the Series
+consists of keys of the dictionary in sorted order.
+And the values are the value objects in the dictionary.
+
+Data Frames represent table-like data, and they have both row and column
+index.
+Like with Series, there are many ways to construct a Data Frame.
+A common way is by passing a dictionary where the value objects are
+lists or NumPy arrays of equal length.
+Let's try constructing a Data Frame from a dictionary.
+I have previously entered a dictionary called Data.
+We have three different types of entities.
+We have persons names, ages, and their zip codes.
+In this dictionary, the name, age, and zip
+are the keys-- their strings-- and the values are, in this case,
+lists that consist of either strings or numbers.
+We can now run this, and now we have our dictionary defined.
+
+To construct a Data Frame, we'll be using the Pandas Data Frame function.
+We need to provide two arguments.
+The first argument is Data, the name of our dictionary
+that we want to use for constructing our Data Frame.
+For the second argument, we specify what are
+the columns that we would like to include in our Data Frame
+as well as the order in which they should appear in our Data Frame.
+We specify this as a list of strings.
+We're going to go to first with name, then age, and finally zip.
+I'm going to call this object, again, x.
+
+  x = pd.DataFrame(data, columns = ["name", "age", "ZIP"])
+
+We can take a look at our Data Frame, and we
+can see that the index on the left is a number integer running
+from 0 to 3, because we did not explicitly specify any other index.
+Pandas is using its default index in this case.
+We have three columns, one for each of the three variables-- name,
+age, and zip.
+This is our Data Frame object.
+We can retrieve a column by using dictionary-like notation
+or we can specify the name of the column as an attribute of the Data Frame.
+Let's practice both.
+First, I'm going to use the name, which in this case happens to be Name.
+And this gives me the names of all of the people in my Data Frame.
+
+  x["name"]
+
+The alternative approach is to use the attribute notation.
+We can type x dot name, and we get the same identical output.
+
+  x.name
+
+We often need to re-index a Series or a Data Frame object.
+This does not affect the association between the index
+and the corresponding data, but instead it essentially reorders
+the data in the object.
+Let's continue with the Series object that we entered previously.
+I'll just redefine that to make sure that the content is
+what I expect to be.
+
+  x = pd.Series([6,3,8,6], index= "q","w","e","r")
+
+And we can now look at the index.
+In this case, we know what to expect.
+We expect the output to be q, w, e, r, which are the indices that we defined.
+We can take the index, and we can construct a new Python
+list, which consists of the same elements, the same letters,
+but now they've been ordered alphabetically.
+
+  sorted(x.index)
+
+We can now use this newly constructed list to re-index our object x.
+We can re-index an object by using the Re-index method.
+As an argument, we provide an array or list of the new indices.
+
+  x.reindex(sorted(x.index))
+
+Series and Data Frame objects support arithmetic operations like addition.
+If we, for example, add two Series objects together,
+the data alignment happens by index.
+What that means is that entries in the series that have the same index
+are added together in the same way we might add elements of a NumPy array.
+If the indices do not match, however, Pandas
+introduces a NAN, or not a number object, the resulting series.
+This is easy to understand through an example.
+Let's take our previous object, a Series object x,
+consisting of four numbers where the indices have
+been set to q, w, e, and r.
+This is our object x.
+
+  x = pd.Series([6,3,8,6], index= "q","w","e","r")
+
+I'm then going to define an object called y.
+I'm going to modify the numbers slightly.
+We're going to go with 7, 3, 5, and 2.
+For indices, I'm going to use e, q, r, and let's say t.
+
+  y = pd.Series([7,3,5,2], index= "e","q","r","t")
+
+I can now look at the objects.
+This is my x Series object, and this is my y object.
+Let's now try adding up these two objects, x plus y.
+
+  x + y
+
+In this case, both x and y have indices e, q, and r, but only one of them
+has either t or w.
+This is why the entries corresponding to indices t and w
+appear as NANs in the output.
+If you construct a similar example for a Data Frame,
+you'll see that arithmetic operations work the same way for them.
+Pandas has many, many more features.
+You can summarize data, compute correlations, handle missing data,
+use hierarchical indexing, and much, much more.
