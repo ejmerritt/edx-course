@@ -1,0 +1,96 @@
+Let's find out about correlations of different flavor attributes.
+In other words, we'd like to learn whether whiskies
+that score high on, say, sweetness also score high on the honey attribute.
+We'll be using the core function to compute correlations
+across the columns of a data frame.
+There are many different kinds of correlations,
+and by default, the function uses what is
+called Pearson correlation  which estimates
+linear correlations in the data.
+In other words, if you have measured attributes for two variables,
+let's call them x and y the Pearson correlation coefficient
+between x and y approaches plus 1 as the points in the xy scatterplot approach
+a straight upward line.
+But what is the interpretation of a correlation
+coefficient in this specific context?
+A large positive correlation coefficient indicates
+that the two flavor attributes in question
+tend to either increase or decrease together.
+In other words, if one of them has a high score
+we would expect the other, on average, also to have a high score.
+Let's compute the pairwise correlation of columns in our flavors data frame.
+We started with flavors.
+We'll be using the data frame function called corr.
+And I'd like to assign the output to a variable called corr_flavors.
+
+  corr_flavors = pd.DataFrame.corr(flavors)
+
+We can inspect the elements of the correlation matrix just by printing it.
+To visualize the correlation matrix, we'll
+first import the matplotlib library.
+
+  import matplotlib as plt
+
+In this case, I'm going to also specify a new figure.
+I'd like to get a large figure, in this case 10 by 10.
+Then I'll use the pseudo color, or P color
+function to plot the contents of the correlation matrix.
+We can also include a color bar, and finally we can save this as a PDF.
+
+  plt.figure(figsize=(10,10))
+  plt.pcolor(corr_flavors)
+  plt.colorbar()
+  plt.savefig("corr_flavors.pdf")
+
+Let's call this corr.
+And then we run this.
+Let's now look for the plot on the computer.
+In this case, we're getting a 12 by 12 matrix, as expected.
+Clearly, correlation of any dimension with itself is exactly plus 1
+but other strong correlations exist too.
+For example, heavy body is associated with smokiness.
+In contrast, it seems that a floral flavor is the opposite of full body
+or medicinal notes.
+We can also look at the correlation among whiskies across flavors.
+To do this, we first need to transpose our table.
+Since these whiskies are made by different distilleries,
+we can also think of this as the correlation
+between different distilleries in terms of the flavor profiles of the whiskies
+that they produce.
+To do this, we can repurpose the code we already have.
+I'm just going to copy paste this part here.
+
+  corr_whisky = pd.DataFrame.corr(flavors.transpose())
+  plt.figure(figsize=(10,10))
+  plt.pcolor(corr_flavors)
+  plt.colorbar()
+  plt.savefig("corr_whisky.pdf")
+
+I'm first going to define a correlation matrix called corr whiskey.
+And we obtain that by using the data frame corr function.
+The input in this case is not going to be flavors, but instead it's transpose
+so we turn rows to columns and columns to rows.
+We'll modify this name here, which is now whisky.
+And this is corr_whisky.
+Let's try running our code.
+And we can then look for the plot on the computer.
+In this case, what Python is showing us is a 90 by 90 correlation matrix.
+However, we only have an 86 by 86 correlation matrix.
+That whitespace at the top and right hand side of the plot
+indicates that there is no data there.
+I'd like to modify my plot slightly by making the axes tied so that they only
+cover the range for which I have data.
+I can do by using the plt axis tight function.
+
+  corr_whisky = pd.DataFrame.corr(flavors.transpose())
+  plt.figure(figsize=(10,10))
+  plt.pcolor(corr_flavors)
+  plt.axis("tight")
+  plt.colorbar()
+  plt.savefig("corr_whisky.pdf")
+
+We can then rerun the code.
+And then we can look for the same plot again.
+And at this point, I'm going to close this
+because I know that it doesn't update it live.
+And now we see that the axis ends add 86.
