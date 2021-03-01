@@ -6,10 +6,19 @@ We first extract the group labels from the model
 and append them to the whisky table.
 We also specify their index explicitly.
 These are first lines of code.
+
+  whisky['Group'] = pd.Series(model.row_labels_, index=whisky.index)
+
 We then reorder the rows in increasing order by group labels.
 These are the group labels that we discovered
 using spectral co-clustering.
-Finally, we reset the index of our DataFrame.
+
+  whisky = whisky.ix[np.argsort(model.row_labels_)]
+
+Finally, we reset the index of our DataFrame
+
+  whisky = whisky.reset_index(drop=True)
+
 We have now reshuffled the rows and columns of the table.
 So let's also recalculate the correlation matrix.
 We will also turn the correlation matrix into a NumPy array.
@@ -20,9 +29,15 @@ and then we'd like to specify columns from 2 to 14.
 We need to transpose this table as before.
 And to calculate correlations, we use pd.DataFrame.corr.
 Finally, I'm going to call this correlations.
+
+  correlations = pd.DataFrame.corr(whisky.iloc[:,2:14].transpose())
+
 Let's then turn this into a NumPy array.
 We can just call that correlation.
 So correlations equals NumPy array correlations.
+
+  correlations = np.array(correlations)
+
 The reason for this step is that when we calculate the correlations,
 what pandas returns is a DataFrame.
 What I'd like to have is a NumPy array; hence the conversion.
@@ -30,8 +45,20 @@ Lets then make a plot of the original correlation coefficients
 and the rearranged correlation coefficients,
 which we would expect to form clusters.
 Let's use the pcolor function to plot the two correlation matrices.
-Our original correlation matrix was called core underscore whisky,
+Our original correlation matrix was called corr_whisky,
 and the new order correlation matrix is called correlations.
+
+  corr_whisky = pd.DataFrame.corr(flavors.transpose())
+  plt.figure(figsize=(14,7))
+  plt.subplot(121)
+  plt.pcolor(corr_whisky)
+  plt.axis("tight")
+  plt.subplot(122)
+  plt.pcolor(correlations)
+  plt.title("Rearranged")
+  plt.axis("tight")
+  plt.savefig("correlations.pdf")
+
 This code is very similar to code that we've already seen before.
 You just run the code.
 And then we can find our file on the computer.

@@ -1,4 +1,4 @@
-from sklearn.cluster.bicluster import SpectralCoclustering
+from sklearn.cluster import SpectralCoclustering
 import numpy as np, pandas as pd
 
 whisky = pd.read_csv("https://courses.edx.org/asset-v1:HarvardX+PH526x+2T2019+type@asset+block@whiskies.csv", index_col=0)
@@ -28,7 +28,7 @@ print(colors)
 # Finally, let's determine the strength of transparency (alpha) for each point where 0 is completely transparent.
 alphas = np.linspace(0, 1, len(grid))
 # Bokeh likes each of these to be stored in a special dataframe, called
-# ColumnDataSource.  Let's store our coordinates, colors, and alpha values. 
+# ColumnDataSource.  Let's store our coordinates, colors, and alpha values.
 source = ColumnDataSource(
     data = {
         "x": xs,
@@ -64,7 +64,7 @@ distilleries = list(whisky.Distillery)
 correlation_colors = []
 for i in range(len(distilleries)):
     for j in range(len(distilleries)):
-        if correlation < 0.7:                     # if low correlation,
+        if np.any(correlations[j]) < 0.7:                     # if low correlation,
             correlation_colors.append('white')         # just use white.
         else:                                          # otherwise,
             if whisky.Group[i] == whisky.Group[j]:                  # if the groups match,
@@ -80,7 +80,7 @@ source = ColumnDataSource(
         "x": np.repeat(distilleries,len(distilleries)),
         "y": list(distilleries)*len(distilleries),
         "colors": correlation_colors,
-        "correlations": np.array.flatten(correlations)
+        "correlations": correlations.flatten()
     }
 )
 
@@ -134,39 +134,43 @@ show(fig)
 #Adapt the given code beginning with the first comment and ending with show(fig) to create the function location_plot(), as described above.
 #Region is a column of in the pandas dataframe whisky, containing the regional group membership for each distillery. Make a list consisting of the value of region_colors for each distillery, and store this list as region_cols.
 #Use location_plot to plot each distillery, colored by its regional grouping.
-output_file(title+".html")
-location_source = ColumnDataSource(
-    data = {
-        "x": whisky[" Latitude"],
-        "y": whisky[" Longitude"],
-        "colors": colors,
-        "regions": whisky.Region,
-        "distilleries": whisky.Distillery
+def location_plot(title, colors):
+    output_file(title+".html")
+    location_source = ColumnDataSource(
+        data = {
+            "x": whisky[" Latitude"],
+            "y": whisky[" Longitude"],
+            "colors": colors,
+            "regions": whisky.Region,
+            "distilleries": whisky.Distillery
+        }
+    )
+
+    fig = figure(title = title,
+        x_axis_location = "above", tools="hover, save")
+    fig.plot_width  = 400
+    fig.plot_height = 500
+    fig.circle("x", "y", size=9, source=location_source, color='colors', line_color = None)
+    fig.xaxis.major_label_orientation = np.pi / 3
+    hover = fig.select(dict(type = HoverTool))
+    hover.tooltips = {
+        "Distillery": "@distilleries",
+        "Location": "(@x, @y)"
     }
-)
+    show(fig)
 
-fig = figure(title = title,
-    x_axis_location = "above", tools="hover, save")
-fig.plot_width  = 400
-fig.plot_height = 500
-fig.circle("x", "y", size=9, source=location_source, color='colors', line_color = None)
-fig.xaxis.major_label_orientation = np.pi / 3
-hover = fig.select(dict(type = HoverTool))
-hover.tooltips = {
-    "Distillery": "@distilleries",
-    "Location": "(@x, @y)"
-}
-show(fig)
-
-region_cols = ## ENTER CODE HERE! ##
+region_cols = []
+for i in whisky.Region:
+    region_cols.append(region_colors[i])
 location_plot("Whisky Locations and Regions", region_cols)
 
 # Exercise 7
 #Create the list region_cols consisting of the color in region_colors that corresponds to each whisky in whisky.Region.
 #Similarly, create a list classification_cols consisting of the color in cluster_colors that corresponds to each cluster membership in whisky.Group.
 #Create two interactive plots of distilleries, one using region_cols and the other with colors defined by called classification_cols. How well do the coclustering groupings match the regional groupings?
-region_cols = ## ENTER CODE HERE! ##
-classification_cols = ## ENTER CODE HERE! ##
+classification_cols = []
+for i in whisky.Group:
+    classification_cols.append(cluster_colors[i])
 
 location_plot("Whisky Locations and Regions", region_cols)
 location_plot("Whisky Locations and Groups", classification_cols)
