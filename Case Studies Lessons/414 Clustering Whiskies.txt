@@ -1,0 +1,112 @@
+Next we're going to cluster whiskeys based on their flavor profiles.
+We'll do this using a clustering method from the scikit-learn machine learning
+module.
+The specific method we'll be using is called spectral co-clustering.
+One way to think about spectral co-clustering method
+is to consider a list of words and a list of documents,
+which is the context in which the method was first introduced.
+We can represent the problem as a graph, where on the left we have words
+and on the right, we have documents.
+Let's draw this.
+Words on the left.
+We have documents on the right.
+Here, different circles correspond to different words.
+And we have our documents.
+I'm going to use squares for them.
+And we have lines connecting words to documents.
+So for example, in this particular document,
+these four words might appear.
+Of course, in practice, you have many more,
+but this is just a schematic of the basic idea.
+In the second document, we might have these words.
+And let me just fill in this picture.
+The goal is to find clusters that consist
+of sets of words and sets of documents that often go together.
+An extreme example would be books written in different languages.
+We can also think about documents that deal with specific scientific fields,
+such as biology or physics.
+The term co-clustering refers to the idea
+that we simultaneously find both clusters
+of words and clusters of documents.
+In this example, the clusters might be this group over here,
+and the second cluster might be this group over here.
+So again, each cluster consists of both words and documents.
+The problem as I've just presented it is still too hard to tackle,
+but it turns out that we can find an approximate solution to the problem.
+We can first represent this graph as what
+is called an adjacency matrix, where the rows correspond to words
+and the columns correspond to documents.
+Any given element of this matrix represents
+the number of times a given word appears in the given document.
+We can then take this matrix, manipulate it in certain ways,
+and find an approximate solution to the stated clustering problem,
+in terms of eigenvalues and eigenvectors of this modified matrix.
+We will not go into the details here, but the term spectral
+refers to the use of eigenvalues and eigenvectors of some matrix,
+and this is the meaning of the term spectral in spectral co-clustering.
+If you'd like to learn more about eigenvalues and eigenvectors,
+you can take any course or any textbook on matrix or linear algebra.
+We can think of the co-clustering technique as simultaneous clustering
+the rows and columns of matrix, whatever they happen to represent.
+In this case, we'll be using the approach
+to find clusters of whiskeys in our correlation matrix of whiskey flavors.
+This method effectively re-orders the rows and columns of the correlation
+matrix so that we can see blocks corresponding to groups of whiskeys
+more clearly.
+Since that whiskeys in the dataset come from six different regions,
+we're going to ask the clustering algorithm to find six blocks.
+Let's first import the method, spectral co-clustering.
+We'll then call the co-clustering method.
+So we'll move it here.
+
+  from sklearn.cluster.bicluster import SpectralCoclustering
+
+The first argument is going to be n clusters, which
+is the number of clusters we'd like to specify.
+In this case, we'll set that equal to 6.
+
+  model = SpectralCoclustering(n_clusters=6, random_state=0)
+
+We'll also specify the random state to be equal to 0.
+This is a parameter that we don't have to care about too much at this point.
+We will capture this as our model.
+We have now created the model object.
+The second step is to fit the model using data from the core whisky
+correlation matrix.
+
+  model.fit(corr_whisky)
+
+Let's now look at the clusters that we have just uncovered.
+The output is an array with the following dimensions--
+number of row clusters times number of rows
+in the data matrix, the correlation matrix, in this case.
+The entries of the array are either true or false.
+Each row in this array identifies a cluster, here ranging from 0 to 5,
+and each column identifies a row in the correlation matrix,
+here ranging from 0 to 85.
+If we sum all of the columns of this array,
+we can find out how many observations belong to each cluster.
+Let's try it out.
+We will us NumPy sum.
+We'll take the model.rows.
+And we specify the axes.
+Remember, axis 0 is rows, axis equal to 1 is columns.
+
+    np.sum(model.rows_, axis=1)
+
+The output tells us how many whiskeys belong to a cluster 0,
+cluster 1, cluster 2, and so on.
+For example, here, 19 whiskeys belong to cluster number 2.
+If instead we sum all of the rows, we can find out how many
+clusters belong to each observation.
+Because each observation belongs in just one of the six clusters,
+the answer should be 1 for all of them.
+But let's check that just to be sure.
+Take the code we just had, and we just change axis to be equal to 0.
+And we can see that the output consists of 1s, as expected.
+Let's look at the row labels in our model.
+How do we interpret the output here?
+Observation number 0 belongs to cluster number 5,
+observation number 1 belongs to cluster number 2, and so on.
+All of the entries in the array have to be numbers between 0 and 5
+because we specified 6 clusters.

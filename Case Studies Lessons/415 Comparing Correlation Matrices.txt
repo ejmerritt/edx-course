@@ -1,0 +1,55 @@
+Let's draw the clusters as groups that we just
+discovered in our whisky DataFrame.
+Let's also rename the indices to match the sorting.
+We can accomplish this operation in three lines of code.
+We first extract the group labels from the model
+and append them to the whisky table.
+We also specify their index explicitly.
+These are first lines of code.
+We then reorder the rows in increasing order by group labels.
+These are the group labels that we discovered
+using spectral co-clustering.
+Finally, we reset the index of our DataFrame.
+We have now reshuffled the rows and columns of the table.
+So let's also recalculate the correlation matrix.
+We will also turn the correlation matrix into a NumPy array.
+We're dealing with the whisky DataFrame still.
+We first used the iloc.
+We're taking all of the rows,
+and then we'd like to specify columns from 2 to 14.
+We need to transpose this table as before.
+And to calculate correlations, we use pd.DataFrame.corr.
+Finally, I'm going to call this correlations.
+Let's then turn this into a NumPy array.
+We can just call that correlation.
+So correlations equals NumPy array correlations.
+The reason for this step is that when we calculate the correlations,
+what pandas returns is a DataFrame.
+What I'd like to have is a NumPy array; hence the conversion.
+Lets then make a plot of the original correlation coefficients
+and the rearranged correlation coefficients,
+which we would expect to form clusters.
+Let's use the pcolor function to plot the two correlation matrices.
+Our original correlation matrix was called core underscore whisky,
+and the new order correlation matrix is called correlations.
+This code is very similar to code that we've already seen before.
+You just run the code.
+And then we can find our file on the computer.
+And here we have our plot.
+So on the left, we have the original correlation matrix.
+Here we have 86 whiskies, and the correlation coefficients
+are computed over their flavor profiles.
+On the right, we have the exact same correlation matrix,
+except its rows and columns have been reordered.
+We asked the spectral co-clustering method
+to identify six different groups of whiskies.
+If you follow the diagonal line on the right from the bottom-left corner
+to the top-right corner, you'll be able to see visually
+those six blocks of whiskies.
+Based on this, we would expect whiskies that
+belong to the same block to be similar in their flavor
+in terms of their smokiness, in terms of their honey flavor, and so on.
+This is the end of the film segments of this case study.
+We have prepared additional exercises for you
+to continue working on the case.
+I hope you enjoyed the case study on Scotch whisky.
