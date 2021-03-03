@@ -1,0 +1,158 @@
+We often need to be able to deal with data that has timestamped events,
+like our GPS data in this case study.
+We also frequently need to be able to do our arithmetical operations with date
+and timestamps, such as computing the time interval between two observations.
+Python's datetime is made for dealing with these types of data.
+One of the columns in our bird data set is timestamp.
+It's called date time.
+Let's look at a couple of the first entries.
+In this case, we can see that we first have the date stamp and then
+the timestamp.
+The date is in the format of year, month, and day.
+The entries in the data frame are all strings for date stamps.
+If we'd like to operate on the time and date stamps,
+such as finding out how much time has elapsed between any two timestamps,
+we first need to convert them into so-called daytime object, that
+supports our arithmetic operations.
+Let's import the date time module first and explore it.
+We'll import the datetime just as import datetime, so no abbreviated form.
+To become more familiar with the library,
+let's play with the function today.
+It returns to us a datetime, datetime object,
+that consists of the current date and timestamp.
+Let's try running it again, but this time we
+will assign the outcome or output to a variable.
+So let's say time 1 is equal to this.
+Then we wait a moment, and then we define time 2,
+and we run the same method again.
+We can now take time 2 and subtract time 1.
+In this case, the output is what's called a time delta object.
+It tells us how much time has elapsed between time 1 and time 2.
+We can try rerunning time 2, and if we do the subtraction again,
+as we'd expect, more time has passed.
+In this case 30 seconds has passed between time 2 and time 1.
+The resulting object is called date time time delta object.
+If we'd like to compute how much time has passed between any two
+observations in our data set, we first have
+to convert the timestamps, now given as strings, to datetime objects.
+Let's investigate the first timestamp in a bit more detail.
+Here is the field following second is UTC,
+which stands for coordinated universal time,
+which is an offset that is expressed in hours.
+In this case those entries are always 0, something you can check easily.
+Since the offsets are all 0, we're going to ignore them moving forward.
+Let's first pull out the first timestamp from our data set.
+That's located at row 0, so bird data dot date time.
+I'm going to call this date string.
+To check these, you can type date str  and Python tells us that it's a string.
+Let's first look at our date string.
+In this case, we're interested in date string,
+with the exception of the last three characters.
+So doing the slicing gives us access to part of the string that we actually
+care about.
+Next we're going to use strip time function
+to turn a string to a datetime object.
+This is a somewhat complicated looking expression.
+Let's look at it in a little bit more detail.
+The first argument is the string, which we would
+like to turn into a datetime object.
+The second argument is also a string, but in this case
+the latter string specifies the formatting of the first string.
+Let's look at the former string in a little more detail.
+For example, the first percentage uppercase
+Y tells Python to expect a year, expressed in four digits.
+The lowercase m tells Python to expect a month, expressed in two digits,
+and so on.
+If we look at the timestamp, the percentage capital H
+tells Python to expect a 24 hour timestamp, expressing
+the hours of the event.
+Let's try running this line
+and we can see that the output is a datetime object.
+The year is 2013, month is 8 corresponding to August,
+date is 15, and so on.
+We can now use this function to go over every single row in our data set,
+and create a new datetime object corresponding to every single row.
+Here is some code that I wrote previously.
+Let's look at the code and try to understand what it does.
+I first set up an empty list, which is called timestamps.
+I then loop over my bird data-- more specifically,
+over every single row in my data set.
+I'm using k as my loop variable.
+For every single row, I extract the date time,
+except I ignore the last three characters.
+Once I've converted it to a datetime object
+I append the resulting object to my timestamps list.
+We can try running the code,
+and we can just take a look at the first few of our timestamps.
+In this case, everything looks good.
+The next step for me is to construct a panda series object
+and insert the timestamp from my Python list into that object.
+I can then append the panda series as a new column in my bird data data frame.
+Let's look at the code to do that briefly.
+On the right-hand side, I first create a panda series object
+from my timestamps list, and I explicitly specify the index
+to match the index of my bird data.
+On the left-hand side I then take my existing bird data.
+I create a new column, which is called timestamp,
+and I assign my panda series object that new timestamp column.
+We can try running the code, and we can then look at the top couple of rows.
+In this case, we can see that the timestamp
+has been appended, or attached, to our table as the final column.
+Let's now practice doing arithmetic with our timestamps.
+I'm going to take my bird data timestamp, let's say from row 4.
+I will subtract that.
+I have my bird data timestamp and column 3.
+In this case, we're getting a time delta object which is what we wanted.
+What I'd like to do next is to create a list that
+captures the amount of time that has elapsed
+since the beginning of data collection.
+To do this, we will need 2 lines of code.
+First I will extract the timestamps for Eric,
+and that object is going to be called times.
+I then create my elapsed time object and I
+construct that as a list comprehension.
+Let's look at the list comprehension in a little more detail.
+Let's first focus on the for loop for time in times.
+What happens is that we're taking the time sequence and going over it
+one object at a time.
+These objects are called time-- that's our loop variable.
+The element that gets appended the list is the following--
+that's given at the beginning of the list comprehension--
+time minus times at 0.
+In other words, for each object in the list, time is going to be different--
+whereas times square bracket 0 marks the beginning of the time measurement,
+in this case, for Eric.
+Let's run our two lines of code.
+Now we can look at our elapsed time.
+If you look at entry 0, we would expect that to be equal to 0.
+If you look at the entry at say 1000, we know that in this case
+12 days, 2 hours, and 2 minutes have passed
+between observation located at 0, and observation located at index 1000.
+But how can we measure time in certain units, like hours or days?
+It turns out this is pretty easy to do.
+We can take the object that we had before,
+and we can simply divide that by a time delta object.
+In this case, if I'd like to know how many days have passed,
+I create a time delta object that's equal to 1 day.
+I can accomplish that by using the key word days equals to 1.
+In this case, I know that exactly 12.084 and so on days
+have passed between observation 0 and 1000.
+If I'd like to know this in hours, I can modify the time delta object.
+I can set it to hours equals 1 and I know that approximately 290 hours
+have passed between these two points.
+We can now look at the data for Eric in a little bit more detail.
+I'm going to make a plot where on the x-axis,
+we have the number of the observation, and on the y-axis
+we have the amount of time that has elapsed, measured in days.
+I'm going to be using the same exact syntax as before.
+I'm going to call this timeplot.pdf and we can look at the plot.
+Looking at the plot, we see more or less a straight line.
+If the times that passes between any two consecutive observations
+was the exact same, for all observations,
+we would see one perfectly straight line.
+In this case we see a couple of jumps in our curve.
+What this indicates to us is that there are observations
+that are further apart from one another than other observations in the data
+set.
+This type of exploration of data really helps
+you understand your data set very thoroughly.

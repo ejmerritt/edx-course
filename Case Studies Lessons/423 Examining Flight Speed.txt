@@ -1,0 +1,147 @@
+The data also contain estimates of two dimensional speeds of the birds.
+That is how fast they were flying on a 2D
+plane that is a local approximation to the curved surface of the earth.
+Let's look at the speed data in a little bit more detail.
+In this case I'm going to work in the editor.
+I use my previous line.
+In this case, we'll be just looking at the data for Eric.
+
+  ix = birddata.bird_name == "Eric"
+
+We'll extract the speed data.
+Bird data speed underscore 2D.
+And we provide the index as an input.
+
+  speed = birddata.speed_2d[ix]
+
+We can then plot a histogram of his speed.
+At this point you should see a fairly cryptic error message.
+That's try to debug this.
+Let's first look at the contents of speed.
+I'm just going to look at the first 10 entries.
+
+  speed[:10]
+
+These are numbers so so far everything looks good.
+If I try to pull out a histogram using just the first ten observations
+of speed, everything should work out.
+
+  plt.hist(speed[:10])
+
+This works, so there must be something further along in the speed array
+the hist function doesn't like.
+Let's see if we have something else than numbers in the array.
+I'm first going to look for non-number objects.
+To do that, I'll by using the isnan function from NumPy.
+
+  np.isnan(speed)
+
+Looking at the output, I can see that I at least
+have a few trues, meaning that I have some non-zero number of NaNs included
+in my array.
+A more elegant way to find out if we have any NaNs in our array
+is the following.
+We can take the previous line of code and use the any method to ask
+if any of the output is equal to true.
+
+  np.isnan(speed).any()
+
+The answer is True, therefore we know that there
+must be at least one NaN in our array.
+Let's then find out how many NaNs we exactly have in our speed array.
+The NumPy isnan function returns an array
+that consists of true and false, in other words
+Boolean variables, Boolean objects.
+We can sum over them.
+And when we do the sum, a true gets interpreted as a 1 and a false
+gets interpreted as 0.
+
+  np.sum(np.isnan(speed))
+
+In this case we have 85 entries for Eric alone that are not numeric.
+This is what's causing the problem with our histogram.
+Let's now include only those points those observations that
+are actually numeric.
+I'm first going to find the NaNs in my speed array.
+I will assign the output to ind for index.
+
+  ind = np.isnan(speed)
+
+We can look at it to confirm that it's a Boolean vector.
+We can then take a bitwise complement of the ind array
+which turns each occurrence of true to a false and vice versa.
+We can try that out.
+
+  ~ind
+
+For example, we can see that the first few elements
+have been turned to true when we take the complement off the ind vector.
+We're now ready to proceed with the histogram.
+We first look for the isnans.
+And instead of using the entire speed array for the histogram,
+we'll only include those entries for which ind is not equal to true.
+You can try saving the output.
+
+  ix = birddata.bird_name == "Eric"
+  speed = birddata.speed_2d[ix]
+  ind = np.isnan(speed)
+  plt.hist(speed[~ind])
+  plt.savefig("speedhist.pdf")
+
+And we can now take a closer look at the histogram.
+Now that we have a working version, we can tweak the code a bit
+and make some further adjustments.
+I'm going to do the following things.
+I'm going to add an x label, a y label, I
+will specify the locations of the bins, and I would also
+like my histogram to be normalized.
+At the top here, we have our original code.
+And I'm just going to copy paste my modified code in here.
+
+  plt.figure(figsize = (8,4))
+  speed = birddata.speed_2d[birddata.bird_name == "Eric"]
+  ind = np.isnan(speed)
+  plt.hist(speed[~ind], bins=np.linspace(0, 30, 20), normed=True)
+  plt.xlabel("2D speed (m/s)")
+  plt.ylabel("Frequency")
+  plt.savefig("speedhist.pdf")
+
+In this case, I've used the x label to add an x label,
+the y label function to add a y label, and I have also
+specified the locations of bins using the bins keyword argument
+and NumPy linspace.
+In this case, the first bin starts at 0 and the last bin ends at 30.
+Finally, I have normalized the y-axis, meaning
+that an integral over the histogram would be equal to 1.
+I can accomplish this stating the normed keyword to be equal to true.
+Let me run it and we'll look at this beauty.
+This is our final histogram that quantifies is how fast Eric is flying.
+Pandas provide some planning functions as well,
+although less customizable than PLT plots,
+they readily deal with things like NaNs.
+However you want to make sure that you always
+examine your data carefully and look for the presence of NaNs
+before preparing your plots.
+
+Let's look at how we would make the histogram using pandas.
+In this case, the plotting functions are methods of data frame instances.
+We're taking our bird data and we're looking
+at the speed 2D, the two dimensional speed estimates for the birds.
+Then we use the plot method.
+As an argument, we have to specify what type of plot we would like to request.
+In this case we'd like to get a histogram, so kind
+of to be equal to hist.
+We can also potentially specify numerous different keyword arguments.
+In this case, I use the range keyword to specify the range of the histogram
+to go from 0 to 30.
+
+  birddata.speed_2d.plot(kind="hist", range=[0, 30])
+  plt.xlabel("2D speed")
+  plt.savefig
+
+Let's try running the code.
+I'm calling this pd_hist.pdf.
+And we get an essentially identical histogram to what we had before.
+The benefit of using pandas in this case was that we did not
+have to deal with NaNs explicitly.
+Instead, all of that happens under the hood.
