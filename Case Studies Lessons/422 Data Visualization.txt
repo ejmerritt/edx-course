@@ -1,0 +1,92 @@
+We'll get started by simply plotting the latitude and longitude of a flight
+trajectory for a single bird in a standard two dimensional plot.
+Latitude and longitude are coordinates along the surface of a sphere,
+where a standard 2-D plot is a plane
+so we would expect very strong distortions
+for the flight trajectories.
+This is especially true because the trajectories
+cover a large spatial region.
+We're doing this however, primarily to have a quick way to look at the data
+and develop more intuition about it.
+We'll be doing an actual cartographic projection later in this case study.
+We'll proceed with plotting and we'll import our pyplot library
+as plt. We'll also import NumPy as np as is usual.
+
+  import matplotlib.pyplot as plt
+  import numpy as np
+
+One of the birds is called Eric.
+Let's extract the indices, the rows of the data frame for Eric.
+Bird data dot bird name.
+We're looking for Eric in this data set.
+
+  ix = birddata.bird_name == "Eric"
+
+I'm going to store the indices in a variable called ix.
+Next we'll extract x and y-coordinates of the flight trajectories.
+X and y are defined here as a tuple.
+I'll first get the longitude corresponding to my index ix,
+and then I'll get the latitude for the same positions.
+And now we have our x and y-coordinates here.
+
+  x, y = birddata.longitude[ix], birddata.latitude[ix]
+
+I'm going to create a figure of whatever size is suitable,
+and then we'll plot the trajectories.
+X versus y, and in this case we'll be just using blue dots
+to represent the flight trajectory.
+
+  plt.figure(figsize = (7,7))
+  plt.plot(x, y, ".")
+
+Let's now look at a PDF version of this plot.
+In this plot you can see the migration path that Eric has taken.
+Again, the flight trajectory will be substantially distorted
+because we did not implement any type of cartographic projection.
+Nevertheless, we get a decent sense of the flight path.
+Let's then plot the trajectories for all three birds in a single plot.
+We'll be extracting the bird names using pandas unique function.
+Bird data dot bird name.
+
+  bird_names = pd.unique(birddata.bird_name)
+
+And we can now look at the contents of this object.
+And we have three birds Eric, Nico, and Sanne.
+Our code will be essentially the same what we had before, except in this case
+we have to loop over all three birds.
+My main loop is going to be for bird name in bird names,
+and I'll be making use of the code that we just
+wrote to fill the following lines.
+We'll proceed very much like before, except that when
+we do find the index, instead of using Eric,
+we'll be using our generic bird name.
+We then extract the x and y-coordinates.
+We'll move the figure establishment or figure creation at the very top.
+And then we plot the flight patterns.
+Once we're done we can also add labels.
+Our x label is longitude.
+And our y label is latitude.
+Finally, we can insert a legend using plt legend
+and we can specify the location of the legend.
+In this case I'd like the legend to be in the lower right corner,
+so location log equals lower right.
+
+  plt.figure(figsize = (7,7))
+  for bird in bird_names:
+    ix = birddata.bird_name ==bird_name
+    x, y = birddata.longitude[ix], birddata.latitude[ix]
+    plt.plot(x, y, ".")
+  plt.xlabel("Longitude")
+  plt.ylabel("Latitude")
+  plt.legend(loc="lower right")
+
+Let's try running the code.
+If we'd like to keep a PDF version of this.
+Before we run the code, we want to make sure
+that we add the label for each plot.
+And in this case, the label is bird name.
+And we can now open the file.
+Looking at the plot, we see that all three birds
+seem to have pretty similar overall flight patterns.
+However, Nico and Sanne seem to venture out further south than Eric does.
+We'll be looking at these trajectories in more detail in the tasks to come.
