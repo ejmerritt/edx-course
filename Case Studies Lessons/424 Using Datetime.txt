@@ -16,6 +16,9 @@ we first need to convert them into so-called daytime object, that
 supports our arithmetic operations.
 Let's import the date time module first and explore it.
 We'll import the datetime just as import datetime, so no abbreviated form.
+
+  import datetime
+
 To become more familiar with the library,
 let's play with the function today.
 It returns to us a datetime, datetime object,
@@ -23,11 +26,20 @@ that consists of the current date and timestamp.
 Let's try running it again, but this time we
 will assign the outcome or output to a variable.
 So let's say time 1 is equal to this.
+
+  time_1 = datetime.datetime.today()
+
 Then we wait a moment, and then we define time 2,
 and we run the same method again.
+
+  time_2 = datetime.datetime.today()
+
 We can now take time 2 and subtract time 1.
 In this case, the output is what's called a time delta object.
 It tells us how much time has elapsed between time 1 and time 2.
+
+  time_2 - time_1
+
 We can try rerunning time 2, and if we do the subtraction again,
 as we'd expect, more time has passed.
 In this case 30 seconds has passed between time 2 and time 1.
@@ -44,14 +56,23 @@ Since the offsets are all 0, we're going to ignore them moving forward.
 Let's first pull out the first timestamp from our data set.
 That's located at row 0, so bird data dot date time.
 I'm going to call this date string.
+
+  date_str = birddata.date_time[0]
+
 To check these, you can type date str  and Python tells us that it's a string.
 Let's first look at our date string.
 In this case, we're interested in date string,
 with the exception of the last three characters.
 So doing the slicing gives us access to part of the string that we actually
 care about.
+
+  date_str[:-3]
+
 Next we're going to use strip time function
 to turn a string to a datetime object.
+
+  datetime.datetime.strptime(date_str[:-3], "%Y-%m-%d %H:%M:%S")
+
 This is a somewhat complicated looking expression.
 Let's look at it in a little bit more detail.
 The first argument is the string, which we would
@@ -73,6 +94,11 @@ date is 15, and so on.
 We can now use this function to go over every single row in our data set,
 and create a new datetime object corresponding to every single row.
 Here is some code that I wrote previously.
+
+  timestamps = []
+  for k in range(len(birddata)):
+    timestamps.append(datetime.datetime.strptime(birddata.date_time.iloc[k][:-3], "%Y-%m-%d %H:%M:%S"))
+
 Let's look at the code and try to understand what it does.
 I first set up an empty list, which is called timestamps.
 I then loop over my bird data-- more specifically,
@@ -84,6 +110,9 @@ Once I've converted it to a datetime object
 I append the resulting object to my timestamps list.
 We can try running the code,
 and we can just take a look at the first few of our timestamps.
+
+  timestamps[0:3]
+
 In this case, everything looks good.
 The next step for me is to construct a panda series object
 and insert the timestamp from my Python list into that object.
@@ -92,16 +121,25 @@ Let's look at the code to do that briefly.
 On the right-hand side, I first create a panda series object
 from my timestamps list, and I explicitly specify the index
 to match the index of my bird data.
+
+  birddata["timestamp"] = pd.Series(timestamps, index=birddata.index)
+
 On the left-hand side I then take my existing bird data.
 I create a new column, which is called timestamp,
 and I assign my panda series object that new timestamp column.
 We can try running the code, and we can then look at the top couple of rows.
+
+  birddata.head()
+
 In this case, we can see that the timestamp
 has been appended, or attached, to our table as the final column.
 Let's now practice doing arithmetic with our timestamps.
 I'm going to take my bird data timestamp, let's say from row 4.
 I will subtract that.
 I have my bird data timestamp and column 3.
+
+  birddata.timestamp[4] - birddata.timestamp[3]
+
 In this case, we're getting a time delta object which is what we wanted.
 What I'd like to do next is to create a list that
 captures the amount of time that has elapsed
@@ -111,6 +149,10 @@ First I will extract the timestamps for Eric,
 and that object is going to be called times.
 I then create my elapsed time object and I
 construct that as a list comprehension.
+
+  times = birddata.timestamp[birddata.birdname == "Eric"]
+  elapsed_time = [time - times[0] for time in times] 
+
 Let's look at the list comprehension in a little more detail.
 Let's first focus on the for loop for time in times.
 What happens is that we're taking the time sequence and going over it
