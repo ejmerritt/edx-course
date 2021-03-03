@@ -15,4 +15,16 @@ for bird in bird_names:
 plt.xlabel("Longitude")
 plt.ylabel("Latitude")
 #plt.legend(loc="lower right")
-speed = birddata.speed_2d[ix]
+# plotting the speed with matplotlib
+plt.figure(figsize = (8,4))
+speed = birddata.speed_2d[birddata.bird_name == "Eric"]
+ind = np.isnan(speed)
+plt.hist(speed[~ind], bins=np.linspace(0, 30, 20), normed=True)
+plt.xlabel("2D speed (m/s)")
+plt.ylabel("Frequency")
+plt.savefig("speedhist.pdf")
+
+#plotting the speed with pandas
+birddata.speed_2d.plot(kind="hist", range=[0, 30])
+plt.xlabel("2D speed")
+plt.savefig("pd_speedhist.pdf")
