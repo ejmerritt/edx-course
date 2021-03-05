@@ -1,0 +1,74 @@
+Our next step is to install Cartopy, a library that
+provides cartographic tools for Python.
+We can identify this module just by googling Cartopy.
+First, we'll google Cartopy.
+In this case, it's the first hit that I get on this particular search.
+We'll then click Documentation, and we'll
+pick the latest version, in this case version 0.13.
+You can explore the documentation page to learn more about this library.
+The first step for us is to install the library.
+Find the Getting Started section on the page, and click installation guide.
+We've been using the Anaconda Python distribution throughout this course.
+One of the benefits of this distribution is
+that it makes it easy to install new packages.
+We will not go into details here, but instead, we'll
+just follow the instructions from the web page.
+Working on a Mac, we can simply copy the one line of code that we have here,
+and we can run that in a terminal window.
+Once we have our terminal window, we just copy/paste a line, and then we wait.
+In this case, we want to proceed, so I reply yes or y.
+And depending on your computer, this might take something
+from 10 to 15 seconds to maybe even a minute or two,
+so be patient at this stage.
+In this case, Python has updated some of the existing
+packages that needed to be updated in order for Cartopy
+to be installed correctly.
+Once the process has been completed, your terminal prompt
+will appear on the screen.
+Cartopy makes it easy to draw maps, and it seems
+to work well on multiple platforms.
+We should point out that there is some other libraries for working with maps,
+but some of them don't work on both Mac and Windows platforms,
+and others can be more difficult to use.
+Here we're using just some of the very basic features of Cartopy,
+and you can explore more features on your own.
+We'll first perform two standard imports.
+To move forward, we need to specify a specific projection
+that we're interested in using.
+Cartopy provides several different projection alternatives.
+In this case, we'll be using one of the standard projections.
+Our next task is loop over all the birds,
+and plot their projected trajectories on the map.
+The code looks very similar to what we had before.
+We're first looping over all of our bird names.
+Then we're extracting the rows from our data
+frame to correspond to that particular bird.
+Then we extract the longitude and latitude in variables x and y.
+The final line, the plot line, is what introduces the transformation.
+In this case, we're using a specific transformation from CCRS.
+We also want to set up a new figure at the beginning.
+Finally, we need to set the extent of our axes on the map.
+This is something that's found usually by trial and error.
+Before we can call our axes on the final line,
+we actually first have to create that.
+We can do that after we've created the figure using plt.axes.
+Finally, we'll display the legend, and we'll save these as map.pdf.
+We can then try running our code.
+We can then look for our map.
+In this case, we can see the flight trajectories as before,
+but in this case, we've used an actual cartographic projection.
+That means that these correspond to an actual map.
+In fact, we can superimpose a map on top of this.
+We can add some more features to our plot.
+For example, we can add land, borders of countries, and so on.
+In this case, I'm adding four different lines.
+These four lines add landmasses, oceans, coastlines, and borders of countries
+to the map.
+We can now rerun our code and take a look at it.
+Looking at the flight trajectories superimposed on top of a map
+gives us much more insight about the migratory patterns of these birds.
+We've just looked at some very basics of how to visualize
+bird flights obtained from GPS data.
+We have prepared some additional exercises for you
+to continue investigating flight paths in more detail.
+Have fun.
