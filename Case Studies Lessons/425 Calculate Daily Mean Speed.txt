@@ -1,0 +1,105 @@
+Our next goal is to create a plot where on the y-axis,
+we have the mean daily speed.
+And on the x-axis, we have time measured in days.
+Before we proceed further, let's think about the algorithm first
+on the white board.
+Our data consists of time stamps which are spaced unevenly.
+This is our time axis here.
+The first point on the left corresponds to our observation number 0.
+This is observation number 1, 2, 3, 4, 5, 6, 7, 8, and so on.
+All time is measured relative to our observation 0.
+If we were to examine the first few points here,
+we would find that they likely correspond to day 0.
+The first day of the experiment.
+We'd like to be collecting the indices for all those observations
+that fall within day zero.
+As soon as we hit day 1, we would like to compute the mean velocity
+over those observations that we have just collected.
+We would then like to start collecting, or aggregating,
+our indices for the new day.
+To say that differently, we'd like to be collecting indices corresponding
+to different observations until we hit the next day.
+Our starting point is day zero.
+So I'm going to be using a variable called next day
+and that's going to be equal to 1.
+I also need a way to keep track of all the different indices.
+I'm going to call that inds.
+Let's say that these three observations correspond to day zero.
+These to day 1, day 2, and so on.
+I will be going over all of my observations.
+I will always check.
+Have I hit the next day yet.
+The day for these first three observations is 0,
+so the test will be false.
+As soon as I hit this observation, I know that I've hit the next day.
+As I loop over all of these points, I will
+be building up this list on the fly.
+So that by the time I hit observation number 3,
+I will have indices 0, 1, and 2 in my inds list.
+Once this happens, I do the following:
+I first compute the average velocity over these indices
+for the previous or the current day.
+And I then reset my next day to be equal to plus 1 to what I was before.
+So in this case, I'll be setting that to be equal to 2.
+I will proceed this way until I have no more data left.
+I'm first going to set up two variables.
+Next day is going to be initially equal to 1.
+And the indices that I'm collecting, I'm going to call that inds,
+is just going to be an empty list.
+The next task will be to loop over elapsed days.
+I'd like to know both the index of any given observation as well as its value.
+I can accomplish this using enumerate.
+Enumerate returns a tuple which consists of index, and in this case, a time.
+This is a for loop for (i, t) enumerate(elapsed_days):.
+This is my primary loop.
+What I want to be able to test is have I hit the next day.
+If that hasn't happened, then I would like to keep collecting my indices.
+In this case, represented by i in my collection of indices called inds.
+So if t is less than next_day, I can just add i, or append(i) to my indices.
+So inds.append(i).
+Otherwise, I need to do something else.
+That's the else part of my if statement.
+The first thing I need to do is to calculate the mean daily speed.
+In this case, I don't have, yet, a way of keeping track of those speeds.
+So I'll need to add, in this case, let's go with the list to keep track
+of all of these daily mean speeds.
+I'm going to call this daily mean speed.
+And I will be setting it up as a Python list.
+The first task is to compute mean speed.
+The second task is to increase next_day by 1.
+So we increment next_day  by1.
+And finally, we need to reset inds.
+So we create an empty Python list called inds.
+Lets then work on the first line.
+Our data frame is called data.
+And we're interested in speed_2d.
+In this case, we're specifically interested in only those entries
+that we've kept track of in inds.
+These are the specific indices over which
+we would like to compute the mean of.
+We then apply np.mean to these observations.
+And finally, we want to append the result to our daily means speed.
+Let's try running the code to see if we've made any syntactical errors.
+The code runs, so we seem to be in good shape.
+Finally, let's add a plotting component to this code.
+A plotting routine consists of four lines of code.
+We first create the figure.
+We then plot the daily mean speed.
+And we add x and y labels to our plot.
+Finally, I'm going to save this as a PDF.
+We can now look for the plot on the computer.
+So looking at the plot, we first see that we
+have data for approximately 260 days.
+On any given typical, or average day, Eric
+is flying, on average, about 2 meters per second,
+just by eyeballing the figure.
+However, we can see that there seemed to be two periods within the observation
+window during which Eric is flying substantially more.
+These are the periods that correspond to his migration patterns.
+We can see that around day, equal to 90 or 95 perhaps,
+his mean daily speed is as high as 9 meters per second.
+We see a similar peak for day perhaps 230 or so.
+Looking at this plot, we've been able to identify when exactly Eric carries out
+his migration.
+The next step we'd like to accomplish is to find out where he actually
+migrates from and where does he end up.

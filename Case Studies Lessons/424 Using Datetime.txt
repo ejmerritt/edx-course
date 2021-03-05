@@ -151,7 +151,7 @@ I then create my elapsed time object and I
 construct that as a list comprehension.
 
   times = birddata.timestamp[birddata.birdname == "Eric"]
-  elapsed_time = [time - times[0] for time in times] 
+  elapsed_time = [time - times[0] for time in times]
 
 Let's look at the list comprehension in a little more detail.
 Let's first focus on the for loop for time in times.
@@ -177,16 +177,28 @@ and we can simply divide that by a time delta object.
 In this case, if I'd like to know how many days have passed,
 I create a time delta object that's equal to 1 day.
 I can accomplish that by using the key word days equals to 1.
+
+  elapsed_time[1000] / datetime.timedelta(days = 1)
+
 In this case, I know that exactly 12.084 and so on days
 have passed between observation 0 and 1000.
 If I'd like to know this in hours, I can modify the time delta object.
 I can set it to hours equals 1 and I know that approximately 290 hours
 have passed between these two points.
+
+  elapsed_time[1000] / datetime.timedelta(hours = 1)
+
 We can now look at the data for Eric in a little bit more detail.
 I'm going to make a plot where on the x-axis,
 we have the number of the observation, and on the y-axis
 we have the amount of time that has elapsed, measured in days.
 I'm going to be using the same exact syntax as before.
+
+  plt.plot(np.array(elapsed_time) / datetime.timedelta(days = 1))
+  plt.xlabel("observation")
+  plt.ylabel("elapsed time in days");
+  plt.savefig("timeplot.pdf")
+
 I'm going to call this timeplot.pdf and we can look at the plot.
 Looking at the plot, we see more or less a straight line.
 If the times that passes between any two consecutive observations
