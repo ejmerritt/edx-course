@@ -176,6 +176,10 @@ location_plot("Whisky Locations and Regions", region_cols)
 location_plot("Whisky Locations and Groups", classification_cols)
 
 #----------BIRD MIGRATION-------------
+import pandas as pd
+import numpy as np
+birddata = pd.read_csv("https://courses.edx.org/asset-v1:HarvardX+PH526x+2T2019+type@asset+block@bird_tracking.csv", index_col=0)
+birddata.head()
 
 
 #----------SOCIAL NETWORK ANALYSIS-------------
