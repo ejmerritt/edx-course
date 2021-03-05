@@ -46,12 +46,23 @@ I'm first going to set up two variables.
 Next day is going to be initially equal to 1.
 And the indices that I'm collecting, I'm going to call that inds,
 is just going to be an empty list.
+
+  next_day = 1
+  inds = []
+
 The next task will be to loop over elapsed days.
 I'd like to know both the index of any given observation as well as its value.
 I can accomplish this using enumerate.
 Enumerate returns a tuple which consists of index, and in this case, a time.
 This is a for loop for (i, t) enumerate(elapsed_days):.
 This is my primary loop.
+
+  for (i,t) in enumerate(elapsed_days):
+    if t < next_day:
+      inds.append(i)
+    else:
+
+
 What I want to be able to test is have I hit the next day.
 If that hasn't happened, then I would like to keep collecting my indices.
 In this case, represented by i in my collection of indices called inds.
@@ -65,6 +76,17 @@ So I'll need to add, in this case, let's go with the list to keep track
 of all of these daily mean speeds.
 I'm going to call this daily mean speed.
 And I will be setting it up as a Python list.
+
+
+  daily_mean_speed = []
+  for (i,t) in enumerate(elapsed_days):
+    if t < next_day:
+      inds.append(i)
+    else:
+      # compute mean speed
+      next_day += 1
+      inds = []
+
 The first task is to compute mean speed.
 The second task is to increase next_day by 1.
 So we increment next_day  by1.
@@ -79,6 +101,9 @@ These are the specific indices over which
 we would like to compute the mean of.
 We then apply np.mean to these observations.
 And finally, we want to append the result to our daily means speed.
+
+  daily_mean_speed.append(np.mean(data.speed_2d[inds]))
+
 Let's try running the code to see if we've made any syntactical errors.
 The code runs, so we seem to be in good shape.
 Finally, let's add a plotting component to this code.
@@ -87,6 +112,21 @@ We first create the figure.
 We then plot the daily mean speed.
 And we add x and y labels to our plot.
 Finally, I'm going to save this as a PDF.
+
+  daily_mean_speed = []
+  for (i,t) in enumerate(elapsed_days):
+    if t < next_day:
+      inds.append(i)
+    else:
+      daily_mean_speed.append(np.mean(data.speed_2d[inds]))
+      next_day += 1
+      inds = []
+  plt.figure(figsize=(8,6))
+  plt.plot(daily_mean_speed)
+  plt.xlabel("Day")
+  plt.ylabel("Mean speed (m/s)")
+  plt.savefig("dms.pdf")
+
 We can now look for the plot on the computer.
 So looking at the plot, we first see that we
 have data for approximately 260 days.
