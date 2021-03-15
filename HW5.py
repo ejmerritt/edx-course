@@ -44,10 +44,11 @@ print(mean_altitudes_perday.head())
 #Store the average speeds for each bird and day as three pandas Series objects, one for each bird, then use the plotting code provided to plot the average speeds for each bird.
 import matplotlib.pyplot as plt
 
-eric_daily_speed  = birddata[["speed_2d", "date"]][birddata.bird_name == "Eric"]
-sanne_daily_speed = birddata[["speed_2d", "date"]][birddata.bird_name == "Sanne"]
-nico_daily_speed  = birddata[["speed_2d", "date"]][birddata.bird_name == "Nico"]
-print(nico_daily_speed.loc[pd.Timestamp(2014,4,4).date()])
+grouped_birdday = birddata.groupby(["bird_name", "date"])
+eric_daily_speed  = grouped_birdday.speed_2d.mean()["Eric"]
+sanne_daily_speed = grouped_birdday.speed_2d.mean()["Sanne"]
+nico_daily_speed  = grouped_birdday.speed_2d.mean()["Nico"]
+print(nico_daily_speed.loc[datetime.date(2014,4,4)])
 
 #eric_daily_speed.plot(label="Eric")
 #sanne_daily_speed.plot(label="Sanne")
