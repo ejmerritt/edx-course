@@ -36,6 +36,26 @@ import os
 import pandas as pd
 import numpy as np
 from collections import Counter
+data_filepath = "https://s3.amazonaws.com/assets.datacamp.com/production/course_974/datasets/"
+book_titles = {#only a selection for now, as the exercises only require translations of Hamlet.
+    "English": {
+        "shakespeare": ("A Midsummer Night's Dream", "Hamlet", "Macbeth", "Othello", "Richard III", "Romeo and Juliet", "The Merchant of Venice")
+    },
+    "French": {
+        "chevalier":     ("L'enfer et le paradis de l'autre monde", "L'i%CC%82le de sable", "La capitaine","La fille des indiens rouges", "La fille du pirate", "Le chasseur noir", "Les derniers Iroquois")
+    },
+    "German": {
+        "shakespeare":   ("Der Kaufmann von Venedig", "Ein Sommernachtstraum", "Hamlet", "Macbeth", "Othello", "Richard III", "Romeo und Julia")
+    },
+    "Portuguese": {
+        "shakespeare":   ("Hamlet", )
+    }
+}
+
+def read_book(title_path):
+    text   = pd.read_csv(title_path, sep = "\n", engine='python', encoding="utf8")
+    text = text.to_string(index = False)
+    return text
 
 def count_words_fast(text):
     text = text.lower()
@@ -113,8 +133,38 @@ print(data.frequency.value_counts().unique)
 #    num_words, which is the total number of words in each frequency category.
 import statistics
 sub_data = pd.DataFrame(columns = ["language", "frequency", "mean_word_length", "num_words"])
-sub_data.loc[1] = language,  ["frequent", "infrequent", "unique"], [(data.loc[data["frequency"] == "frequent", statistics.mean(data["length"])]),(data.loc[data["frequency"] == "infrequent", statistics.mean(data["length"])]),(data.loc[data["frequency"] == "unique", statistics.mean(data["length"])])], [(sum(data.loc[data["frequency"] == "frequent"])), (sum(data.loc[data["frequency"] == "infrequent"])), (sum(data.loc[data["frequency"] == "unique"]))]
-sub_data.head()
+book_dir = "Books"
+title_num = 1
+for language in book_titles:
+    for author in book_titles[language]:
+        for title in book_titles[language][author]:
+            if title == "Hamlet":
+                inputfile = data_filepath+"Books/"+language+"/"+author+"/"+title+".txt"
+                text = read_book(inputfile)
+                hamlets.loc[title_num] = [language, text]
+                title_num += 1
+language, text = hamlets.iloc[0]
+
+counted_text = count_words_fast(text)
+
+data = pd.DataFrame({
+    "word": list(counted_text.keys()),
+    "count": list(counted_text.values())
+})
+
+data["length"] = data["word"].apply(len)
+
+data.loc[data["count"] > 10,  "frequency"] = "frequent"
+data.loc[data["count"] <= 10, "frequency"] = "infrequent"
+data.loc[data["count"] == 1,  "frequency"] = "unique"
+
+sub_data = pd.DataFrame({
+    "language": language,
+    "frequency": ["frequent","infrequent","unique"],
+    "mean_word_length": data.groupby(by = "frequency")["length"].mean(),
+    "num_words": data.groupby(by = "frequency").size()
+})
+print(sub_data.mean_word_length)
 
 # Exercise 5
 #The previous code for summarizing a particular translation of Hamlet is consolidated into a single function called summarize_text.
@@ -128,7 +178,38 @@ sub_data.head()
 # Exercise 6
 #Plot the word statistics of each translations on a single plot. Note that we have already done most of the work for you.
 #Consider: do the word statistics differ by translation?
+colors = {"Portuguese": "green", "English": "blue", "German": "red"}
+markers = {"frequent": "o","infrequent": "s", "unique": "^"}
+import matplotlib.pyplot as plt
+for i in range(grouped_data.shape[0]):
+    row = grouped_data.iloc[i]
+    plt.plot(row.mean_word_length, row.num_words,
+        marker=markers[row.frequency],
+        color = colors[row.language],
+        markersize = 10
+    )
 
+color_legend = []
+marker_legend = []
+for color in colors:
+    color_legend.append(
+        plt.plot([], [],
+        color=colors[color],
+        marker="o",
+        label = color, markersize = 10, linestyle="None")
+    )
+for marker in markers:
+    marker_legend.append(
+        plt.plot([], [],
+        color="k",
+        marker=markers[marker],
+        label = marker, markersize = 10, linestyle="None")
+    )
+plt.legend(numpoints=1, loc = "upper left")
+
+plt.xlabel("Mean Word Length")
+plt.ylabel("Number of Words")
+# write your code to display the plot here!
 
 #---------CLASSIFICATION--------------#
 import numpy as np, random, scipy.stats as ss

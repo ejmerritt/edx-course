@@ -1,0 +1,85 @@
+Many systems of scientific and societal interest
+consist of a large number of interacting components.
+The structure of these systems can be represented
+as networks where network nodes represent the components,
+and network edges, the interactions between the components.
+Network analysis can be used to study how pathogens, behaviors,
+and information spread in social networks,
+having important implications for our understanding of epidemics
+and the planning of effective interventions.
+In a biological context, at a molecular level,
+network analysis can be applied to gene regulation networks, signal
+transduction networks, protein interaction networks, and much,
+much more.
+This case study first introduces some basic concepts about networks,
+we'll then write a Python function to generate very simple random graphs,
+and finally, we'll analyze some basic properties of social networks collected
+in different rural villages in India.
+If you wanted to be strict with terminology,
+we should really distinguish between the terms network and graph.
+Network refers to the real world object, such as a road
+network, whereas a graph refers to its abstract mathematical representation.
+It's useful to be aware of this distinction,
+but we'll be using these terms, networks and graph interchangeably.
+Let's first define some basic network concepts.
+Graphs consist of nodes, also called vertices, and links, also called edges.
+Mathematically, a graph is a collection of vertices and edges
+where each edge corresponds to a pair of vertices.
+When we visualize graphs, we typically draw vertices as circles and edges
+as lines connecting the circles.
+There are many concepts that are used to describe graphs.
+Let's define a couple of them so we have some common terminology.
+In this picture, this is an example of a vertex, as is this one over here.
+And this is an edge between these two vertices.
+Two connected vertices are said to be neighbors.
+So this vertex, vertex number 1, is a neighbor of vertex 2 and vice versa.
+The degree of a vertex is the number of entries connected to it,
+so the degree of this vertex is 1, the degree of this vertex
+is 1, 2, 3, and so on.
+A path is a sequence of unique vertices, such
+that any two vertices in the sequence are connected by an edge.
+Let's call this vertex 3, so the sequence 1, 2, 3 would be a path.
+That's because vertex 1 and vertex 2 are connected, and vertex 2 and vertex 3
+are connected.
+Intuitively, the path is the path that I've highlighted here.
+The length of a path is defined as the number of edges in that path.
+In this example, 1 plus 1, that gives us 2.
+So the length of the path for node 1 to node 3, or vertex 1 to vertex 3,
+is equal to 2.
+Let's look at another path.
+Let's call this vertex 4 and this 5.
+The length of the path from 1 to 5 would be 1, 2, 3, and so on.
+In this case, we're specifically talking about the shortest paths,
+a path that comprises the minimum number of steps for us to go from vertex a
+to vertex b.
+A vertex v is said to be reachable from vertex u
+if there exists a path from u to v, that is, if there is a way
+to get from u to v. So for example, looking at this vertex 1
+and, let's say, this one over here, 4, 1 is reachable from 4
+because we can get from 4 to 1.
+And likewise, because in this case, the graph is undirected,
+we also have a path from 1 to 4.
+A graph is said to be connected if every vertex is reachable
+from every other vertex, that is, if there
+is a path from every vertex to every other vertex.
+In this case, our graph here is connected.
+If a graph is not connected, it is said to be disconnected.
+So let's add a couple of vertices here to demonstrate that.
+We might have vertex 6 and 7 here, and they might be connected to one another,
+but neither of the two is connected the rest of the graph.
+That's why, in its entirety, this graph is disconnected.
+If a graph is disconnected, it breaks apart naturally
+into pieces, or components.
+Any component is connected when considered on its own,
+but there are no edges between the nodes that belong to different components.
+In this case, we have two components.
+We have one component over here, and we have our second component,
+which is over here.
+And there are no edges from nodes in this component
+to nodes in this component.
+The size of a component is defined as the number of nodes in the component.
+If there are several components in a graph,
+the largest component, the one having the greatest number of nodes,
+is called the largest connected component.
+In this case, the size of this component here is 2.
+The size of this component is 1, 2, 3, 4, five.

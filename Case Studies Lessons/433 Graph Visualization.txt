@@ -1,0 +1,67 @@
+Networkx contains many types of random graph generators.
+But in addition, it also contains a few empirical data sets.
+Let's use one of them called the karate club graph.
+In this network, the nodes represent members of a karate club and the edges
+correspond to friendships between the members.
+We can extract the karate club data by typing karate club graph
+and we can assign that network to object G. Networkx is not really
+made for drawing networks, but we can nevertheless
+use it to produce some basic network visualizations.
+
+  G = nx.karate_club_graph()
+
+We first need to import matplotlib pyplot
+as plt. We can now use the nx draw function to visualize our network.
+
+  import matplotlib.pyplot as plt
+
+In this case, I'm going to use a couple of additional keyword arguments.
+First, I would like to have the labels visible inside the nodes.
+To do this, I use the with labels keyword
+and I set that to be equal to true.
+I can also set the node colors and edge colors to be whatever I would like.
+In this case, I'm going to set the node color to be equal to light blue.
+And I'm going to set the edge color to be equal to gray.
+Let's try saving this visualization into a PDF file.
+
+  nx.draw(G, with_labels=True, node_color="lightblue", edge_color="gray")
+  plt.savefig("karate_graph.pdf")
+
+We can take the lines that we had before and we use the plt savefig function.
+I'm going to call this karate graph dot pdf.
+And then we can run the code.
+Let's then look for that file on the computer.
+And we can make this a little bit bigger.
+And in this case we have a visualization of the karate club network.
+Networkx stores the degrees of nodes in a dictionary where
+the keys are node IDs and the values are their associated degrees.
+You can get access to that dictionary using the G dot degree method.
+
+  G.degree()
+
+Again, the keys in the dictionary are node IDs and the values
+are the corresponding degrees of the nodes.
+So for example, node 31 has six friends or six ties.
+Node number 30 has four, and so on.
+We can use this dictionary to find the degree of a given node.
+Or alternatively, we can use to G dot degree function.
+Let's try that out.
+
+  G.degree()[33]
+
+G dot degree gives us the dictionary which is accessed by keys.
+So we can see from the above that we have a node called 33.
+And in this case, we know that the degree of that node is 17.
+Alternatively, we can use the G dot degree method.
+And in this case, the argument is the node
+whose degree we would like to find out.
+
+  G.degree(33)
+
+And again, we get the same answer.
+Note that although both are called degree,
+Python distinguishes between the two based on their call signature.
+The former has no arguments, whereas the latter has one argument.
+The ID of the node whose degree we are querying.
+This is how Python knows whether to return a dictionary
+or whether to use a function to look up the degree of the given node.
