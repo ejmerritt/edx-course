@@ -183,3 +183,33 @@ birddata.head()
 
 
 #----------SOCIAL NETWORK ANALYSIS-------------
+# Exercise 1
+    #Create a function marginal_prob that takes a dictionary chars with personal IDs as keys and characteristics as values; it should return a dictionary with characteristics as keys and their marginal probability (frequency of occurence of a characteristic divided by the sum of frequencies of each characteristic) as values.
+    #Create a function chance_homophily(chars) that takes a dictionary chars defined as above and computes the chance homophily (homophily due to chance alone) for that characteristic.
+    #A sample of three peoples' favorite colors is given in favorite_colors. Use your function to compute the chance homophily in this group, and store it as color_homophily.
+    #Print color_homophily.
+from collections import Counter
+import numpy as np
+
+def marginal_prob(chars):
+    ids = chars.keys()
+    characteristics = chars.values()
+    
+    for i in characteristics:
+        characteristic_frequency = sum(value == i for value in characteristics)
+    new_dict = dict()
+    new_dict.keys() = characteristics
+    for i in new_dict.keys():
+        new_dict[i] =
+
+def chance_homophily(chars):
+    # Enter code here!
+
+favorite_colors = {
+    "ankit":  "red",
+    "xiaoyu": "blue",
+    "mary":   "blue"
+}
+
+color_homophily = chance_homophily(favorite_colors)
+print(color_homophily)
