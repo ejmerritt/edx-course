@@ -35,7 +35,8 @@ a function called Bernoulli.
 We'll first import that from SciPy stats import Bernoulli.
 And then we can call this function.
 
-
+  from scipy.stats import bernoulli
+  bernoulli.rvs(p=0.2)
 
 We'll be using the rvs method to generate one single realization
 in this case of a Bernoulli random variable.
@@ -46,10 +47,22 @@ to outcome 0.
 Let's try this a couple of times.
 So if we keep repeating this, you'll get mostly 0s,
 but occasionally you'll get a 1 as well.
+
+  bernoulli.rvs(p=0.2)
+  >>> 0
+  bernoulli.rvs(p=0.2)
+  >>> 0
+  bernoulli.rvs(p=0.2)
+  >>> 1
+
 Let's look at some informal pseudocode code for our ER graph generator.
 Initially, I'm going to specify some number of nodes.
 We'll just go with 20.
 I'm going to fix p to be equal to 0.2.
+
+  N = 20
+  p = 0.2
+
 These are just some numbers for us to experiment with.
 The first step for us is going to be the creation of an empty graph.
 Create empty graph.
@@ -61,8 +74,14 @@ Let's start turning our informal pseudocode into actual code.
 To create the empty graph, we'll be using nx.Graph,
 and remember to spell Graph here with a capital G. I'm
 going to be calling my graph G here.
+
+  G = nx.Graph()
+
 The next step is to add all N nodes in the graph.
 I can accomplish that with just one line by using the Add Nodes From function.
+
+  G.add_nodes_from(range(N))
+
 One way to do this would be to construct a list containing the nodes 0, 1, 2, 3,
 and so on.
 An easier way is to use a range object.
@@ -76,6 +95,11 @@ For node 1 in G.nodes.
 Remember, an edge is a pair of nodes, so we actually
 need to nest another loop inside of our first loop.
 So in this case, we need a second for loop for node 2 in G.nodes.
+
+  for node1 in G.nodes():
+    for node2 in G.nodes():
+      bernoulli.rvs(p=p)
+
 At this point, we have looped over all pairs of nodes,
 and the next step is to add an edge with probability p.
 To do this, we used Bernoulli function, Bernoulli.rvs,
@@ -85,6 +109,12 @@ that we are providing.
 The second p here is the actual value of p, in this case 0.2.
 If this returns 1-- so we can ask if Bernoulli.rvs is equal to True,
 we add the edge between node 1 and node 2.
+
+  for node1 in G.nodes():
+    for node2 in G.nodes():
+      if bernoulli.rvs(p=p) == True:
+        G.add_edge(node1, node2)
+
 Here we can simplify our code a tiny bit.
 Let's look at the IF statement a little bit more closely.
 Here on the left, we have Bernoulli.rvs, which returns either 0 or 1.
@@ -103,6 +133,14 @@ In this case, the IF statement will be true
 if the Bernoulli random variable is equal to 1.
 If it's 0, the IF statement evaluates to a False.
 Let's try running our random graph.
+
+  G = nx.Graph()
+  G.add_nodes_from(range(N))
+  for node1 in G.nodes():
+    for node2 in G.nodes():
+      if bernoulli.rvs(p=p):
+        G.add_edge(node1, node2)
+
 First we add the values of the parameters.
 So N is 20, p is equal to 0.2.
 And in this case, everything looks good.
@@ -127,6 +165,14 @@ Either additional constraint will force us to consider
 each pair of nodes just one time.
 We're going to modify the code so we'll add if node 1 is less than node 2,
 and the Bernoulli process works out.
+
+  G = nx.Graph()
+  G.add_nodes_from(range(N))
+  for node1 in G.nodes():
+    for node2 in G.nodes():
+      if node1 < node2 and bernoulli.rvs(p=p):
+        G.add_edge(node1, node2)
+
 Let's then try running our code.
 We can then draw this.
 And you may be able to see that the graph looks less dense.
@@ -141,6 +187,17 @@ and I need to make sure to indent my code.
 The only line I need to add here is the return statement.
 We want to make sure to return the graph G to whoever calls this function.
 We'll wrap this up by finishing the docstring.
+
+  def er_graph(N, p):
+    """Generate an ER graph."""
+    G = nx.Graph()
+    G.add_nodes_from(range(N))
+    for node1 in G.nodes():
+      for node2 in G.nodes():
+        if node1 < node2 and bernoulli.rvs(p=p):
+          G.add_edge(node1, node2)
+    return G
+
 We'll say generate an ER graph,
 and then we run the function.
 So now the function has been defined.
@@ -154,5 +211,15 @@ I'll say node size equal to 40, and node color is equal to gray.
 And let me just move this line here at the top.
 And while we're at it, we can save this.
 I'll just call this er1.pdf.
+
+  nx.draw(er_graph(50, 0.08), node_size=40, node_color="gray")
+  plt.savefig("er1.pdf")
+
 We can run our code.
 Let's look for er1, and this is our own homemade Erdos-Renyi graph.
+
+COMPREHENSION Qs
+1. How many components do you expect in an ER graph with n=10 and p=1?
+>>> 1, because p=1 means an edge exists between each edge pair, making the network consist of one component
+2. How many components do you expect in an ER graph with n=10 and p=0?
+>>> 10, because p=0 means no edges exist between any of the nodes, so each node is its own component  
