@@ -1,0 +1,214 @@
+In most networks, most nodes are connected to each other
+as part of a single connected component.
+That is for each pair of nodes in this component,
+there exists a set of edges that create a path between them.
+Let's now find out how large the largest connected component
+is in our two graphs.
+We can extract all components for graph using the following function
+in the NetworkX module.
+This function is called connected components
+subgraph-- nx.connected connected component subgraphs,
+and as input we can provide G1.
+
+  nx.connected_component_subgraphs(G1)
+
+In this case, Python tells us that this is what's called a generator function.
+Generator functions do not return a single object
+but instead, they can be used to generate a sequence of objects
+using the next method.
+Let's try this out.
+We can first create a generator.
+Let's call that gen. So gen equals and nx.connected subgraphs.
+
+  gen = nx.connected_component_subgraphs(G1)
+
+To get to an actual component, we can use the next method.
+The actual name of the method is underscore underscore
+next underscore underscore.
+And we need the parentheses.
+This generates a component that we're going to call g.
+
+  g = gen.__next__()
+
+So g is equal to gen dot underscore underscore next underscore underscore.
+We can double check the g is network graph.
+That means we can ask, what is the number of nodes in this component?
+And this particular component has 825 nodes.
+
+  g.type()
+  g.number_of_nodes()
+  >>> 825
+
+Another way to do this is to use the len function.
+So we can take len off gen dot underscore underscore next, and so on.
+
+  len(gen.__next__())
+  >>> 3
+  len(gen.__next__())
+  >>> 4
+
+And what Python is telling us is that the next subsequent component
+has three nodes in it.
+And we could, in principle, run these a few times
+until we run out of components.
+Let's take another moment to look at the code.
+The first thing to realize here is that len when apply to a graph
+object returns to the number of nodes in that object.
+Let's try saying len of G1,
+and Python is returning 843.
+
+  len(G1)
+  >>> 843
+  G1.number_of_nodes
+  >>> 843
+
+We can also do G1 number of nodes,
+and the answer is the same.
+When we're running the line length of generator next,
+Python is going over the graph one component at a time.
+So for example, in this case, we might have
+five components or as many as 25 components in our graphs.
+Each of these components has some size associated
+with it, which again is the number of nodes
+that make up that given component.
+
+  len(gen.__next__())
+  >>> 2
+
+When we run this line, Python is telling us
+that there is a component in that graph that has size 2.
+In other words, there is a component that consists of only two nodes.
+We can keep running this and until eventually we'll
+have run out of components.
+
+  len(gen.__next__())
+  >>> 2
+  len(gen.__next__())
+  >>> 4
+  len(gen.__next__())
+  >>> 1
+  len(gen.__next__())
+  >>> 1
+
+One thing to realize about this is that the ordering of these components
+is arbitrary.
+If this looks tedious, that's because it is.
+In practice, we wouldn't call the next method manually in this way.
+Instead, we would use some other function that
+will implicitly call the next method.
+A good way to proceed is to use the max function that we can
+use to get the maximum of a sequence.
+The max function can take in a generator as its input.
+But given to graph components, A and B, how can
+the max function possibly know which is the maximum?
+And what does maximum even mean in this context?
+The answer is that we need to tell the max function what number to associate
+with each object in the sequence, in this case, a graph.
+The size of a component is defined as the number of nodes it contains,
+which as we saw above, we can obtain by applying the len function to a given
+component.
+Let's then put these ideas together as code.
+We are now ready to extract the largest connected component of our graphs, G1
+and G2.
+First, we call connected components subgraphs on G1.
+We provide that as input, the max function.
+
+  gen = nx.connected_component_subgraphs(G1)
+  G1_LCC = max(nx.connected_component_subgraphs(G1), key=len)
+
+And then we provide a key, which is equal to len, in this case.
+The object is G1 underscore LCC-- LCC for Largest Connected Component.
+And then we can do the same for G2.
+
+  G2_LCC = max(nx.connected_component_subgraphs(G2), key=len)
+
+And we modify this here as well.
+We can now ask, what is the size of these components?
+So we could use G1.
+
+  len(G1_LCC)
+  >>> 825
+
+Or we can just take the graph object and use the instance method
+number of nodes.
+
+  G1_LCC.number_of_nodes()
+  >>> 825
+
+And we see the two coincide.
+What we found is that G1 contains one largest connected component that
+has 825 nodes in it.
+If we look at G2, its largest connected component contains 810 nodes.
+
+  len(G2_LCC)
+  >>> 810
+
+Let's compute the proportion of nodes that
+lie in the largest connected components for these two graphs.
+This is the number of nodes in the largest connected component.
+We can divide that by the number of nodes in the graph itself.
+
+  G1_LCC.number_of_nodes() / G1.number_of_nodes()
+  >>> 0.978647[...]
+
+And in this case, we see that 97.9% of all of the nodes of graph G1
+are contained in the largest connected component.
+We can run the same bit of code for G2,
+and for G2 have approximately 92% of all nodes
+are contained in the largest connected component.
+
+  G2_LCC.number_of_nodes() / G2.number_of_nodes()
+  >>> 0.923603[...]
+
+In practice, it is very common for networks
+to contain one component that encompasses
+a large majority of its nodes, 95, 99, or even 99.9% of all of the nodes.
+Let's now try visualizing these components.
+This might take a couple of minutes on your computer
+so be patient.
+We'll first create a figure explicitly,
+then we call the draw function.
+
+  plt.figure()
+  nx.draw(G1_LCC, node_color="red", edge_color="gray", node_size=20)
+  plt.save_fig("village1.pdf")
+
+The first one is going to be G1 LCC.
+So we're only visualizing the largest connected component of G1.
+Node color, we set that to be equal to red,
+edge color-- let's do that gray,
+and node size, we can set to 20.
+Again, to save this I'm going to call this village1.pdf.
+We can then take the same code and run it for village2.
+So we'll change this to G2 LCC,
+and we change the output file name.
+
+  plt.figure()
+  nx.draw(G2_LCC, node_color="green", edge_color="gray", node_size=20)
+  plt.save_fig("village2.pdf")
+
+In this case, let's use green for the nodes,
+and we can keep the edges gray.
+Again, we can run this,
+and this might take a couple of minutes on your computer.
+Let's then look at these figures that we just created.
+We can first look for village1 and then for village2.
+We can then go to Window and Tile Vertically.
+The visualization algorithm that we have used
+is stochastic, meaning that if you run it several times,
+you will always get a somewhat different graph layout.
+However, in most visualizations, you should
+find that the largest connected component of G2
+appears to consist of two separate groups.
+These groups are called network communities.
+And the idea is that a community is a group
+of nodes that are densely connected to other nodes in the group,
+but only sparsely connected to nodes outside of that group.
+Finding network communities is a very interesting and timely problem.
+It's also one of those problems that is fairly easy to state in words,
+but a more mathematically rigorous formulation of the problem
+reveals that a problem is not so easy after all.
+In this case study, we covered some basic ideas
+about networks and how to handle them using Python.
+We prepared some follow-up exercise for you to continue working with networks.
+Have fun.
