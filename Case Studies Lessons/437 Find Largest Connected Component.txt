@@ -1,3 +1,9 @@
+***Workaround for deprecated code***
+
+def connected_component_subgraphs(G):
+  for c in nx.connected_components(G):
+    yield G.subgraph(c)
+
 In most networks, most nodes are connected to each other
 as part of a single connected component.
 That is for each pair of nodes in this component,
@@ -10,7 +16,7 @@ This function is called connected components
 subgraph-- nx.connected connected component subgraphs,
 and as input we can provide G1.
 
-  nx.connected_component_subgraphs(G1)
+  connected_component_subgraphs(G1)
 
 In this case, Python tells us that this is what's called a generator function.
 Generator functions do not return a single object
@@ -20,7 +26,7 @@ Let's try this out.
 We can first create a generator.
 Let's call that gen. So gen equals and nx.connected subgraphs.
 
-  gen = nx.connected_component_subgraphs(G1)
+  gen = connected_component_subgraphs(G1)
 
 To get to an actual component, we can use the next method.
 The actual name of the method is underscore underscore
@@ -113,14 +119,14 @@ and G2.
 First, we call connected components subgraphs on G1.
 We provide that as input, the max function.
 
-  gen = nx.connected_component_subgraphs(G1)
-  G1_LCC = max(nx.connected_component_subgraphs(G1), key=len)
+  gen = connected_component_subgraphs(G1)
+  G1_LCC = max(connected_component_subgraphs(G1), key=len)
 
 And then we provide a key, which is equal to len, in this case.
 The object is G1 underscore LCC-- LCC for Largest Connected Component.
 And then we can do the same for G2.
 
-  G2_LCC = max(nx.connected_component_subgraphs(G2), key=len)
+  G2_LCC = max(connected_component_subgraphs(G2), key=len)
 
 And we modify this here as well.
 We can now ask, what is the size of these components?
@@ -212,3 +218,13 @@ In this case study, we covered some basic ideas
 about networks and how to handle them using Python.
 We prepared some follow-up exercise for you to continue working with networks.
 Have fun.
+
+COMPREHENSION Qs
+1. For an iterator object X, what does X.__next__() do?
+>>> Returns the next value in X if it exists
+2. For a given network G, what does len(G) return?
+>>> Number of nodes
+3. Graphs G1 and G2 are defined as in Video 4.3.7. Which graph contains the largest connected component?
+>>> G1
+4. Graphs G1 and G2 are defined as in Video 4.3.7. Which graph contains the greatest fraction of its nodes in its largest connected component?
+>>> G1
