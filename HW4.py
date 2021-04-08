@@ -192,15 +192,13 @@ from collections import Counter
 import numpy as np
 
 def marginal_prob(chars):
-    characteristic_frequency = dict(Counter(chars.values()))
-    frequency_sum = sum(characteristic_frequency.values())
-    for key in characteristic_frequency:
-        characteristic_frequency[key] /= frequency_sum
-    return characteristic_frequency
+    frequencies = dict(Counter(chars.values()))
+    sum_frequencies = sum(frequencies.values())
+    return {char: freq / sum_frequencies for char, freq in frequencies.items()}
 
 def chance_homophily(chars):
-    frequencies = marginal_prob(chars)
-    return np.sum(np.square(list(frequencies.values())))
+    marginal_probs = marginal_prob(chars)
+    return np.sum(np.square(list(marginal_probs.values())))
 
 favorite_colors = {
     "ankit":  "red",
