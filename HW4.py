@@ -192,18 +192,15 @@ from collections import Counter
 import numpy as np
 
 def marginal_prob(chars):
-    ids = chars.keys()
-    characteristics = chars.values()
-    
-    for i in characteristics:
-        characteristic_frequency = sum(value == i for value in characteristics)
-    new_dict = dict()
-    new_dict.keys() = characteristics
-    for i in new_dict.keys():
-        new_dict[i] =
+    characteristic_frequency = dict(Counter(chars.values()))
+    frequency_sum = sum(characteristic_frequency.values())
+    for key in characteristic_frequency:
+        characteristic_frequency[key] /= frequency_sum
+    return characteristic_frequency
 
 def chance_homophily(chars):
-    # Enter code here!
+    frequencies = marginal_prob(chars)
+    return np.sum(np.square(list(frequencies.values())))
 
 favorite_colors = {
     "ankit":  "red",
@@ -213,3 +210,71 @@ favorite_colors = {
 
 color_homophily = chance_homophily(favorite_colors)
 print(color_homophily)
+
+# Exercise 2
+#In the remaining exercises, we will calculate actual homophily in these village and compare the obtained values to those obtained by chance. In Exercise 2, we subset the data into individual villages and store them.
+#Note that individual_characteristics.dta contains several characteristics for each individual in the dataset such as age, religion, and caste. Use the pandas library to read in and store these characteristics as a dataframe called df.
+    #Store separate datasets for individuals belonging to Villages 1 and 2 as df1 and df2, respectively.
+    #Note that some attributes may be missing for some individuals.
+    #Use the head method to display the first few entries of df1.
+import pandas as pd
+
+df  = pd.read_csv("https://courses.edx.org/asset-v1:HarvardX+PH526x+2T2019+type@asset+block@individual_characteristics.csv", low_memory=False, index_col=0)
+df1 = # Enter code here!
+df2 = # Enter code here!
+
+# Enter code here!
+
+# Exercise 3
+#Exercise 3, we define a few dictionaries that enable us to look up the sex, caste, and religion of members of each village by personal ID. For Villages 1 and 2, their personal IDs are stored as pid.
+    #Define dictionaries with personal IDs as keys and a given covariate for that individual as values. Complete this for the sex, caste, and religion covariates, for Villages 1 and 2.
+    #For Village 1, store these dictionaries into variables named sex1, caste1, and religion1.
+    #For Village 2, store these dictionaries into variables named sex2, caste2, and religion2.
+sex1      = # Enter code here!
+caste1    = # Enter code here!
+religion1 = # Enter code here!
+
+# Continue for df2 as well.
+
+# Exercise 4
+#Use chance_homophily to compute the chance homophily for sex, caste, and religion In Villages 1 and 2. Consider whether the chance homophily for any attribute is very high for either village.
+
+
+# Exercise 5
+#Complete the function homophily(), which takes a network G, a dictionary of node characteristics chars, and node IDs IDs. For each node pair, determine whether a tie exists between them, as well as whether they share a characteristic. The total count of these is num_ties and num_same_ties, respectively, and their ratio is the homophily of chars in G. Complete the function by choosing where to increment num_same_ties and num_ties.
+def homophily(G, chars, IDs):
+    """
+    Given a network G, a dict of characteristics chars for node IDs,
+    and dict of node IDs for each node in the network,
+    find the homophily of the network.
+    """
+    num_same_ties = 0
+    num_ties = 0
+    for n1, n2 in G.edges():
+        if IDs[n1] in chars and IDs[n2] in chars:
+            if G.has_edge(n1, n2):
+                # Should `num_ties` be incremented?  What about `num_same_ties`?
+                if chars[IDs[n1]] == chars[IDs[n2]]:
+                    # Should `num_ties` be incremented?  What about `num_same_ties`?
+    return (num_same_ties / num_ties)
+
+# Exercise 6
+#In this dataset, each individual has a personal ID, or PID, stored in key_vilno_1.csv and key_vilno_2.csv for villages 1 and 2, respectively. data_filepath1 and data_filepath2 contain the URLs to the datasets used in this exercise. Use pd.read_csv to read in and store key_vilno_1.csv and key_vilno_2.csv as pid1 and pid2 respectively.
+data_filepath1 = "https://courses.edx.org/asset-v1:HarvardX+PH526x+2T2019+type@asset+block@key_vilno_1.csv"
+data_filepath2 = "https://courses.edx.org/asset-v1:HarvardX+PH526x+2T2019+type@asset+block@key_vilno_2.csv"
+
+# Enter code here!
+
+# Exercise 7
+# Use your homophily() function to compute the observed homophily for sex, caste, and religion in Villages 1 and 2. Print all six values.
+# Use chance_homophily() to compare the observed homophily values to the chance homophily values. Are observed values higher or lower than those expected by chance?
+import networkx as nx
+A1 = np.array(pd.read_csv("https://courses.edx.org/asset-v1:HarvardX+PH526x+2T2019+type@asset+block@adj_allVillageRelationships_vilno1.csv", index_col=0))
+A2 = np.array(pd.read_csv("https://courses.edx.org/asset-v1:HarvardX+PH526x+2T2019+type@asset+block@adj_allVillageRelationships_vilno2.csv", index_col=0))
+G1 = nx.to_networkx_graph(A1)
+G2 = nx.to_networkx_graph(A2)
+
+pid1 = pd.read_csv(data_filepath1, dtype=int)['0'].to_dict()
+pid2 = pd.read_csv(data_filepath2, dtype=int)['0'].to_dict()
+
+# Enter your code here!
