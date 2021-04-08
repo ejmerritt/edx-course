@@ -216,27 +216,33 @@ print(color_homophily)
     #Note that some attributes may be missing for some individuals.
     #Use the head method to display the first few entries of df1.
 import pandas as pd
-
 df  = pd.read_csv("https://courses.edx.org/asset-v1:HarvardX+PH526x+2T2019+type@asset+block@individual_characteristics.csv", low_memory=False, index_col=0)
-df1 = # Enter code here!
-df2 = # Enter code here!
+df1 = df[df.village == 1]
+df2 = df[df.village == 2]
 
-# Enter code here!
+df1.head()
 
 # Exercise 3
 #Exercise 3, we define a few dictionaries that enable us to look up the sex, caste, and religion of members of each village by personal ID. For Villages 1 and 2, their personal IDs are stored as pid.
     #Define dictionaries with personal IDs as keys and a given covariate for that individual as values. Complete this for the sex, caste, and religion covariates, for Villages 1 and 2.
     #For Village 1, store these dictionaries into variables named sex1, caste1, and religion1.
     #For Village 2, store these dictionaries into variables named sex2, caste2, and religion2.
-sex1      = # Enter code here!
-caste1    = # Enter code here!
-religion1 = # Enter code here!
+sex1 = df1.set_index("pid")["resp_gend"].to_dict()
+caste1 = df1.set_index("pid")["caste"].to_dict()
+religion1 = df1.set_index("pid")["religion"].to_dict()
 
-# Continue for df2 as well.
+sex2 = df2.set_index("pid")["resp_gend"].to_dict()
+caste2 = df2.set_index("pid")["caste"].to_dict()
+religion2 = df2.set_index("pid")["religion"].to_dict()
 
 # Exercise 4
 #Use chance_homophily to compute the chance homophily for sex, caste, and religion In Villages 1 and 2. Consider whether the chance homophily for any attribute is very high for either village.
-
+chance_homophily(sex1)
+chance_homophily(sex2)
+chance_homophily(religion1)
+chance_homophily(religion2)
+chance_homophily(caste1)
+chance_homophily(caste2)
 
 # Exercise 5
 #Complete the function homophily(), which takes a network G, a dictionary of node characteristics chars, and node IDs IDs. For each node pair, determine whether a tie exists between them, as well as whether they share a characteristic. The total count of these is num_ties and num_same_ties, respectively, and their ratio is the homophily of chars in G. Complete the function by choosing where to increment num_same_ties and num_ties.
