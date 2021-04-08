@@ -257,9 +257,9 @@ def homophily(G, chars, IDs):
     for n1, n2 in G.edges():
         if IDs[n1] in chars and IDs[n2] in chars:
             if G.has_edge(n1, n2):
-                # Should `num_ties` be incremented?  What about `num_same_ties`?
+                num_ties += 1
                 if chars[IDs[n1]] == chars[IDs[n2]]:
-                    # Should `num_ties` be incremented?  What about `num_same_ties`?
+                    num_same_ties += 1
     return (num_same_ties / num_ties)
 
 # Exercise 6
@@ -267,7 +267,9 @@ def homophily(G, chars, IDs):
 data_filepath1 = "https://courses.edx.org/asset-v1:HarvardX+PH526x+2T2019+type@asset+block@key_vilno_1.csv"
 data_filepath2 = "https://courses.edx.org/asset-v1:HarvardX+PH526x+2T2019+type@asset+block@key_vilno_2.csv"
 
-# Enter code here!
+pid1 = pd.read_csv(data_filepath1)
+pid2 = pd.read_csv(data_filepath2)
+pid1.iloc[100]
 
 # Exercise 7
 # Use your homophily() function to compute the observed homophily for sex, caste, and religion in Villages 1 and 2. Print all six values.
@@ -281,4 +283,18 @@ G2 = nx.to_networkx_graph(A2)
 pid1 = pd.read_csv(data_filepath1, dtype=int)['0'].to_dict()
 pid2 = pd.read_csv(data_filepath2, dtype=int)['0'].to_dict()
 
-# Enter your code here!
+homophily(G1, [resp_gend, caste, religion], pid1)
+
+print(f"The homophily for Sex in Village 1 is {homophily(G1, sex1, pid1)}")
+print(f"Higher than chance? {(homophily(G1, sex1, pid1) > chance_homophily(sex1))}")
+print(f"The homophily for Caste in Village 1 is {homophily(G1, caste1, pid1)}")
+print(f"Higher than chance? {(homophily(G1, caste1, pid1) > chance_homophily(caste1))}")
+print(f"The homophily for Religion in Village 1 is {homophily(G1, religion1, pid1)}")
+print(f"Higher than chance? {(homophily(G1, religion1, pid1) > chance_homophily(religion1))}")
+
+print(f"The homophily for Sex in Village 2 is {homophily(G2, sex2, pid2)}")
+print(f"Higher than chance? {(homophily(G2, sex2, pid2) > chance_homophily(sex2))}")
+print(f"The homophily for Caste in Village 2 is {homophily(G2, caste2, pid2)}")
+print(f"Higher than chance? {(homophily(G2, caste2, pid2) > chance_homophily(caste2))}")
+print(f"The homophily for Religion in Village 2 is {homophily(G2, religion2, pid2)}")
+print(f"Higher than chance? {(homophily(G2, religion2, pid2) > chance_homophily(religion2))}")
