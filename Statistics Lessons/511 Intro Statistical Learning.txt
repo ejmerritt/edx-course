@@ -1,0 +1,130 @@
+JP ONNELA: Statistical learning refers to a large collection of tools
+that are used for understanding data.
+Statistical learning can be divided into two categories which
+are called supervised learning and unsupervised learning.
+Supervised learning refers to a collection of techniques and algorithms
+that, when given a set of example inputs and example outputs,
+learn to associate the inputs with the outputs.
+The outputs usually need to be provided by a supervisor, which
+could be a human or another algorithm, and this is where the name comes from.
+Unsupervised learning refers to a collection of techniques and algorithms
+that are given inputs only and there are no outputs.
+The goal of supervised learning is to learn relationships and structure
+from such data.
+In this case study, we will learn the basics
+of supervised statistical learning.
+We will look at regression, which refers to problems
+that have continuous outputs, and we will also
+look at classification, which refers to problems
+that have categorical outputs like 0 or 1, blue or green, and so on.
+We will mainly use to scikit-learn machine learning library
+for Python to implement these models.
+Note that this case study deals with supervised learning only
+and we will leave unsupervised learning for the future.
+In statistics, variables can be either quantitative or qualitative.
+Quantitative variables take on numerical values, such as income,
+whereas qualitative variables take on values in a given category,
+such as male or female.
+The range of quantitative variables depends on what they measure
+and what units are used.
+For example, we might measure annual income
+in dollars or thousands of dollars.
+Similarly, qualitative variables can have two or more categories or classes.
+The male-female example refers to a qualitative variable
+with two categories, but in principle, there can be any number of categories.
+In some cases, we convert a continuous variable to a categorical variable
+by specifying the cutoff points between the categories.
+For example, for income we might specify that a household with an annual income
+less than $30,000 a year is a low income household;
+a household with an income between $30,000 and $100,000
+is a middle income household; and a household with an annual income
+exceeding $100,000 a year a high income household.
+Methods in supervised learning are divided into two groups
+based on whether the output variable, also called the outcome,
+is quantitative or qualitative.
+If the outcome is quantitative, we talk about regression problems,
+whereas if the outcome is qualitative, we talk about classification problems.
+Note that this division into regression and classification problems
+is made based on the nature of the output, not the inputs,
+and it's common for both regression and classification problems
+to involve a mixture of quantitative and qualitative inputs.
+In both problems, we have some input variable X and an output variable Y,
+and we seek some function f of X for predicting Y, given values of the input
+X. What the best prediction is depends on the so-called loss function,
+which is a way of quantifying how far our predictions for Y for a given
+value of X are from the true observed values of Y. This
+is the subject of statistical decision theory which is outside of our scope,
+but we will state the relevant results here.
+First, in a regression setting, by far the most common loss function
+is the so-called squared error loss.
+And in that case, the best value to predict for a given X
+is a conditional expectation, or a conditional average,
+of Y given X. So what that means is that what we should predict
+is the average of all values of Y that correspond to a given value of X.
+Second, in a classification setting, we most often
+use the so-called 0-1 loss function, and in that case,
+the best classification for a given X is obtained
+by classifying observation of the class with the highest
+conditional probability given X. In other words, for a given value of X,
+we compute the probability of each class and we then
+assign the observation to the class with the highest probability.
+Let's look at the foundations of regression and classification
+on the whiteboard.
+We're going to start with the regression setting,
+so I'll just put the R in here.
+And imagine a situation where we have our random variable X here,
+which is our predictor, and we have our random variable Y here,
+which is the response.
+Now consider a setting where we have a very large number of points.
+And so our goal is to predict Y for a given value of X. The question is,
+what value of Y should we predict?
+So let's draw a line here.
+So rather than looking at all values of X,
+we will look at one specific value of X. I'm going to call that lowercase x.
+Now if we had infinitely many points, we would have lots of points
+here on the line, we would be able to return the mean value of those points.
+However, it might be the case that we don't
+have any observations on the line, and then the question
+is, what should we do?
+Typically what's done is, we look for observations
+that are close to the value of x.
+They will not be exactly equal to x, but they will be in the neighborhood of x.
+And now we can find out the corresponding values of Y
+and try to do averaging over them.
+Let's then look at the classification setting.
+In this case, we again have a predictor here, X,
+and we have an outcome, which is going to be Y. In this case
+we have a binary response, so we can only have two values:
+we can either have a 0 or 1.
+So perhaps we have lots of 0's here, we might have lots of 1's over here,
+and maybe we have a couple of 1's and a couple of 0's over here.
+Now for any given value of X, let's say we fix x over here-- again,
+I'm going to use lowercase for this specific value--
+what should we return?
+And the answer is, we should try to estimate the probability that Y belongs
+to either 0 class or the 1 class.
+So let's write down what is it we're actually estimating.
+In this case, we are estimating, in the regression setting,
+a conditional expectation of Y given a specific value for x.
+So this is simply saying that this is a conditional mean, a conditional average
+taking over all points that share at the value of x.
+This is your regression function.
+So if we repeat this for all values of x, we will get a line like this.
+And typically we might call this f of x.
+That's our regression function.
+In a classification setting, we would want to estimate two probabilities.
+These are conditional probabilities.
+So the first of them would be the probability
+that the random variable Y is equal to 0 given the value of x.
+And the second probability is for Y equal to 1
+given that the random variable, which is the large X, is equal to the small x.
+And whichever of these two probabilities is largest,
+that's going to be our prediction for a given value of x.
+
+COMPREHENSION Qs
+1. What is the difference between supervised and unsupervised learning?
+>>> Supervised learning matches inputs and outputs, whereas unsupervised learning discovers structure for inputs only.
+2. What is the difference between regression and classification?
+>>> Regression results in continuous outputs, whereas classification results in categorical outputs. 
+3. What is the difference between least squares loss and 0−1 loss?
+>>>  Least squares loss is used to estimate the expected value of outputs, whereas 0−1 loss is used to estimate the probability of outputs.
