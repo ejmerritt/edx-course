@@ -1,0 +1,211 @@
+JP ONNELA: Scikit-learn is an open source,
+machine learning library for Python.
+It's one of the most prominent Python libraries for machine learning.
+And it is widely used in both industry and academia.
+Scikit-learn depends on two other Python packages, NumPy and SciPy,
+both of which are included in the Anaconda Python distribution.
+Let's work through an example that demonstrates the use of scikit-learn
+for linear regression.
+I'm going to specify my sample size n, which is going to be 500.
+I'm going to set up beta0 equal to 5.
+I also have beta1, which is going to be equal to 2.
+Beta1.
+And then we'll also have a beta2, which will be set equal to minus 1.
+
+  n = 500
+  beta_0 = 5
+  beta_1 = 2
+  beta_2 = -1
+
+So we're going to have three predictors in the model, one constant and two
+covariates.
+I'm going to be using the random seed again, which is something you can do.
+And if you do use this seed, the same seed as I do,
+you should get the same results.
+
+  np.random.seed(1)
+
+Then we'll determine or define x1, which is going to be 10 times ss.uniform where size is going to be equal to n.
+So again, we're generating x1 points, n of them,
+and they are uniformly distributed between 0 and 10.
+We do the same for x2.
+So I can just copy, paste this line over here.
+So now I have values for x1 and x2 Then we
+need to define our outcome y, which is going to be beta0--
+that's our intercept term--
+plus beta1 times x1 plus beta2 times x2.
+This is the deterministic part, so far.
+To this we want to add some noise.
+So ss.norm, so we're adding some Gaussian noise.
+Location is 0, so the mean of the noise is 0.
+Scale is equal to 1.
+So standard deviation-- both variance and standard deviation--
+are equal to 1.
+And size is going to be equal to n.
+
+  x_1 = 10 * ss.uniform(size=n)
+  x_2 = 10 * ss.uniform(size=n)
+  y = beta_0 + beta_1 + beta_2 + x_2 + ss.norm.rvs(loc=0, scale=1, size=n)
+
+We can then try to run the code.
+All right, so what happened here?
+So we made a simple mistake.
+So remember when you use ss (SciPy stats),
+you first specify your distribution, such as uniform or normal,
+and then you specify a method, which tells Python what
+is it you want to do with that object.
+In this case, we wanted to generate random variables, realizations
+from this distribution.
+So that's why we need the .rvs.
+And this is the bit of code that I didn't have here before.
+
+  x_1 = 10 * ss.uniform.rvs(size=n)
+  x_2 = 10 * ss.uniform.rvs(size=n)
+  y = beta_0 + beta_1 + beta_2 + x_2 + ss.norm.rvs(loc=0, scale=1, size=n)
+
+Let's try running this.
+And now it appears to run.
+We want to do one more thing, which is we
+want to construct a capital X variable.
+And the idea here is to take our x1 variable and our x2 variable
+and stack them as columns into a capital X variable, turning it into a matrix.
+So we can do this by using the np.stack function.
+So we need first a list here.
+So we're going to be taking x1 and x2.
+So our input consists of a list where we specify the vectors,
+or arrays, that we would like to stack.
+Then we also have to specify the axis.
+Remember this starts from 0.
+And because we would like exponent x to be columns in this matrix,
+we will use axis equals 1.
+Now we can also run this line of code.
+
+  X = np.stack([x_1, x_2], axis=1)
+
+Now we should be all set.
+Let's now try to create a plot.
+I wrote some code, elsewhere.
+I'm just going to copy paste that in here.
+
+  from mpl_toolkits.mplot2d import Axes3D
+  fig = plt.figure()
+  ax = fig.add_subplot(111, projection="3d")
+  ax.scatter(X[:,0], X[:,1], y, c=y)
+  ax.set_xlabel("$x_1$")
+  ax.set_ylabel("$x_2$")
+  ax.set_zlabel("$y$")
+
+And we're going to be creating a three dimensional
+plot where we see the values of x1 and x2, and the value of the outcome y.
+Now we can look at this plot in my Jupyter notebook,
+which is where I generated it previously.
+Here we have our three dimensional plot.
+We have x1 axis from 0 to 10, x2 from 0 to 10, and here we have our outcome.
+So we generated these plots from a simple model,
+intercept plus beta1 times x1 plus beta2 times x2.
+Therefore, the true underlying surface is a plane in three dimensional space.
+If you rotate this picture, this graph around,
+you'll be able to see that there is indeed a plane
+here when the points line up.
+Let's then try to use scikit-learn to fit this linear model.
+Let's first do the import.
+I'm now working in the interactive editor directly.
+From sklearn.linear_model linear model, we want to import LinearRegression.
+
+  from sklearn.linear_model import LinearRegression
+
+Then we'll define an object called lm, which is short for a linear model.
+It's a linear regression.
+And so we specify this object.
+And we want to make sure that the option fit_intercept is set equal to true.
+
+  lm = LinearRegression(fit_intercept=True)
+
+As the next step, we'll fit this model, lm.fit.
+We provide our x's and our y's.
+
+  lm.fit(X, y)
+  >>> LinearRegression(copy_X=True, fit_intercept=True, n_jobs=1, normalize=False)
+
+And then we get some output.
+One of the important things to see here is
+that if you look at the fit intercept option, or parameter,
+it's been set to true.
+We want to include the intercept, because we know that in this case,
+we have a non-zero intercept in the data.
+We can extract the coefficients from the model.
+So we can type lm.intercept, which gives us
+the value of the estimated intercept.
+
+  lm.intercept
+  >>> 5.1540777636662539
+
+And we can access the coefficients by typing lm.coef,
+and there's an underscore at the end.
+
+  lm.coef_[0]
+  >>> 1.99993789891399
+
+If we take the first element from here, this gives us the value of beta1.
+And if we take the second, which is at location 1,
+this gives us the value of beta2.
+We can see from here that we estimated beta0 to be equal to approximately 5.
+Beta1 was estimated to be equal to approximately 2.
+And beta2 was estimated to be approximately equal to minus 1.
+We can also try to predict the value of the outcome for some value of x.
+So I'm going to create a variable X_0.
+And this will be a NumPy array.
+And in this case, because we have two predictors in our model,
+we need to provide a value for x1 and x2.
+
+  X_0 = np.array([2,4])
+
+So say we're interested in the value of the outcome when x1 is equal to 2,
+x2 is equal to 4.
+We can now take our model object, lm, and we can use the predict method.
+In this case, it takes in just one input, which is the value of X_0.
+And we'll see something interesting.
+
+  lm.predict(X_0)
+
+What happens here, is Python is telling us that--
+it's giving us a warning.
+It's telling us that the shape of the data is not quite right.
+A useful way to overcome this is to actually read the warning.
+What Python is telling us is the following.
+Reshape your data, either using x.reshape(-1,
+1) if your data has a single feature, which is not our case here,
+or x.reshape(1, -1) if it contains a single sample.
+So we have the latter situation.
+We have just a single data point here.
+It is a single sample.
+So what we can do is we can rerun this code here.
+And we just follow the instructions.
+We say reshape and 1 and minus 1.
+
+  lm.predict(X_0.reshape(1,-1))
+  >>> array([5.07289561])
+
+And in this case we don't get a warning.
+So for this particular input value, 2, 4, the values of x1 and x2,
+our predicted output is 5.07, and so on.
+We can also find out the score, the r-squared statistic,
+how well the model works.
+We again, call the model object lm.
+We call the score function.
+And this takes in two inputs.
+The first one is the X matrix, and the second one is the outcome.
+
+  lm.score(X, y)
+  >>> 0.979
+
+So what happens under the hood is the following.
+The model takes the input values X. It generates a prediction y
+hat, produced by the model.
+And it compares the y hat with the true outcome values y in the training set.
+And in this case, we have a very high r-squared value, 0.98.
+This would be unusually high in most applications.
+
+COMPREHENSION
+1. In the video, we estimated the values of three parameters. Which of these estimates is closest to its true value?
+>>> The estimated first slope, 𝛽1  
