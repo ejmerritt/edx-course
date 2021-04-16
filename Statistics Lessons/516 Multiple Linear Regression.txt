@@ -1,0 +1,37 @@
+JP ONNELA: In multiple linear regression,
+the goal is to predict a quantitative or a scalar valued
+response, Y, on the basis of several predictor variables.
+And the model takes the following form.
+We're still going to be using a capital Y for our output or outcome.
+And Y is equal to beta 0 plus beta 1 times X1 plus beta 2 times
+X2 and so on until beta p times Xp.
+
+Y =β0 + β1x + β2x + ... E
+
+And then we also have the error term here.
+In this case, I put these little bars at the bottom and top of X to highlight
+the fact that these are capital X's.
+So these are all random variables.
+Multiple linear regression is very similar to simple linear regression,
+but it's worth taking a moment to make sure we
+know how to interpret the coefficients.
+In general, consider a predictor Xk and the parameter beta
+k associated with that predictor.
+A unit change the value of xk is associated with a change beta hat k
+in the value of the outcome y, while keeping all other predictors fixed.
+If the values of the predictors are correlated,
+it may not be possible to change the value of one predictor
+and keep the others fixed.
+So one therefore always needs to be careful with interpretation
+of model results.
+
+COMPREHENSION Qs:
+1. Consider a multiple regression model with two inputs. The model predictions for the output 𝑦 are given by
+
+𝑦̂ =𝛽̂ 0+𝑥1𝛽̂ 1+𝑥2𝛽̂ 2
+
+𝛽1 and 𝛽2 have been estimated from data. If we assume that 𝛽̂ 1=1, and 𝛽̂ 2=3.
+What is the interpretation of 𝛽̂ 1?
+>>> The change in the predicted outcome if 𝑥1 is increased by 1, holding 𝑥2 constant.
+2. Consider the model and parameters in Question 1. For a given expected output prediction 𝑦̂ , what would be the expected change in the prediction value if you increased 𝑥1 by 1, and decreased 𝑥2 by 3?
+>>> -8
