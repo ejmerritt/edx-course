@@ -1,0 +1,85 @@
+JP ONNELA: In regression, our outcome variable was continuous.
+Now our goal is to predict a categorical outcome, such as blue or orange,
+or 0 or 1, so we're dealing with a classification problem.
+There are many different classifiers, techniques
+that carry out the classification task.
+But here we'll use one of the most basic ones, called logistic regression.
+The name of this technique is a little bit confusing,
+since it has the word regression as part of the name.
+But despite this name, it's a binary classifier,
+meaning that it is applied to classification settings
+where we have two categories.
+Our goal is to model the conditional probability
+that the outcome belongs to a particular class conditional on the values
+of the predictors.
+We can also call these conditional class probabilities.
+If we have only two classes, we can code the responses, the class labels,
+using 0s and 1s.
+So the outcome, y, is always either 0 or 1.
+We can write this in the following way.
+We can write p of x as a shorthand for the probability
+that y is equal to 1 given the value of x.
+So this is a conditional probability.
+If y is not equal to 1, it must be 0.
+And this happens with probability 1 minus p of x.
+Therefore, this one quantity, p of x, is the only probability
+that we need to model.
+One option might be to use a linear regression model.
+So we might write the following-- we could
+write p of x equals beta 0 plus beta 1 times x1.
+And this is in a setting where we have a single predictor, which is x1.
+The most obvious problem here is that the probability must always
+lie between 0 and 1, but there is nothing here to constrain that.
+So using this approach, we might get probabilities that are less than 0
+or greater than 1, which is not sensible.
+Therefore, instead of writing this linear regression
+for the probability p of x, we will modify the left-hand side
+of the equation in the following way.
+We will write log of p of x divided by 1 minus
+p of x is equal to beta 0 plus beta 1 times x1.
+So this expression here, which is our logistic regression,
+requires some explanation.
+Notice that we haven't changed the right-hand side of the equation.
+So this is still a linear model, but rather than directly modeling
+the probabilities p of x, it's modeling this expression here
+on the left-hand side.
+Because this expression is non-linear, we
+can say that logistic regression is a linear model that models probabilities
+on a non-linear scale.
+Let's look at the left-hand side now a little bit more carefully.
+If we use p to denote the probability that some event occurs and then use
+1 minus p to denote the probability that this event does not occur,
+the ratio of these two probabilities, p divided by 1 minus p,
+is called the odds of that event.
+Because odds are defined as ratios of two probabilities,
+and because probabilities are never negative, the odds of an event
+can take any value between 0 and plus infinity.
+Here we take the log of the odds, which gives us
+the log odds of that particular event.
+And log odds can vary from minus infinity to plus infinity.
+So we can now use a linear model to model this expression here.
+Regarding terminology, the function that maps a probability p
+to log p over 1 minus p is often called the logit function.
+We can naturally extend the logistic regression to multiple predictors.
+And then it's usually called multiple logistic regression.
+So we take the expression that we have here from before,
+and we just simply add multiple predictors here.
+If we have p predictors, we would have a term beta p times xp.
+And this here is called multiple logistic regression.
+The coefficients, the betas, in this expression must be estimated from data.
+And this is usually done using the method of maximum likelihood.
+The intuition behind the maximum likelihood method
+is to find parameter estimates that make the observed data maximally likely.
+
+COMPREHENSION Qs:
+1. What is one of the problems with using linear regression to predict probabilities?
+>>> Linear regression may predict values outside of the interval between 0 and 1
+2. The following code creates a function that converts probability to odds:
+
+  def prob_to_odds(p):
+    if p <= 0 or p >= 1:
+        print("Probabilities must be between 0 and 1.")
+    return p / (1-p)
+
+Assume that there are only two classes and all data points belong to one of these two classes. The probability that a given data point belongs to Class 1 is 0.2. What are the odds that a given data point belongs to Class 2 as given by the function above?
+>>> 4 
