@@ -1,0 +1,173 @@
+JP ONNELA: We're next going to look at the classification problem,
+and we'll start by generating data from two
+separate two-dimensional normal distributions.
+So, we're dealing here with a setting where
+we have two predictors, x1 and x2.
+x1 is 0 on this axis, and x2 is 0 here.
+So, the origin is located here.
+Our goal is to simulate data from two normal distributions.
+We want one of the normal distributions to be a distance, h, from the origin.
+So, it's going to be located here, and we want the second normal distribution
+to be the same distance but to the right.
+So, it might be located over here.
+These two directions, x1 and x2, will be independent of one another.
+So, the idea is that we have some type of two-dimensional normal distribution,
+one here.
+We have another one here, and we'll be generating
+a bunch of observations from this distribution
+and a bunch of of observations from this distribution.
+Anything that comes, or originates, from this distribution
+is going to be called class 1, and everything
+that comes from, or is generated, by this distribution
+is going to be called class 2.
+So, this is our problem setting, and our task
+is to create, or write, some Python code that will generate data
+from this type of problem setting.
+At this point, we'll switch to working in a Jupyter notebook.
+Here in the first cell at the top of the window, I have run some imports.
+
+  import numpy as np
+  import scipy.stats as ss
+  import matplotlib.pyplot as plt
+  %matplotlib notebook
+
+  from sklearn.linear_model import LinearRegression
+  from sklearn.model_selection import train_test_split
+
+Here, we've imported the numpy, scipy.stats, matplotlib,
+pyplot modules, and we've also imported LinearRegression from
+sklearn.linear_model and train_test_split from
+sklearn.model_selection.
+We'll be using the ss.norm.rvs function to generate
+data that are normally distributed.
+I'm initially going to provide some value to h.
+I'm just going to set it to 1, and I'm going
+to set my standard deviation to be equal to 1 as well.
+
+  h = 1
+  sd = 1
+
+This is just so that I have some placeholder values to work with.
+I also want to set up a variable, n, which is the number of observations
+that we'll be drawing from each of the two distributions.
+And for now we can set this to 50.
+
+  n = 50
+
+The first parameter for the normal distribution
+is going to be the mean, which is minus h.
+The second one is going to be the standard deviation,
+and the third is the number of points to generate.
+I'm going to call this vector x1 because this will give me
+the x-coordinates of the points, or observations,
+that come from the first class of data.
+
+  x1 = ss.norm.rvs(-h, sd, n)
+
+Then, I will set up y1, which is the y-coordinate of these observations.
+They will have mean 0, and they will have the same standard deviation
+as before, and I will also have to generate n of these points.
+
+  y1 = ss.norm.rvs(0, sd, n)
+
+I have to do the same thing for the data coming from distribution 2, or class 2.
+The only difference is that rather than having that distribution centered
+at minus h, I want to change this bit to h.
+
+  x2 = ss.norm.rvs(h, sd, n)
+  y2 = ss.norm.rvs(0, sd, n)
+
+If I run this code, I will have now generated four random vectors: x1, y1,
+x2, and y2.
+One thing I want to do is to wrap this, or embed this, code inside a function.
+So, I'm going to define a function which is called
+gen_data, short for generate data, and I want
+to provide four different arguments: n, h, standard deviation for class 1,
+and standard deviation for class 2.
+And I want to make sure I'll indent the code,
+and in here, since these first two lines correspond to class 1, I'll put in sd1,
+and these two need sd2 here.
+The final step that we need to do is to return the data.
+So we'll return x1, y1, x2, and y2.
+
+  def gen_data(n, h, sd1, sd2):
+    x1 = ss.norm.rvs(-h, sd, n)
+    y1 = ss.norm.rvs(0, sd, n)
+    x2 = ss.norm.rvs(h, sd, n)
+    y2 = ss.norm.rvs(0, sd, n)
+    return (x1, y1, x2, y2)
+
+We've now defined a function for generating data.
+We can try running it.
+This is equal to this.
+Let's set n equal to 50.
+h we can set equal to 1.
+The sd's we can set equal to 1 and, say, 1 and 1.5.
+
+  (x1, y1, x2, y2) = gen_data(50, 1, 1, 1.5)
+
+And the function appears to be running fine.
+Let's take the same code that we have here.
+Let's now generate a somewhat different data set.
+In this case, we want to generate 1,000 data points.
+We'll set h equal to 1.5.
+The standard deviation for class 1 should be 1,
+and we can keep the standard deviation for class 2 at 1.5.
+And then we can run the code.
+
+  (x1, y1, x2, y2) = gen_data(1000, 1.5, 1, 1.5)
+
+What we'd like to do next is to visualize the data we've generated.
+So, let's write a simple function, plot_data, that creates the plot.
+I'm going to create the function here directly.
+Plot_data: it takes in x1, y1, x2, and y2.
+
+  def plot_data(x1, y1, x2, y2):
+
+The first thing I want to do is open a new figure.
+Then, we'll do a plot.
+We plot x1 versus y1.
+We'll use little dots, and we'll set marker size equal to 2.
+Here then on the second line, we just copy and paste the line from above,
+and we're plotting x2 versus y2 using the same kinds of markers.
+One thing we want to do is to add axis labels.
+So, we use the x label command, and it's call this X_1.
+
+  def plot_data(x1, y1, x2, y2):
+    plt.figure()
+    plt.plot(x1, y1, "o", ms=2)
+    plt.plot(x2, y2, "o", ms=2)
+
+Now, if you have LaTeX installed in your computer, which
+is a mathematical typesetting software, you
+can surround X_1 in a pair of dollar signs,
+and we'll see what that looks like in a moment.
+We'll also label the y-axis, and we'll call that X_2.
+And in this case, there's no need to return anything.
+
+  def plot_data(x1, y1, x2, y2):
+    plt.figure()
+    plt.plot(x1, y1, "o", ms=2)
+    plt.plot(x2, y2, "o", ms=2)
+    plt.xlabel("$X_1$")
+    plt.ylabel("$X_2$")
+
+We can now run the code, and Python produces this beautiful plot.
+On the x-axis, we have X1 as we should.
+On the y-axis, we have X2.
+Note that when we use the dollar signs, we had X_1 and X_2,
+and they appear as subscripts in the plot.
+As we saw on the white board, the group of points on the left
+are the observations coming from class 1, and the orange points on the right
+are the observations coming from class 2.
+You'll see that the centers of these clouds of data points
+are more or less symmetrically located around X1 is equal to 0.
+But you should also see that the cloud on the right, the orange cloud,
+is broader than the blue cloud.
+And that's because we used to greater value for its standard deviation.
+
+COMPREHENSION Qs:
+1. Which of the following function calls will produce data that would be easiest to classify correctly?
+>>> gen_data(1000, 20, .5, .5)
+Which of the following function calls will produce data that would be hardest to classify correctly?
+>>> gen_data(1000, 0, 1, 1)
