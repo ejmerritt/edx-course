@@ -1,0 +1,231 @@
+JP ONNELA: Let's do this in Python.
+We will first import from sklearn.linear_model
+LogisticRegression.
+That's our first step.
+
+  from sklearn.linear_model import LogisticRegression
+
+Then second, we can set up or instantiate a classifier object.
+So we'll call LogisticRegression.
+And this simply generates the model object.
+
+  clf = LogisticRegression()
+
+The next step for us is to call the fit function on the clf object.
+But to do that, we have to first combine our vectors x1, y1, and x2
+and y2 in a more suitable form.
+The sklearn.linear_model LogisticRegression function wants two
+inputs, which are the x's and the y's.
+So we have an X matrix.
+Then we have a y vector.
+Let's start with the y.
+These are the outcomes.
+And in this case, we have observations from two classes, 1 and 2.
+So we might have a bunch of 1's followed by a bunch of 2's.
+This would be our outcome vector y.
+The x is going to be a matrix where the different rows correspond
+to different observations.
+In this case, we have n observations or data points.
+And the columns here correspond to the values of the covariates,
+or the predictors.
+If you look at the white board for another second, in our case,
+we decided to call the covariates x and y.
+So in the first column, we're going to have a bunch of observations
+that we called x1--
+this is going to be one vector.
+And then the second column is going to be y1.
+This is our second vector.
+So these two column vectors are the x- and y-coordinates
+of the points coming from the first class.
+But we're not done yet.
+Then we need to put the observations from x2 underneath this x here.
+And then we need y2s under here.
+And this is how we're going to build our X matrix for logistic regression.
+To generate the X matrix, we'll take the following approach.
+We'll first take the x1 vector and the y1 vector.
+And we will stack these together.
+Then we will do the same for x2 and y2.
+And finally, we'll put the first block on top of the second block.
+And we can do these operations using the vstack, or vertical stack,
+function in numpy and the hstack, or horizontal stack, also in numpy.
+
+Let's try this out in Python.
+I'm going to start with the vertical stack.
+And the first arguments are going to be x1 and y1.
+And we can see what happens when we do this.
+
+  np.vstack((x1, y1)).shape
+  >>> (2, 1000)
+
+If we type dot shape, we'll see that this has the wrong shape.
+In this case, we have two rows and 1,000 columns.
+But instead, we want the transpose of this.
+So we can take the transpose by saying dot T. And then we can check the shape.
+
+  np.vstack((x1, y1)).T.shape
+  >>> (1000, 2)
+
+And in that case, we now have 1,000 rows and two columns,
+which is exactly what we want.
+We can take out the shape now.
+We will do the same thing for x2 and y2.
+We will then put these inside a tuple.
+And then we will call np.vstack on this object.
+And this is going to be our X matrix.
+
+  X = np.vstack((np.vstack((x1, y1)).T, np.vstack((x2, y2)).T))
+
+All right.
+We can type X.shape.
+And we'll see that X is a matrix with 2,000 rows and two columns,
+which is exactly what we wanted.
+Remember, we generated 1,000 observations
+from each class, which is why we have 2,000 observations in total.
+Now we're done with the X matrix piece.
+We also need to generate the outcome vector y.
+In this case, I'm going to use the np.repeat function.
+So we have n observations coming from class 1.
+And we have the same number of observations coming from class 2.
+So I want to generate a vector of 1's which is n elements long.
+I want to generate a vector of 2's which is also n elements long.
+I can put these inside a tuple.
+And I can then call the np.hstack function on this tuple.
+And this should give me my vector y.
+
+  y = np.hstack((np.repeat(1,n), np.repeat(2,n)))
+
+In this case, we're missing the equals sign.
+This looks better.
+We type y.shape.
+
+  y.shape
+  >>> (100, )
+
+All right.
+This demonstrates why it's useful to check the sizes of your arguments.
+Remember, above, we defined a global variable n.
+And we set that to be equal to 50.
+So when we told Python to generate n replicas of 1's and n replicas
+of 2's, it generated 50 1's and 50 2's.
+However, when we generated the predictor dataset, which was here,
+we generated 1,000 data points from each class.
+That's why we need to go back here rather than having--
+well, actually, what we can do is we can just say n is equal to 1,000.
+We can now run y.shape.
+
+  n = 1000
+  y = np.hstack((np.repeat(1,n), np.repeat(2,n)))
+  y.shape
+  >>> (2000, )
+
+And now y has the same number of rows as X.
+So next thing we want to do is generate our test and training datasets.
+We're going to be using the same expression as before.
+The input is X and y.
+We split the data evenly between a test set and a training set.
+And again, I'm using a random seed here, which is something
+that you can do if you'd like.
+
+  X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.5, random_state = 1)
+
+Again, let's check the sizes of these objects.
+
+  X_train.shape
+  >>> (1000, 2)
+
+So we have 1,000 observations randomly selected from X.
+The same should be true for test.
+
+  X_test.shape
+  >>> (1000, 2)
+
+That looks good.
+We can look at this for y and for y_train.
+So everything thing looks good.
+Our final step is to fit the classifier.
+So we called our classifier clf.
+It supports the fit method.
+We train it with the training data.
+The first argument is the X data, the predictors,
+and the second one is the values of the outcomes.
+
+  clf.fit(X_train, y_train)
+
+Python gives us an object which includes a lot of information
+about the classifier.
+And it's useful to Google this to find out the meaning of all
+of these different parameters.
+One thing we can do is we can now find out what is the score--
+in other words, how well does the classifier perform.
+To do that, we provide X_test and y_test.
+
+  clf.score(X_test, y_test)
+  >>> 0.88
+
+And in this case, we seem to get an excellent score of 88%.
+Remember, in the classification context, we're
+modeling conditional probabilities.
+So we can ask scikit-learn to give us estimates of these probabilities.
+To compute the estimated class probabilities,
+we will use the predict_proba function.
+And the argument has to be a np.array which has two covariates because we
+trained the model with two covariates.
+We can try to put into values minus 2 and 0.
+And if we run this, we'll probably get a warning.
+
+  clf.predict_proba(np.array([-2,0]))
+  >>> Warning[...]
+
+So let's see what Python is telling us.
+In this case, let's just read the error message.
+"Reshape your data either using X.reshape(-1,
+1) if your data has a single feature, which is not the case here,
+or X.reshape(1, -1) if it contains a single sample."
+So we have the second situation here.
+This is one single data point.
+So that's why we will use the reshape method--
+we'll just follow the instructions--
+1, minus 1.
+
+  clf.predict_proba(np.array([-2,0])).reshape(1, -1)
+  >>> array([[0.97332102, 0.02667898]])
+
+And in this case, Python returns to us the probabilities.
+But why do we get two probabilities?
+Well, remember, we had two classes, class 1 and class 2.
+So we put in particular values for the predictors-- minus 2 and 0
+in this case.
+What the output is telling us is that there
+is a 0.97 probability that this particular test
+point belongs to class 1.
+And there is a 0.02 or 0.03 probability that it belongs to class 2.
+These two probabilities, of course, have to add up to 1.
+In addition to estimating these conditional probabilities,
+we can also ask our classifier to make a prediction.
+We do this by calling the clf.predict function.
+
+  clf.predict(np.array([-2,0])).reshape(1, -1))
+  >>> array([1])
+
+And in this case, we saw previously that the predicted probability
+was 0.97 for class 1.
+We had called our classes 1 and 2.
+And we can check this by going back to how we defined our y vector,
+our outcome vector, which consisted of both 1's and 2's.
+We have a binary classifier.
+So the only outputs that are permissible are 1 and 2.
+In this case, our classifier predicts that for these given
+values of covariates, minus 2 and 0, class 1 is the more likely class.
+As you might guess, the prediction is for the class
+with a greater probability--
+in other words, for the class that has a predicted probability exceeding 0.5.
+
+COMPREHENSION Qs:
+1. If you have data and want to train a model, which method would you use?
+>>> clf.fit()
+2. If you want to compute the accuracy of your model, which method would you use?
+>>> clf.score()
+3. If you want to estimate the probability of a data point being in each class, which method would you use?
+>>> clf.predict_proba()
+4. If you want to know to which class your model would assign a new data point, which method would you use?
+>>> clf.predict()
