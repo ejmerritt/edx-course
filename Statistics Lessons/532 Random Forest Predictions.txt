@@ -1,0 +1,88 @@
+JP ONNELA: We will next aggregate several trees
+to form a forest of trees.
+The prediction of the random forest combines information
+from the predictions of the individual trees.
+In the regression setting, the prediction of the random forest
+is the mean of the predictions of the individual trees.
+In a classification setting, the prediction of the random forest
+is the mode of the predictions of the individual trees.
+Random forests introduce two types of randomness to decision trees.
+The first type has to do with introducing randomness to the data,
+so that each tree is fit to a somewhat different dataset.
+The second type of randomness has to do with which
+predictors are considered when making a split at any point in a given tree.
+These two steps have the implication of decorrelating
+the trees, which ultimately gives us a more reliable method.
+The first type of randomness, randomness in data,
+is due to bootstrap aggregation, which is often called bagging.
+Bootstrap is a re-sampling method, which involves repeatedly drawing samples
+from a training set and refitting a model on each sample.
+If we have n observations in our training data set,
+we form a bootstrap dataset by randomly selecting n observations
+with replacement from the original dataset.
+Because the sampling is performed with replacement,
+the same observation can occur multiple times in the bootstrap data.
+We can perform this process multiple times,
+and we'll likely get a somewhat different data set every time.
+So bagging, in the context of decision trees,
+means that we draw a number of bootstrap datasets and fit each to a tree.
+The second type of randomness, randomness
+in how we split the predictor space, happens as follows.
+Normally with decision trees, we consider each predictor-cut point
+combination when making a cut into predictor space.
+In contrast, in random forest, each time we consider a split,
+we don't look at all predictors, but instead
+draw a small random sample of the predictors.
+And now we're only allowed to use these predictors when making a split.
+Each time we make a split, we take a new sample of predictors.
+This sounds really strange, but it's actually a very effective trick.
+Let's consider a simple example.
+We start from some dataset having 1,000 observations,
+and we have 9 predictors from x1 through x9.
+We want to build, say, 50 trees.
+So let's randomize the data first.
+We first draw 50 bootstrap samples from the original data
+and dedicate a separate tree for each dataset.
+We then fit the trees one by one.
+Starting from the first tree and the first cut,
+we first determine which predictors to use.
+If we're allowed to use, say, three predictors when making a cut,
+we might be allowed to use x3, x7, and, say, x8 for the first cut.
+We make the best cut we can given the data and these three predictors,
+and we then move the second cut in the first tree.
+This time we might be allowed to use predictors x1, x5, and x7.
+And again, we find the best cut.
+We proceed until we fit the first three, meaning until we fit
+whatever stopping criterion we have.
+We then continue the same way until we get all of the trees in the forest.
+To make a prediction using a random forest,
+we identify the region in the predicted space
+separately for each tree, where the test observation happens to fall.
+Based on this, we next have each tree make a separate prediction.
+And we then combine the predictions of the individual trees
+to form the prediction of the forest.
+So this is how random forests work.
+If you're not familiar with them from before,
+you may want to read more about them.
+Fortunately, using random forests in sklearn is easy.
+One of the great features of the sklearn library is that there is a consistent framework for the workflow needed to use different statistical models.
+To do random forest regression, you use the following import:
+
+  from sklearn.ensemble import RandomForestRegressor
+
+To do random forest classification, you use the following import:
+
+  from sklearn.ensemble import RandomForestClassifier
+
+After importing the relevant model, everything proceeds in the same way as for linear and logistic regression as shown in the previous videos.
+
+COMPREHENSION Qs:
+1. Random forests get their name by introducing randomness to decision trees in two ways, once at the data level and once at the predictor level.
+How is randomness at the data level introduced?
+>>> Each tree gets a bootstrapped random sample of training data.
+How is randomness at the predictor level introduced?
+>>> Each split only uses a subset of predictors.
+2. In a classification setting, how does a random forest make predictions?
+>>> Each tree makes a prediction and the mode of these predictions is the prediction of the forest.
+In a regression setting, how does a random forest make predictions?
+>>> Each tree makes a prediction and the mean of these predictions is the prediction of the forest. 
