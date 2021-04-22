@@ -1,0 +1,125 @@
+JP ONNELA: Random forest is a powerful method
+for regression and classification.
+We will next cover the conceptual foundations of random forests,
+but we need to start from a simpler method first.
+These simpler methods are called tree-based methods.
+The random forest method makes use of several trees
+when making its prediction, and since in graph theory, a collection of trees
+is called a forest, this is where the random forest method gets its name.
+In other words, to make a prediction, the random forest
+considers the predictions of several trees.
+It would not, however, be useful to have many identical trees
+because all these trees would presumably give you the same prediction.
+This is why the trees in the forest are randomized
+in a way we'll come back to shortly.
+Tree-based methods can be used for regression and classification.
+These methods involve dividing the predictor space
+into simpler regions using straight lines.
+So we first take the entire predictor space and divide it into two regions.
+We now in turn look at each of these two smaller regions,
+divide them into yet smaller regions, and so on,
+continuing until we hit some stopping criteria.
+So the way we divide the predictor space into smaller regions
+is recursive in nature.
+To make a prediction for a previously unseen test observation,
+we find the region of the predictor space where the test observation falls.
+In the regression setting, we return the mean
+of the outcomes of the training observations in that particular region,
+whereas in a classification setting we return
+the mode, the most common element of the outcomes of the training
+observations in that region.
+When we use lines to divide the predictor space into regions,
+these lines must be aligned with the directions
+of the axes of the predictor space.
+And because of this constraint, we can summarize the splitting rules
+in a tree.
+This is also why these methods are known as decision tree methods.
+In higher dimensions, these lines become planes,
+so we end up dividing the predictor space into high-dimensional rectangles
+or boxes.
+How do we decide where to make these cuts?
+The basic idea is that we'd like to carve out
+regions in the predictor space that are maximally
+homogeneous in terms of their outcomes.
+Remember, we'll ultimately use the mean or the mode
+of the outcomes falling in a given region as our predicted outcome
+for an unseen observation.
+So we can minimize error by finding maximally homogeneous regions
+in the predictor space.
+Whenever we make a split, we consider all predictors from x1 to xp,
+and for each predictor, we consider all possible cut points.
+We choose the predictor - cut point combination such
+that the resulting division of the predictor space
+has the lowest value of some criterion, usually called a loss function,
+that we're trying to minimize.
+In regression, this loss function is usually
+RSS, the residual sum of squares.
+In classification, two measures are commonly used,
+called the Gini index and the cross-entropy.
+You can find their definitions online, but the basic idea
+is, again, to make cuts using a predictor
+- cut point combination that makes the classes within each region
+as homogeneous as possible.
+Let's look at decision trees on the white board.
+Let's think about a classification problem
+where we have two covariates, or predictors, again, x1 and x2,
+and we have a bunch of observations in this space.
+Because it's a classification problem, each point
+will have a class associated with it, either number 1 or number 2.
+Let's add a couple of more points here.
+The idea with decision trees is the following.
+We are trying to split this space, the predictor space,
+by forming regions that are maximally homogeneous.
+So let's say we happen to have many 2's here and just one 1 there.
+One option would be for us to split the predictor space here.
+If our x1 ranges from 0 to 10, this might correspond
+to a value of x1 is equal to 6.
+What does the tree representation look like?
+So at the top, we start from all of our data.
+We split the predictor space into two regions.
+In this region, x1 is greater than 6.
+So it corresponds to the right branch.
+And this part here, this region corresponds to a situation
+where x1 is less than 6.
+Once we've now split the space into two, we can proceed to make a further cut.
+So for example, perhaps in this region over here,
+which corresponds to this branch here, we
+might choose to make a cut here for a given value of x2.
+In the tree, we then introduce another branch.
+Let's say that the value of x2 here happens to be 8.
+And in this case, the cut is based on the value of x2.
+So we go to the right.
+If the value of x2 is greater than or equal to 8,
+otherwise we go to the left branch, and so on.
+So we continue to build these trees.
+We continue splitting these regions by introducing cuts
+in the predictor space.
+We stop once we meet some stopping criterion.
+At that point, we should have regions here
+that consist mostly of 2's, and 1's, say 2's here and 1's over here.
+How does a decision tree make a prediction?
+Let's say we have observed a data point here,
+which corresponds to a specific value of x2 and a specific value of x1.
+If this is a classification problem, which it has been so far,
+we first find the region where this data point falls.
+In this case, it's this particular region here
+that we're now highlighting in green.
+Because it's a classification problem, we find the mode of these observations
+here.
+They all seem to belong to class two.
+And that's why our prediction for this point is going to be equal to two.
+If we were dealing with the regression problem,
+we wouldn't have 1's and 2's as the outcomes,
+but we would have some other measurements, like BMIs or incomes
+or something like that.
+To make a prediction in that setting, we would proceed just as before.
+But instead of returning the mode, we would return the mean
+of the observations in that region.
+
+COMPREHENSION Qs:
+1. The goal of a tree-based method is typically to split up the predictor or feature space such that:
+>>> data within each region are as similar as possible.
+2. For classification, how does a decision tree make a prediction for a new data point?
+>>> It returns the mode of the outcomes of the training data points in the predictor space where the new data point falls.
+For regression, how does a decision tree make a prediction for a new data point?
+>>> It returns the mean of the outcomes of the training data points in the predictor space where the new data point falls. 
