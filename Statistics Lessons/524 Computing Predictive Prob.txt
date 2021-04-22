@@ -107,14 +107,26 @@ And the next step is-- we can call this function.
 And before we look at the results, let's look at the code
 that I just copy pasted in.
 We first create a figure of a particular size here.
+
+  plt.figure(figsize=(5,8))
+
 Then on the second line, we create a subplot
+
+  ax = plt.subplot(211)
+
 and we call the plot_probs function.
 The first argument, which is what we haven't talked about yet,
 is the axis object of that particular subplot.
+
+  plot_probs(ax, clf, 0)
+
 The reason we need to provide this in here
 is because the contour function plotting command on this line in our function
 needs to know what are the axes into which the contour plot will be added.
 Then we add, finally, a title to our plot.
+
+  plt.title("Pred. prob for class 1")
+
 We run this function call two times.
 The first time we call a plot probes function,
 we're estimating the probabilities that these different observations belong
@@ -122,6 +134,15 @@ to class 0, the first class.
 Then we run it for the second time where the last argument
 is 1, which gives us the predictive probabilities for the observations
 to belong to class 2.
+
+  plt.figure(figsize=(5,8))
+  ax = plt.subplot(211)
+  plot_probs(ax, clf, 0)
+  plt.title("Pred. prob for class 1")
+  ax = plt.subplot(212)
+  plot_probs(ax, clf, 1)
+  plt.title("Pred. prob for class 2");
+
 If we now scroll down, we can look at the actual predictive probabilities.
 I'm going to make my screen a little bit smaller.
 Now, let's look at the top plot first.
@@ -152,3 +173,9 @@ it turns out that a linear decision boundary is the best one can do.
 If we had more than two Gaussian distributions generating the data,
 then the optimal decision boundary would be non-linear.
 And generally, a linear model would usually not do a good job.
+
+COMPREHENSION Qs:
+1.What does the pattern of probabilities across the grid (at 7:34 in Video 5.2.4) indicate about 𝑋1 and 𝑋2?
+>>> The class probability is determined mostly by 𝑋1. 
+2. The sum of the class probabilities:
+>>> will always equal 1 for any number of classes.
