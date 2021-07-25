@@ -1,0 +1,77 @@
+JP ONNELA: In simple linear regression, the goal
+is to predict a quantitative response Y on the basis of a single predictor
+variable X. It assumes the following relationship between the random
+variables X and Y.
+Our random variable, which is capital Y, is going to be given to us by some
+parameter beta 0 plus some other parameter-- let's call it beta 1--
+times a random variable X plus epsilon, which is some error term.
+
+  Y = B0 + B1 * X + E
+
+Note that the capital letters here always correspond to random variables.
+Once we have used training data to produce estimates,
+beta 0 hat and beta 1 hat, for the model coefficients,
+we can predict future values of Y.
+So I'm going to write this underneath here.
+Our predicted value is going to be a lowercase y with a hat on top.
+We have our beta 0 hat to indicate that this has been estimated from data.
+Plus, we have beta 1 hat, again estimated from data.
+And then we have our lowercase x over here.
+
+  ŷ = b0 + b1 * x
+
+So here, just to be clear, y hat indicates
+a prediction, or a specific value, of the random variable Y
+on the basis of a specific value where X (the uppercase X)
+is equal to a lowercase x.
+Notice the hats on top of the betas.
+They indicate that these are parameter estimates,
+meaning that their parameter values that have been estimated using data.
+To estimate the unknown coefficients in the model, we must use data.
+Let's say that our data consists of n observation
+pairs, where each pair consists of a measurement of x
+and a measurement of y.
+We can write these n observations as follows.
+We can take our first pair, x1, y1.
+This is our first data point.
+Then we can take our second data point, x2, y2, and so on, all the way to xn,
+yn.
+
+  (x1, y1), (x2, y2), [...] (xn, yn)
+
+These are observed data.
+The most common approach to estimating the model parameters
+involves minimizing the least squares criterion.
+We first define the i-th residual as follows.
+We typically use lowercase e for the residual.
+So the residual for the i-th observation is
+going to be given by the data point yi minus our predicted value
+for that same data point.
+
+  ei = yi - ŷi
+
+So e sub i here is the difference between the i-th
+observed response value and the i-th response value predicted by the model.
+From this, we can define the residual sum of squares, RSS, as follows.
+I'll create a bit of space here.
+RSS is equal to the first residual squared
+plus the second residual squared plus the n-th residual squared.
+
+  RSS = e1^2 + e2^2 + [...]
+
+The least squares estimates of beta 0 and beta 1--
+these guys here-- are those values of beta 0
+and beta 1 that minimize the RSS criterion.
+
+COMPREHENSION Qs
+1. What is the difference between 𝑌 (capital letter) and 𝑦 (lowercase letter)?
+>>> 𝑌 is a random variable, whereas 𝑦 is a particular value.
+2. The following code implements the residual sum of squares for this regression problem. What is the approximate value of rss?
+  def compute_rss(y_estimate, y):
+    return sum(np.power(y-y_estimate, 2))
+
+  def estimate_y(x, b_0, b_1):
+    return b_0 + b_1 * x
+
+  rss = compute_rss(estimate_y(x, beta_0, beta_1), y)
+>>> 81.540007425512

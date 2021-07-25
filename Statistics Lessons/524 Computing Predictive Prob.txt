@@ -1,0 +1,181 @@
+JP ONNELA: We just saw how to compute predictive probabilities using sklearn.
+Let's look at the problem again.
+We had two predictors, x1 and x2.
+We put in a test point, which corresponded
+to some specific values of x1 and x2.
+And what we computed was predictive probability,
+or conditional probability, that this particular observation
+belongs to class 1 or class 2.
+In this example, we computed these two probabilities for a single point.
+What we want to do next is to compute these probabilities
+at every point of the x1-x2 grid.
+Let's see how we can do that.
+I'm just going to talk us through the strategy,
+and then we'll look at the code.
+The first thing we'll do is we'll specify a grid.
+We'll be using meshgrid for this.
+So we specify some spacing on the x1 axis,
+and we do the same on the x2 axis.
+This will generate a grid like this--
+I'll just draw a few lines here.
+And we'll be able to use meshgrid to output two matrices.
+So the first matrix, I'm just going to draw them here side by side.
+Because this is a table, or a set of intersecting grid points,
+we know that every one of these points has both an x1 coordinate and x2
+coordinate associated with it.
+So when we call meshgrid, we get two matrices at the output.
+The first output matrix is going to give us
+the x1 coordinate at all of these grid points,
+and the second one is going to give us the x2 coordinate at the same grid
+points.
+We have one challenge here.
+Remember when we called the predict_proba function,
+we provided our x matrix in the following shape.
+We had the columns correspond to the predictors
+and the rows correspond to the different samples, or data points.
+Now x1 and x2, which are the two predictors we have, are matrices.
+So the question is what can we do in this situation?
+We'll be using the ravel function.
+So what that does is the following.
+Let's just focus on the x1 case.
+x2 is identical.
+The ravel will take x1, the matrix.
+It will take the first row.
+Let's call it r1.
+Let's call this r2 and so on.
+It will take the first row, then it will append to that the second row.
+This would be r1, r2, and so on.
+In other words, it takes all the rows of this matrix
+and gives us one long vector, which has all the values contained
+not as a matrix but as a vector.
+We will do this for both this matrix and the second matrix of x2 values.
+We can then put them side by side like this.
+Now these are our x1 values and these are our x2 values.
+This will form a matrix, but this matrix has the wrong orientation.
+So our final step is going to be to take this matrix and flip it around,
+meaning take the transpose of that matrix.
+Let's look at the function for plotting these predicted probabilities.
+Here's the code I just wrote.
+Let's look at it line by line.
+
+  def plot_probs(ax, clf, class_no):
+    xx1, xx2 = np.meshgrid(np.arange(-5, 5, 0.1), np.arange(-5, 5, 0.1))
+    probs = clf.predict_proba(np.stack((xx1.ravel(), xx2.ravel()), axis=1))
+    Z = probs[:,class_no]
+    Z = Z.reshape(xx1.shape)
+    CS = ax.contourf(xx1, xx2, Z)
+    cbar = plt.colorbar(CS)
+    plt.xlabel("$X_1$")
+    plt.ylabel("$X_2$")
+
+On the first line here we used the meshgrid.
+We specify the range of values for x1 from minus 5 to plus 5
+in increments of 0.1, and we do the same for the second variable x2.
+Then we call the meshgrid function, and we store the output
+into two matrices, which are xx1 and xx2 in this case.
+Next, we will take the two matrices, xx1 and xx2, and we use the ravel method.
+So first, we turn xx1 into a vector here.
+We do the same for xx2 using the ravel function.
+And then we stack these two vectors.
+We then call the clf.predict_proba function, which gives us an array.
+Because we have two classes, this matrix here, probs,
+is going to have n rows and two columns.
+I'm going to take in class number here as an input argument to this function.
+So what happens is the following.
+In probs, I have, for every single observation, every single row,
+I have the probability that this particular observation belongs
+to class 1 or class 2.
+I want to extract all of the rows from this matrix.
+But I only want that particular column here that corresponds to class number.
+So, for example, if class number here is equal to 0,
+we will end up extracting the first column from this matrix.
+After we do that, we assign that to a variable z.
+So at this point, z contains the conditional class probabilities,
+which is what we wanted to compute.
+We have one more challenge here, however.
+Remember, we wanted to plot these on an x1, x2 plane,
+and z is going to be a long column vector.
+We therefore use the reshape function, which takes z and turns it
+into the shape of xx1, in this case.
+You could use xx2 here, and it would work just the same.
+We store the output in z, and then we call
+the contourf function to plot the value of z
+at locations that are specified by xx1 and xx2.
+Finally, I plot a color bar, and I add axis labels to the plot.
+We've now written or defined our function.
+And the next step is-- we can call this function.
+And before we look at the results, let's look at the code
+that I just copy pasted in.
+We first create a figure of a particular size here.
+
+  plt.figure(figsize=(5,8))
+
+Then on the second line, we create a subplot
+
+  ax = plt.subplot(211)
+
+and we call the plot_probs function.
+The first argument, which is what we haven't talked about yet,
+is the axis object of that particular subplot.
+
+  plot_probs(ax, clf, 0)
+
+The reason we need to provide this in here
+is because the contour function plotting command on this line in our function
+needs to know what are the axes into which the contour plot will be added.
+Then we add, finally, a title to our plot.
+
+  plt.title("Pred. prob for class 1")
+
+We run this function call two times.
+The first time we call a plot probes function,
+we're estimating the probabilities that these different observations belong
+to class 0, the first class.
+Then we run it for the second time where the last argument
+is 1, which gives us the predictive probabilities for the observations
+to belong to class 2.
+
+  plt.figure(figsize=(5,8))
+  ax = plt.subplot(211)
+  plot_probs(ax, clf, 0)
+  plt.title("Pred. prob for class 1")
+  ax = plt.subplot(212)
+  plot_probs(ax, clf, 1)
+  plt.title("Pred. prob for class 2");
+
+If we now scroll down, we can look at the actual predictive probabilities.
+I'm going to make my screen a little bit smaller.
+Now, let's look at the top plot first.
+On the x-axis, we have the different values of the x1 predictor;
+and on the y-axis, we have the different x2 values.
+The contents of this plot correspond to probabilities.
+Probabilities vary from 0 to 1.
+So in this case, blue corresponds to 0, meaning low probability, and yellow
+corresponds to a high probability.
+What this means is that if we are somewhere here
+in this part of the plot, it's very likely
+that this particular observation has a class probability 1 for class 1.
+If we move a little bit more towards the center,
+the probability will decline to first 0.9, 0.75, and so on.
+And if we continue to move further to the right, the probability,
+the conditional probability that a given observation will belong to class 1
+will go to 0.
+The exact opposite happens in the lower plot.
+Remember, when we have only two classes, the probabilities have to add up to 1.
+So for example, if you have a test point here and the same test point here,
+the two probabilities need to add up to 1.
+In other words, as the conditional probability in the upper plot
+decreases to the right, the conditional probability for class 2
+has to increase to the right in the bottom plot.
+In this case, where the training data in each class
+are generated from bivariate Gaussian distributions,
+it turns out that a linear decision boundary is the best one can do.
+If we had more than two Gaussian distributions generating the data,
+then the optimal decision boundary would be non-linear.
+And generally, a linear model would usually not do a good job.
+
+COMPREHENSION Qs:
+1.What does the pattern of probabilities across the grid (at 7:34 in Video 5.2.4) indicate about 𝑋1 and 𝑋2?
+>>> The class probability is determined mostly by 𝑋1. 
+2. The sum of the class probabilities:
+>>> will always equal 1 for any number of classes.

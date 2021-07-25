@@ -1,0 +1,102 @@
+JP ONNELA: We're going to start with a simple toy
+example involving regression.
+So let's first go to our Python.
+We'll import numpy the usual way.
+We'll also import scipy.stats as ss.
+We'll also want to import matplotlib.pyplot as plt.
+And these are the immediate imports that we will need.
+
+  import numpy as np
+  import scipy.stats as ss
+  import matplotlib.pyplot as plt
+
+So let's generate some fake data.
+I'd like to generate one hundred data points,
+so n is equal to number of data points.
+And these are going to be a linear regression,
+and these notions will make a little bit more sense later.
+But we'll define two parameters, which are beta0 and beta1.
+And for this example, I'm going to set beta0 to be equal to 5
+and beta1 is going to be equal to 2.
+In his example, I'm going to be using a specific seed, a random seed for numpy.
+So I do that by saying np.random.seed.
+
+  n = 100
+  beta_0 = 5
+  beta_1 = 2
+  np.random.seed(1)
+
+And you don't need this, but if you use the same seed,
+you will get identical results.
+The next thing we want to do is we want to generate some x values.
+So ss.uniform.rvs can be used to generate random variables that
+are distributed on the 0-1 interval.
+In this case, I want to specify the size.
+I'd like to generate one hundred random variables.
+But what I really want to have is, I would
+like to have my x variables be distributed between 0 and 10.
+So what I need to do is--
+I'll multiply the output by 10, and I will assign this
+to a variable that's called x.
+
+  x = 10 * ss.uniform.rvs(size=n)
+
+Finally, I need to generate some outcome data, which is y.
+And we're going to assume that this is the true model.
+The data come from a model where we have beta0, which is just
+a fixed constant, plus beta1 times x.
+Now this is our deterministic part of the model.
+So we have the constant coefficient beta0,
+and then we have beta1, which is multiplied by x.
+We will also add some random noise, and we use the norm method from ss.
+We want to generate random variables.
+We will have location equal to 0.
+So that means the mean is going to be 0.
+Scale is going to be 1.
+And the size, the number of observations, is going to be n.
+And this has to match the size of x.
+
+  y = beta_0 + beta_1 * x + ss.norm.rvs(loc=0, scale=1, size=n)
+
+We can then try to run this code.
+Let's then try plotting our data.
+So we first create a new figure.
+Then we use plt.plot.
+We then plot x versus y.
+We'll use circles to make the plots, and our marker size
+is going to be equal to 5.
+Then I'm going to generate a variable, which I call xx.
+And this is going to be a range of x values.
+Now, these are values for which I would like to plot my regression function.
+So we define this as a numpy array.
+And in this case, we will just have two points here, the beginning value,
+the lowest value of x, and the highest value of x.
+Then we'll plot, plt.plot, we'll plot the x values,
+then we have beta0 plus beta1 times xx.
+So this is the deterministic part of the model, the part of the model that
+doesn't involve any error.
+Then we add labels.
+So we add x label.
+We're just simply going to call this x.
+And we do the same for y.
+And then we try running this code.
+
+  plt.figure()
+  plt.plot(x, y, "o", ms=5)
+  xx = np.array([0,10])
+  plt.plot(xx, beta_0 + beta_1 * xx)
+  plt.xlabel("x")
+  plt.ylabel("y")
+  plt.show()
+
+So let's look at the plot for a second.
+We have the x values here going from 0 to 10.
+We have the y values going from about 5 to 25.
+And the orange line, the straight line here,
+is the function that we used to generate the data from.
+The blue dots here correspond to realizations from this model.
+So what we did was we first sampled 100 points from the interval 0 to 10.
+Then we computed the corresponding y values.
+And then we added a little bit of normally distributed
+or Gaussian noise all of those points.
+And that's why the points are being scattered around the line.

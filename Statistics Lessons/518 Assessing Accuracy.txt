@@ -1,0 +1,167 @@
+JP ONNELA: To evaluate the performance of a regression model,
+we need to somehow quantify how well the predictions of the model
+agree with the observed data.
+In the regression setting, the most commonly used measure
+is the mean squared error, or MSE.
+It's defined in the following way.
+MSE is given by an average.
+We're averaging over n data points.
+Our indexing variable is i, which goes from 1 to n.
+We take yi, which is the observed outcome.
+From that, we subtract our prediction at the corresponding value xi,
+and we square the difference.
+This is the definition of MSE.
+If we compute the MSE using the training data, the data that
+was used to train the model, then we usually call it the &amp;quot;training MSE.&amp;quot;
+But we don't usually care how well the model works on the training data.
+But instead, we'd like the model to perform well
+on previously unseen test data.
+And when we compute the MSE using the test data set,
+we call it the &amp;quot;test MSE.&amp;quot;
+So far, we've talked about model accuracy in the context of regression.
+To evaluate how well a classifier performs, as we'll see shortly,
+we compute the training error rate, which
+is the proportion of errors the classifier makes
+when applied to training data.
+Analogously to the regression setting, we also
+have test error rate, which is the proportion
+of errors or misclassifications the classifier makes
+when applied to test data.
+We can obtain estimates of test error by dividing our data set into two parts--
+the training data and the test data.
+And we use the training data only to train the model.
+Once the model has been fitted, we can now
+test its accuracy using the test data, which was not
+in any way used to train the model.
+Let's see how we can divide our data into training data and test
+data using sklearn.
+We will first import from sklearn.model_selection -
+we import an object called train_test_split.
+
+  from sklearn.model_selection import train_test_split
+
+And this is the function that we'll be using
+to split a data set into training data and test data.
+The first output is going to be our X_train.
+The second one is going to be X_test.
+Then we have y_train, and then we have, finally, y_test.
+This is the output of the function.
+We call train_test_split using our X variable, which are our predictors,
+our y, and this is our outcome.
+We can then specify a couple of additional parameters
+if we would like to.
+
+  X_train, X_test, y_train, y_test = train_test_split(X, y)
+
+In this case, we'll get to specify train_size.
+This is the proportion of data that will be allocated to the training set.
+And I'm just going to use 0.5 here.
+And finally, I'm going to use random_state.
+This just specifies a random seed.
+So if you use the same random seed, you will get the same answer.
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.5, random_state=1)
+
+Now we can fit the model, the linear model, using the training data.
+So our linear model lm is going to be equal to LinearRegression.
+And I want to make sure that we use the fit_intercept option.
+So we have to set this to True.
+It typically, by default, is set to True.
+But in this case, I want to be clear that it has been set to True.
+Now, this has created a model object which is called lm.
+
+  lm = LinearRegression(fit_intercept=True)
+
+The next step is for us to fit this, so we call the fit method.
+The first input argument is going to be X_train,
+and the second one is going to be y_train.
+So it's important to realize that the first argument here corresponds
+to the matrix of covariates, or predictors, in the training data set.
+The second argument corresponds to the outcomes in the training data set.
+
+  lm.fit(X_train, y_train)
+
+We can run this line, and now Python outputs a linear regression object.
+And you can confirm, if you look at the screen,
+fit_intercept has been set to true.
+So we know that this is a linear model that fits the intercept as well.
+We can now test how well the model performs.
+We can call the lm object.
+And we invoke the score method.
+We want to provide the test matrix, the test covariates.
+And the second input we need is the test outputs.
+
+  lm.score(X_test, y_test)
+
+So let's think about this, what happens?
+The first argument gives the predictors, or covariates, to the linear model.
+Based on that, it makes predictions.
+Let's call them y hats.
+Then the y_test vector, which we provide as a second argument,
+provides the true outcomes for the corresponding x values.
+And this is how lm.score knows how to compute the accuracy of the model.
+We can run this, and in this case, we get a very high r-squared value.
+Statistical models generally perform best
+when their capacity is appropriate for the complexity of the modeling task.
+Typically, more flexible models require estimating
+a greater number of parameters.
+Models that are too flexible can lead to overfitting,
+which means that the model starts to follow the noise in the data
+too closely.
+In the extreme case, the model can memorize the data points rather
+learn the structure of the data.
+The problem with this is that it generalizes poorly to unseen data.
+In contrast, if the model is too simple, it can underfit the data, in which case
+the model is not sufficiently flexible to learn the structure in the data.
+Let's look at this in the context of a regression problem, or regression
+setting.
+We have our outcome here, which is y, and we have our predictors here, x.
+Let's think about a situation where we observe data
+that might look something like this.
+So we only have a handful of data points.
+And in this case, it looks like an ideal fit, an ideal model,
+might be some kind of a curved line.
+Let's first look at the phenomenon of overfitting.
+So if we really are overfitting these data,
+one possible model would then be one which simply just
+connects the dots together.
+And in this case, if we evaluate the training error,
+it's going to be 0, because the model has effectively memorized all of the y
+values for the corresponding x values.
+So what's the problem with this approach?
+So the problem is that it doesn't generalize well.
+So let's think about a setting where we now generate a new, unseen data set,
+but we've already fitted the model given by the blue line.
+So let's say that in this new data set, the points happen
+to arrive at these locations.
+In this case, we can see that the distance--
+let's use a different color--
+between the fitted value of the model and what we actually
+observe in this case is very large.
+So in other words, the model doesn't generalize well
+for this new, unseen data set.
+In the other extreme, we can think about fitting
+as a model that's overly simple.
+In that case, it might correspond to a straight line.
+If we fit a straight line through these points,
+we can see that on average, it fits OK.
+But the fit seems to be poor at this end, so for small values of x,
+and for large values of x.
+Ideal model complexity would probably be somewhere between these two extremes,
+and it might look something like this--
+a slightly curved line.
+Now this black line here corresponds to a model
+that has ideal, or optimal, model complexity.
+So it fits well not only the training data,
+but as we generate new test data sets, this model
+will also fit those observations.
+
+COMPREHENSION Qs
+1. When evaluating the performance of a model in a regression setting on test data, which measure is most appropriate?
+>>> Test MSE
+When evaluating the performance of a model in a classification setting on test data, which measure is most appropriate?
+>>> Test error rate
+2. How do we expect an model that was overfit on the training data to perform on testing data?
+>>> It will likely perform worse on the testing data.
+3. What is the primary motivation for splitting our model into training and testing data?
+>>> By evaluating how our model fits on unseen data, we can see how generalizable it is.

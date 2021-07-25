@@ -1,0 +1,225 @@
+In the same way that we can generate random numbers from a given
+distribution, like the normal or the binomial distribution,
+we can sample not numbers but random graphs
+from a collection or ensemble of random graphs.
+Just like different distributions of numbers
+give rise to different samples of numbers,
+different random graph models give rise to different kinds of random graphs.
+The simplest possible random graph model is the so-called Erdos-Renyi,
+also known as the ER graph model.
+This family of random graphs has two parameters, capital N and lowercase p.
+Here the capital N is the number of nodes in the graph,
+and p is the probability for any pair of nodes to be connected by an edge.
+Here's one way to think about it-- imagine
+starting with N nodes and no edges.
+You can then go through every possible pair of nodes and with probability p
+insert an edge between them.
+In other words, you're considering each pair of nodes
+once, independently of any other pair.
+You flip a coin to see if they're connected,
+and then you move on to the next pair.
+If the value of p is very small, typical graphs generated from the model
+tend to be sparse, meaning having few edges.
+In contrast, if the value of p is large, typical graphs
+tend to be densely connected.
+Although the NetworkX library includes an Erdos-Renyi graph generator,
+we'll be writing our own ER function to better understand the model.
+This is also an opportunity for us to learn more about the NetworkX library,
+and it's also a step towards being able to implement a more complicated network
+model yourself, the kind of model that is not
+included in the NetworkX library.
+Our task is to implement an ER model as a Python function.
+Let's first see how to implement the coin flip just one time.
+To do this, we'll be using the SciPy stats module, more specifically
+a function called Bernoulli.
+We'll first import that from SciPy stats import Bernoulli.
+And then we can call this function.
+
+  from scipy.stats import bernoulli
+  bernoulli.rvs(p=0.2)
+
+We'll be using the rvs method to generate one single realization
+in this case of a Bernoulli random variable.
+The only input argument is p, which is the probability of success.
+In this case, the outcomes are coded as 0s and 1s.
+That means that p is the probability that we get an outcome 1 as opposed
+to outcome 0.
+Let's try this a couple of times.
+So if we keep repeating this, you'll get mostly 0s,
+but occasionally you'll get a 1 as well.
+
+  bernoulli.rvs(p=0.2)
+  >>> 0
+  bernoulli.rvs(p=0.2)
+  >>> 0
+  bernoulli.rvs(p=0.2)
+  >>> 1
+
+Let's look at some informal pseudocode code for our ER graph generator.
+Initially, I'm going to specify some number of nodes.
+We'll just go with 20.
+I'm going to fix p to be equal to 0.2.
+
+  N = 20
+  p = 0.2
+
+These are just some numbers for us to experiment with.
+The first step for us is going to be the creation of an empty graph.
+Create empty graph.
+The next step for us is to add all N nodes in the graph.
+We then would like to loop over all pairs of nodes
+and add an edge with probability p.
+So loop over all pairs of nodes, and add an edge with probability p.
+Let's start turning our informal pseudocode into actual code.
+To create the empty graph, we'll be using nx.Graph,
+and remember to spell Graph here with a capital G. I'm
+going to be calling my graph G here.
+
+  G = nx.Graph()
+
+The next step is to add all N nodes in the graph.
+I can accomplish that with just one line by using the Add Nodes From function.
+
+  G.add_nodes_from(range(N))
+
+One way to do this would be to construct a list containing the nodes 0, 1, 2, 3,
+and so on.
+An easier way is to use a range object.
+And we call that range object with argument N. In this case,
+we'll be adding nodes starting from 0 and ending at N minus 1.
+In other words, we will have added N nodes to our graph.
+The next step for us is to loop over all of our nodes.
+We'll do this using a for loop.
+Let's call it node 1.
+For node 1 in G.nodes.
+Remember, an edge is a pair of nodes, so we actually
+need to nest another loop inside of our first loop.
+So in this case, we need a second for loop for node 2 in G.nodes.
+
+  for node1 in G.nodes():
+    for node2 in G.nodes():
+      bernoulli.rvs(p=p)
+
+At this point, we have looped over all pairs of nodes,
+and the next step is to add an edge with probability p.
+To do this, we used Bernoulli function, Bernoulli.rvs,
+and we set the probability parameter p to be equal to p.
+Just to be clear here, the first p is the name of the keyword argument
+that we are providing.
+The second p here is the actual value of p, in this case 0.2.
+If this returns 1-- so we can ask if Bernoulli.rvs is equal to True,
+we add the edge between node 1 and node 2.
+
+  for node1 in G.nodes():
+    for node2 in G.nodes():
+      if bernoulli.rvs(p=p) == True:
+        G.add_edge(node1, node2)
+
+Here we can simplify our code a tiny bit.
+Let's look at the IF statement a little bit more closely.
+Here on the left, we have Bernoulli.rvs, which returns either 0 or 1.
+Then we're asking if that is equal to True.
+What happens in this case is, that if the Bernoulli process returns 0,
+that gets interpreted as False.
+In contrast, if it returns a 1, that gets interpreted as True.
+So in this case, this line will be run G dot add edge if
+and only if the Bernoulli process returns a 1 to us.
+Let's look at the Bernoulli function one more time.
+I just said that if the function returns a 1, that
+gets interpreted as true, therefore we do not
+need this exclusive comparison if the value that it returns is equal to true.
+We can just omit that.
+In this case, the IF statement will be true
+if the Bernoulli random variable is equal to 1.
+If it's 0, the IF statement evaluates to a False.
+Let's try running our random graph.
+
+  G = nx.Graph()
+  G.add_nodes_from(range(N))
+  for node1 in G.nodes():
+    for node2 in G.nodes():
+      if bernoulli.rvs(p=p):
+        G.add_edge(node1, node2)
+
+First we add the values of the parameters.
+So N is 20, p is equal to 0.2.
+And in this case, everything looks good.
+I'm going to ask G dot number of nodes to find out how many nodes I have.
+I have 20, which is what I expected.
+Let's try drawing that.
+If you're used to looking at networks, this graph
+will look too densely connected to be right.
+In fact, we have a subtle error in our code.
+Now we're considering each pair of nodes twice, not just once, as we should.
+Consider running through the two loops, one nested inside the other.
+Consider a situation where node 1 is equal to 1 and node 2 is equal to 10.
+In this case, we're considering the pair 1,10.
+Now if you move forward in that loop, there's
+going to be a moment where node 1 is equal to 10, and node 2 is equal to 1.
+In this case, we are considering the node pair 10,1.
+But because our graph is undirected, we should consider
+each pair of nodes just one time.
+For this reason, we need to impose an extra constraint such as node
+1 less than node 2 or node 1 greater than node 2.
+Either additional constraint will force us to consider
+each pair of nodes just one time.
+We're going to modify the code so we'll add if node 1 is less than node 2,
+and the Bernoulli process works out.
+
+  G = nx.Graph()
+  G.add_nodes_from(range(N))
+  for node1 in G.nodes():
+    for node2 in G.nodes():
+      if node1 < node2 and bernoulli.rvs(p=p):
+        G.add_edge(node1, node2)
+
+Let's then try running our code.
+We can then draw this.
+And you may be able to see that the graph looks less dense.
+In fact, this is the correct implementation of the model.
+As our final step, let's turn this into a function.
+I'm going to call this ER graph, and it takes in two parameters-- capital
+N and lowercase p.
+I'm using capital N and lowercase p here because that's
+the convention for this particular model.
+I add a docstring, which I will complete in the second,
+and I need to make sure to indent my code.
+The only line I need to add here is the return statement.
+We want to make sure to return the graph G to whoever calls this function.
+We'll wrap this up by finishing the docstring.
+
+  def er_graph(N, p):
+    """Generate an ER graph."""
+    G = nx.Graph()
+    G.add_nodes_from(range(N))
+    for node1 in G.nodes():
+      for node2 in G.nodes():
+        if node1 < node2 and bernoulli.rvs(p=p):
+          G.add_edge(node1, node2)
+    return G
+
+We'll say generate an ER graph,
+and then we run the function.
+So now the function has been defined.
+Now we're ready to call this function.
+We can call it directly inside nx.draw so I want
+to visualize this graph right away.
+So I need to call ER graph.
+I want to build this on 50 nodes using p equal to 0.08.
+I can also specify a couple of additional attributes for the draw.
+I'll say node size equal to 40, and node color is equal to gray.
+And let me just move this line here at the top.
+And while we're at it, we can save this.
+I'll just call this er1.pdf.
+
+  nx.draw(er_graph(50, 0.08), node_size=40, node_color="gray")
+  plt.savefig("er1.pdf")
+
+We can run our code.
+Let's look for er1, and this is our own homemade Erdos-Renyi graph.
+
+COMPREHENSION Qs
+1. How many components do you expect in an ER graph with n=10 and p=1?
+>>> 1, because p=1 means an edge exists between each edge pair, making the network consist of one component
+2. How many components do you expect in an ER graph with n=10 and p=0?
+>>> 10, because p=0 means no edges exist between any of the nodes, so each node is its own component  

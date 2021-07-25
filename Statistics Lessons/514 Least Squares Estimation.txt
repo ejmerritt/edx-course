@@ -1,0 +1,100 @@
+JP ONNELA: We can use matrix calculus to obtain a formula, a closed form
+solution for obtaining the least-squares estimates,
+and that is how some software packages do the estimation.
+Other software packages use different methods,
+such as the method of gradient descent, which is a numerical optimization
+method used for complex models.
+In our setting, it's useful to simply try out
+some of the values for the parameters over a grid of points to understand
+the underlying principles.
+In the following, we're going to assume that we know the true value of beta 0,
+and our goal is to estimate the value of beta 1, the slope of the line,
+from data.
+Let's then go back to Python.
+I'm going to define a variable rss, which
+is going to be a list which contains all the rss
+values for different values of the slopes.
+
+  rss = []
+
+I'm then going to define a variable called slopes.
+I'm going to be using np.arange to do this.
+And I'd like to try out values from, say, minus 10 to plus 15.
+And I'd like to go in increments of 0.01.
+
+  slopes = np.arange(-10, 15, 0.01)
+
+Then I'm going to loop over all of the different slopes.
+So this calls for a for loop: for slope in slopes.
+And I'd like to compute the RSS value inside this loop.
+So how do we get that?
+So first, we have our observation y.
+From that, we want to take out the prediction
+of the model, which is beta 0.
+We have to be careful - we need a minus here - minus slope times x.
+Now, this gives us the deviation from the value predicted by the model.
+So we want to make sure to square this.
+And then we want to add these terms up.
+
+  for slope in slopes:
+    np.sum((y - beta_0 - slope * x)**2)
+
+Now, this is our RSS value for a given value of the slope.
+What I'd like to do is I'd like to append this to my list, so rss.append,
+and that should do it.
+
+  for slope in slopes:
+    rss.append(np.sum((y - beta_0 - slope * x)**2))
+
+We can try running this code.
+And it runs.
+So we can look at the values of RSS if we'd like to.
+And the output looks reasonable.
+Let's now try to find the estimates.
+So I'm going to create a variable which is ind_min,
+and this will be used to find the index within the rss list that
+gives me the lowest value for rss.
+To do this, I'll use the argmin function from numpy, so we type np.argmin.
+And we need rss here.
+
+  ind_min = np.argmin(rss)
+
+We can try running this as well.
+And let's just take a look at the value.
+So what Python is telling me is that the lowest value for rss
+happens at index location 1,200.
+Now we can try to print out the estimate.
+So we'll have a simple print statement: estimate for the slope.
+And what do we need here?
+We have all of our slopes, but we'd like to pick one value, the one that
+corresponds to the index value ind_min.
+
+  print(f"Estimate for the slope: {slopes[ind_min]}")
+
+And in this case, we got the estimate 2.0.
+One thing we can also do here is we can correct the spelling.
+Instead of foe, we can just say for the slope, which is more conventional.
+And that looks good.
+Now that we've done the computation, it would
+be useful to visualize our results.
+I'm going to copy paste some code in here.
+And all we're doing is we're creating a figure.
+We're plotting on the x axis different slope values,
+and on the y-axis different RSS values.
+And then we'll just label our plot.
+
+  plt.figure()
+  plt.plot(slopes, rss)
+  plt.xlabel("Slope")
+  plt.ylabel("RSS");
+
+Let's look at this plot more carefully.
+Here in the figure on the x-axis, we have the different slopes
+that we tried out from minus 10 to plus 15.
+On the y-axis, we have the different rss values.
+And remember, the goal is to find the value
+of slope, the value of the parameter that
+gives us the smallest value for RSS.
+And looking at the plot, it looks like it happens at around 2.
+If we go back to our Python, we'll see that our estimate was exactly
+2.0 in this case.

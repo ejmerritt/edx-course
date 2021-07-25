@@ -1,0 +1,141 @@
+JP ONNELA: In this case, we know what the true slope is,
+but it would be useful to see how we could estimate this simple model using
+Python.
+I'm going to do this using the stats models library.
+If you're used to statistical programming language like R,
+you might find the stats models library familiar to work with.
+We're going to start by importing the stats models library as sm.
+So we say import statsmodels.api as sm.
+We're going to define a mod object by saying sm.OLS.
+OLS stands for ordinary least squares.
+And we need an argument inside the parentheses.
+The first is y, which is our y-values.
+The second one is x, our predictor values.
+Then we can form our estimate by calling the mod object--
+I'm sorry, we first fit that.
+And then we can say print est.summary, which
+gives us a summary of the model of the fitted model object.
+Let's see what happens.
+
+  import statsmodels.api as sm
+  mod = sm.OLS(y, x)
+  est = mod.fit()
+  print(est.summary())
+
+Let's look at the model output.
+We see that we fitted a model with a single variable, x1.
+And the estimated coefficient is 2.7.
+That seems a little bit high, given that we
+know that the true value should be 2.0.
+So what happened here?
+In this case, we've actually fitted a slightly different model,
+a model that has a slope, but no intercept,
+meaning that there is no constant term in the model.
+This means that the line is forced to go through 0, which
+is why the slope is artificially large.
+Let's take a look at that on the whiteboard.
+We know that our data should look something like this.
+And there is some true slope here, which would be 2.
+But because we are fitting a model that doesn't have an intercept term,
+we're actually fitting a line that is forced
+to go through the origin, the point over here.
+The least squares criterion will now force this line
+to go something like this, and therefore, the slope
+of the line that we just estimated, this guy over here,
+is going to be higher than the true slope, which
+is the slope for this line.
+Let's now try to fit a slightly different model, a model that includes
+the constant, the intercept term.
+So I'm going to define x as sm.add_constant,
+which is one of the methods that's available in this library.
+So lower case x is the x I had before.
+I'm now going to be building another variable, which
+is capital X, which is the same as x, but includes one column of 1s.
+Then we take the model.
+We define a new model object.
+I'm going to call that mod.
+We continue to do OLS.
+We have our outcome y, but now we need the capital X, the one
+that has the constants added to it.
+We'll estimate this model-- we'll fit the model by saying mod.fit,
+and then we can print out the summary, saying print est.summary.
+And let's try running the code.
+
+  X = sm.add_constant(x)
+  mod = sm.OLS(y, X)
+  est = mod.fit()
+  print(est.summary())
+
+In this case, we can see we have two predictors in the model.
+We have the constant term, which has been estimated as 5.2,
+and then we have a coefficient to go with the predictor x1, which
+has been estimated as 1.9685.
+And this value, of course, is very close to the true value 2.0.
+This looks better.
+Now we've included an intercept in the model,
+and we've also estimated its value.
+But how should we interpret these coefficients?
+The intercept 5.2 is the value of the outcome y
+when all predictors, here just x1, are set to 0.
+The slope has a somewhat different interpretation,
+which is that an increase of 1 in the value of x1
+is associated with an increase of 1.97 in the value of the outcome y.
+The output also includes standard errors of the estimates,
+which tell us how precisely the parameter values have been estimated.
+Imagine generating a new sample of data and feeding the model
+to this new sample.
+In this case, we would get a somewhat different estimate
+for intercept and slope.
+If we repeated this process many times, always generating a new data set,
+and fitting the model to this new data set,
+we would end up with a distribution of estimates for the intercept
+and another distribution of estimates for the slope.
+These distributions are known as sampling distributions of the parameter
+estimates.
+Let's focus on the sampling distribution of the slope estimates.
+The standard deviation of this distribution
+is known as the standard error of the slope.
+The smaller the standard error, the more precisely it's
+being estimated, meaning that the more we've
+been able to learn about its value from the data.
+We can take the value of the standard error, multiply it by 2,
+or 1.96 to be exact, and add this number to the point estimate of the intercept.
+Similarly, we can subtract this number from the point estimate.
+Doing this gives us the 95% confidence interval, which
+is also shown as part of the output.
+Since 0 is not contained in that confidence interval, in this case,
+we can be sure that the value of the true slope, the parameter whose
+value we're trying to learn, is not 0.
+So how well did we do?
+The output summary includes the so-called r-squared statistic,
+which is the proportion of variance explained.
+And because it's a proportion, it's always between 0 and 1.
+But what does variance explained actually mean?
+Before we fit our model, we can compute what
+is called the total sum of squares, or TSS, which
+is defined as the sum of the squared differences between outcome
+yi and the mean outcome.
+Now after we've created the model, we compute a similar quantity
+called the residual sum of squares, RSS, which
+is defined as the sum of the squared differences between the outcome yi
+and the outcome predicted by the model yi hat.
+If the model is useful at all, we would expect
+the RSS is to be smaller than the TSS.
+The r-squared statistic takes the difference between TSS and RSS,
+and then divides that quantity by TSS.
+A number near 0, therefore, indicates that the model did not
+explain much of the variability in the response or the outcome.
+Larger values are better, but what values of r-squared are considered good
+always depends on the application context.
+
+COMPREHENSION Qs:
+1. If the true intercept were negative but the regression model did not include an intercept term, what would that imply for the estimated slope?
+>>> The estimated slope would likely be lower than the true slope.
+2. What does an estimated intercept term correspond to?
+>>> The estimated outcome when the input is set to zero
+3. What does an estimated slope term correspond to?
+>>> The change in the estimated output when the input changes by one unit
+4. You could create several datasets using different seed values and estimate the slope from each. These parameters will follow some distribution. What is the name used for this distribution?
+>>> The sampling distribution of the parameter estimates
+5. If the 𝑅-squared value is high, this indicates
+>>> A good fit: the residual sum of squares is low compared to the total sum of squares. 

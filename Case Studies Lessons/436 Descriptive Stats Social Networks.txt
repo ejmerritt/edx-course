@@ -1,0 +1,135 @@
+In this task, we will look at basic properties of the social networks
+from two different villages in rural India.
+These data are part of a much larger dataset that was collected
+to study diffusion of micro-finance.
+And the findings of this study were published
+in an article called, "The Diffusion of Micro-finance," in the Journal Science
+in 2013.
+In short, a census of households was conducted,
+and a subset of individuals was asked detailed questions
+about the relationships they have with others in the village.
+This information was used to create networks for each village.
+Basic information for all households and all surveyed individuals
+was also collected.
+The structure of connections in a network
+can be captured in what is known as the Adjacency matrix of the network.
+If we have n nodes, this is n by n matrix,
+where entry ij is one if node i and node j have a tie between them.
+Otherwise, that entry is equal to zero.
+The graphs we're dealing with are called undirected,
+which means that a tie between nodes i and j
+can just as well be described as a tie between nodes j and i.
+Consequently, the adjacency matrix is symmetric.
+That means that the element ij is always the same as the element ji.
+Either both are zero or both are equal to 1.
+We provide the adjacency matrix files for the two villages as CSV files.
+We will first read in the network of adjacency matrices
+and construct the networks.
+Here, np.loadtxt is used to read in the CSV files, the adjacency matrices.
+We will first important NumPy as np.
+We'll be using the np.loadtxt function to read in the file.
+
+  import numpy as np
+  A1 = np.loadtxt("adj_allVillageRelationships_vilno_1.csv", delimiter=",")
+  A2 = np.loadtxt("adj_allVillageRelationships_vilno_2.csv", delimiter=",")
+
+The first argument is going to be the file name, which
+looks a little bit complicated.
+And the second argument is going to be delimiter.
+In this case, it's a comma.
+So we set that equal to a comma.
+And make sure to surround the comma with quotes.
+We will call this A1.
+Then we have our second adjacency matrix, A2,
+which corresponds to village 2.
+And we can now run these three lines of code.
+Our next step will be to convert the adjacency matrices to graph objects.
+We will accomplish that by using the to NetworkX graph method.
+So G1, the graph that corresponds to a A1,
+is equal to nx.to networkx graph A1.
+And G2 will be the graph object that is constructed
+from the adjacency matrix called A2.
+
+  G1 = nx.to_networkx_graph(A1)
+  G2 = nx.to_networkx_graph(A2)
+
+Although networks can be quite complex, we can measure some of their properties
+using simple numbers.
+To get a basic sense of the network size and number of connections,
+let's count the number of nodes and the number of edges in the networks.
+In addition, each node has a total number of edges, its degree.
+Let's also calculate the mean degree for all nodes in the network.
+We'll write this up as a function.
+We'll call this basic net stats.
+The only input is going to be a graph G.
+We're interested in looking at number of nodes.
+We're also interested in number of edges.
+And finally, we're interested in the mean degree.
+
+  def basic_net_stats(G):
+    G.number_of_nodes()
+    G.number_of_edges()
+    G.degree().values()
+
+So we first extract the G.degree dictionary.
+We look at its values.
+We convert that to a list.
+Let's use the print function to print out these statistics to our user.
+This is number of nodes.
+
+  print(f"Number of nodes: {G.number_of_nodes()}")
+
+This is our number of edges.
+
+  print(f"Number of edges: {G.number_of_edges()}")
+
+And finally, the last line is our average or mean degree,
+and we can print that with two decimal places.
+
+  degree_sequence = [d for n, d in G.degree()]
+  print(f"Average degree: {np.mean(degree_sequence)}")
+
+This is where printing out the average degree,
+we need to be sure to compute the average of the items on the list.
+We can then run the function.
+And then we can call it on G1 and on G2.
+
+  basic_net_stats(G1)
+  basic_net_stats(G2)
+
+In G1, we have 843 nodes, 3,400 edges,
+and the average degree is about 8.
+We can then run it on G2, which corresponds
+to a network in a different village.
+And in this case, we have 877 nodes, about 3,100 edges,
+and the average degree is slightly smaller, approximately equal to 7.
+Let's import the degree distribution from these two villages. First G1,
+then G2,
+and we'll have to save this as village hist.pdf.
+
+  plot_degree_distribution(G1)
+  plot_degree_distribution(G2)
+  plt.savefig("village_hist.pdf")
+
+We can try finding that plot here.
+And in this case, we have degree distributions
+from the two different villages, shown here, one on top of the other.
+Notice how the degree distributions look quite different from what
+we observed for the ER networks.
+It seems that most people have relatively few connections,
+whereas a small fraction of people have a large number of connections.
+This distribution doesn't look at all symmetric,
+and its tail extends quite far to the right.
+This suggests that the ER graphs are likely not good models
+for real world social networks.
+In practice, we can use ER graphs as a kind of reference graph
+by comparing their properties to those of empirical social networks.
+More sophisticated network models are able to capture
+many of the properties that are shown by real world networks.
+But we will not go into those details here.
+
+COMPREHENSION Qs:
+1. As described in Video 4.3.6, which network has more nodes?
+>>> G2
+2. As described in Video 4.3.6, which network has more edges?
+>>> G1 

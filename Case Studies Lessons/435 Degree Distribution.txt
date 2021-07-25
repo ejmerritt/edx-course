@@ -1,0 +1,123 @@
+NOTES ON NETWORKX V2.0 OR HIGHER:
+  G.degree() now returns a DegreeView object instead of a dictionary
+  Replace this line of code:
+    plt.hist(list(G.degree().values()), histtype="step”)
+  ...with these lines:
+    degree_sequence = [d for n, d in G.degree()]
+    plt.hist(degree_sequence, histtype="step")
+
+Let's plot the degree distribution for this graph.
+We'll need to do this again soon, so we can put all of this
+together as a function.
+I'm going to call this function plot degree distribution,
+and it takes in my graph G. This is my function definition.
+
+  def plot_degree_distribution(G):
+
+Then I'd like to look at the degrees. So we have the G.degree,
+which returns to us a dictionary.
+I'm interested in the values, which are the degrees of the different nodes.
+I first want to turn that into a list.
+I turn this into a list because G.degree.values gives me
+a view object to the values.
+
+  def plot_degree_distribution(G):
+    degree_sequence = [d for n, d in G.degree()]
+    plt.hist(degree_sequence, histtype="step")
+
+I actually want to create a copy of that and turn it into a list.
+That's why I include the list surrounding the G.degree values object.
+We can then use the plt hist function to draw this.
+And my histogram type, hist type, is going to be step.
+We could use almost anything, but this just
+works well for this specific purpose.
+And then we want to add our xlabels, so plt.xlabel is going to be degree k.
+If you're familiar with LaTeX, you know that we
+can put dollar signs around the k, and the k
+will get rendered as a LaTeX k letter.
+
+  def plot_degree_distribution(G):
+    degree_sequence = [d for n, d in G.degree()]
+    plt.hist(degree_sequence, histtype="step")
+    plt.xlabel("Degree $k$")
+
+We can also add a y label, and that's just
+going to be P of k, the probability of observing a node with that degree.
+
+    plt.ylabel("$P(k)$")
+
+Finally, we can add the title using plt.title.
+I'm going to call this degree distribution.
+
+    plt.title("Degree distribution")
+
+That's our function definition.
+Let's run that.
+And we can now generate a new graph.
+Let's say G is equal to er_graph.
+Let's go with 50 nodes and a probability 0.08.
+
+  G = er_graph(50, 0.08)
+
+That's my G. And then I can plot that degree distribution.
+I'm just going to copy it from here, and I'm going to save that to a file.
+I'll turn it into PDF file.
+I'll call this hist1.pdf.
+
+  plot_degree_distribution(G)
+  plt.savefig("hist1.pdf")
+
+Then we can look for hist1.
+And this is our degree histogram.
+Looking at the histogram, we'll see that there
+are some notes that have zero degree, so they have no connections.
+And the most connected node has 10 connections.
+A majority of the nodes appear to have somewhere
+between perhaps 4 and 7 edges, although the result is not that clear.
+The reason for that is that our graph is relatively small.
+We can create a clearer plot or a cleaner plot
+by increasing the number of nodes in our graph.
+Let's go with 500 in this case.
+We've run the same code again.
+Let's look for the plot on the computer, hist1.
+And in this case, we'll see that the histogram looks different.
+So we have a larger graph in this case.
+So most of the nodes have a higher degree than before.
+That's because previously each node had 50 minus 1,
+or 49 potential nodes that they could connect to.
+In this case we, have 500 nodes, so any node
+can connect to any of the remaining 500 minus 1 nodes.
+So in this case, we would expect the degree, the average degree,
+to be higher than previously.
+If you look at the histogram again, we will
+see that there are no nodes that have fewer than 25 connections
+and also there are no nodes that have more than 63 or 64 connections.
+The majority of the nodes appear to have somewhere
+between perhaps 35 and 50 connections.
+Let's next try generating a couple of different graphs using
+our er_graph function, and then we can block the degree distributions
+for all of those graphs.
+I'm going to call this G1.
+I'll plot the degree distribution for you G1.
+I can do this again for G2 and plot the degree distribution for G2.
+We can do this one more time.
+We generated graph G3 then we plot its degree distribution.
+I'm going to call this hist_3.
+We can then find hist_3 on the computer.
+In this case, we have three plots, three histograms,
+because we have three different graphs.
+Because every graph realization will be different from any other,
+that means that the specific degree distribution of any graph
+is going to be somewhat different from that of any other graph.
+In this case, we can see that the three degree distributions follow one another
+fairly closely.
+This is an example of degrees distributions drawn from three
+different Erdos-Renyi graphs.
+
+COMPREHENSION Qs
+1. Consider the following code. What will this plot?
+  D = {1:1, 2:2, 3:3}
+  plt.hist(D)
+>>> This contains an error. plt.hist() does not take a dictionary as a single argument.
+2. How do the degree distributions in nx.erdos_renyi_graph(100, 0.03) and nx.erdos_renyi_graph(100, 0.30) compare?
+>>> The latter has a greater mean on average. 
